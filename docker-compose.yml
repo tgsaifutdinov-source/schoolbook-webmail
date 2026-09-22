@@ -4,5 +4,7 @@ services:
       context: .
     container_name: schoolbook-webmail
     restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     ports:
       - "127.0.0.1:4180:3000"
