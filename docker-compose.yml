@@ -1,0 +1,8 @@
+services:
+  webmail:
+    build:
+      context: .
+    container_name: schoolbook-webmail
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:4180:3000"
