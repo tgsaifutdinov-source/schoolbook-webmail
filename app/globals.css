@@ -30,3 +30,18 @@ nav button,.settings{min-height:45px;font-size:14px}
 .storageBox{font-size:10px}.storageBox b{font-size:10px}.proCard{padding:16px 14px}.proCard strong{font-size:13px}.proCard small{font-size:10px}.proCard button{height:40px;font-size:11px}
 }
 @media(min-width:1600px){.workspace{grid-template-columns:290px 520px minmax(700px,1fr)}.topbar{margin-left:290px}.brand{left:34px}.letter{max-width:1080px}.messages article{min-height:100px}}
+
+/* Production viewport calibration: target the visual density of the approved reference */
+@media(min-width:1200px){
+body{font-size:18px}
+.shell{padding:14px 20px}
+.topbar{margin-left:320px;height:86px;padding:0 26px;gap:18px}
+.workspace{height:calc(100vh - 114px);grid-template-columns:320px 560px minmax(650px,1fr)}
+.brand{left:42px;top:28px;width:245px;gap:14px}.brandMark{width:56px;height:56px;font-size:24px}.brand b{font-size:22px;line-height:22px}.brand small{font-size:11px;letter-spacing:2px}
+.search{height:52px;border-radius:13px}.search input{font-size:16px}.filterTop{width:48px;height:48px}.topTools button,.refresh{width:44px;height:44px}.account .avatar{width:44px;height:44px}.account b{font-size:15px}.account small{font-size:11px}
+.workspace aside{padding:104px 20px 20px}.compose{height:58px;font-size:16px;border-radius:13px;margin-bottom:24px}.compose svg{width:20px}nav button,.settings{min-height:48px;font-size:15px;padding:0 14px}nav svg,.settings svg{width:19px}nav em{font-size:11px;padding:3px 8px}.sectionTitle{font-size:12px;padding:24px 14px 8px}.folderMocks span{height:44px;font-size:14px;padding:0 14px}.folderMocks i{width:14px;height:14px}.storageBox,.storageBox b{font-size:11px}.proCard strong{font-size:15px}.proCard small{font-size:11px}.proCard button{font-size:12px;height:43px}
+.listHead{height:82px;padding:16px 20px 10px}.listHead h1{font-size:27px}.listHead span,.sortButton{font-size:12px}.messages article{min-height:102px;padding:17px 18px;gap:14px}.senderAvatar{width:48px;height:48px;font-size:15px}.msg b,.msg time{font-size:13px}.msg strong{font-size:15px;margin-top:6px}.msg p{font-size:13px;margin-top:3px}.star svg{width:16px}.tag{font-size:10px;padding:3px 6px}
+.toolbar{height:66px;padding:0 28px}.toolbar button{width:43px;height:43px}.toolbar svg{width:20px}
+.letter{max-width:1180px;padding:46px 54px 90px}.eyebrow{font-size:11px}.subjectLine h2{font-size:35px}.favorite{width:44px;height:44px}.from{margin:27px 0 32px}.senderAvatar.big{width:54px;height:54px;font-size:16px}.from b{font-size:15px}.from small,.from time{font-size:12px}.body{font-size:17px;line-height:1.75;min-height:280px;padding:30px}.actions button{height:46px;font-size:13px;padding:0 18px}.attachment{max-width:600px;padding:14px}.attachment b{font-size:13px}.attachment small,.attachmentDownload{font-size:11px}
+}
+@media(min-width:1900px){.workspace{grid-template-columns:330px 600px minmax(760px,1fr)}.topbar{margin-left:330px}.letter{max-width:1280px}}
