@@ -1641,3 +1641,102 @@ html[data-mail-density="compact"] .messages article{min-height:66px;padding-top:
     max-height:40dvh!important;
   }
 }
+
+/* Final Gmail contact chooser: compact, quiet and anchored to recipient field */
+.composeWindow .recipientChipField .recipientSuggestions{
+  width:min(312px,calc(100% - 108px))!important;
+  max-height:238px!important;
+  padding:3px 0 4px!important;
+  border:1px solid #dadce0!important;
+  border-radius:6px!important;
+  box-shadow:0 5px 16px rgba(60,64,67,.20)!important;
+}
+.composeWindow .recipientSuggestionCaption{
+  height:24px;
+  padding:0 11px;
+  display:flex;
+  align-items:center;
+  color:#7a8089;
+  font-size:9px;
+  font-weight:600;
+  text-transform:none;
+}
+.composeWindow .recipientSuggestion{
+  min-height:38px!important;
+  padding:4px 9px!important;
+  gap:8px!important;
+}
+.composeWindow .recipientSuggestion:hover,
+.composeWindow .recipientSuggestion.active,
+.composeWindow .recipientSuggestion[aria-selected="true"]{
+  background:#f1f3f4!important;
+}
+.composeWindow .contactAvatar{
+  width:26px!important;
+  height:26px!important;
+  min-width:26px!important;
+  flex-basis:26px!important;
+  font-size:11px!important;
+}
+.composeWindow .contactName{
+  font-size:10px!important;
+  line-height:1.2!important;
+}
+.composeWindow .contactEmail{
+  margin-top:1px;
+  font-size:8px!important;
+  line-height:1.15!important;
+}
+.composeWindow .recipientEmpty{
+  min-height:38px;
+  padding:0 11px!important;
+  display:flex;
+  align-items:center;
+  font-size:9px!important;
+}
+@media(min-width:1200px){
+  .composeWindow .recipientChipField .recipientSuggestions{
+    width:min(326px,calc(100% - 112px))!important;
+    max-height:246px!important;
+  }
+  .composeWindow .recipientSuggestion{
+    min-height:40px!important;
+    padding:4px 10px!important;
+  }
+  .composeWindow .contactAvatar{
+    width:27px!important;
+    height:27px!important;
+    min-width:27px!important;
+    flex-basis:27px!important;
+  }
+  .composeWindow .contactName{font-size:10px!important}
+  .composeWindow .contactEmail{font-size:8px!important}
+}
+@media(max-width:850px){
+  .composeWindow .recipientChipField .recipientSuggestions{
+    width:min(300px,calc(100vw - 100px))!important;
+    max-height:230px!important;
+  }
+  .composeWindow .recipientSuggestion{
+    min-height:42px!important;
+    padding:5px 9px!important;
+  }
+  .composeWindow .contactAvatar{
+    width:28px!important;
+    height:28px!important;
+    min-width:28px!important;
+    flex-basis:28px!important;
+  }
+  .composeWindow .contactName{font-size:11px!important}
+  .composeWindow .contactEmail{font-size:9px!important}
+}
+@media(max-width:560px){
+  .composeWindow .recipientChipField .recipientSuggestions{
+    width:auto!important;
+    max-height:36dvh!important;
+  }
+  .composeWindow .recipientSuggestionCaption{
+    height:26px;
+    font-size:10px;
+  }
+}
