@@ -119,7 +119,7 @@ export async function POST(req:NextRequest){
   return NextResponse.json({ok:true,ids:messageIds});
  }
 
- const reversible=["archive","trash","move"].includes(action);
+ const reversible=["archive","trash","move","spam","notSpam"].includes(action);
  const restoreMap=reversible?await snapshotMailboxes(c,messageIds):{};
  let update:any={};
 
@@ -131,8 +131,8 @@ export async function POST(req:NextRequest){
   const targetMailboxId=typeof body.targetMailboxId==="string"?body.targetMailboxId:"";
   if(!targetMailboxId)return NextResponse.json({error:"Missing target mailbox"},{status:400});
   update={mailboxIds:{[targetMailboxId]:true}};
- }else if(action==="archive"||action==="restore"||action==="trash"){
-  const wanted=action==="archive"?"archive":action==="restore"?"inbox":"trash";
+ }else if(action==="archive"||action==="restore"||action==="trash"||action==="spam"||action==="notSpam"){
+  const wanted=action==="archive"?"archive":action==="restore"||action==="notSpam"?"inbox":action==="spam"?"junk":"trash";
   const d=await jmap(c,[["Mailbox/get",{accountId:c.accountId,properties:["id","role"]},"mailboxes"]]);
   const target=d.methodResponses?.[0]?.[1]?.list?.find((x:any)=>x.role===wanted);
   if(!target)return NextResponse.json({error:"Target mailbox not found"},{status:404});
