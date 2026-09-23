@@ -908,3 +908,63 @@ html[data-mail-density="compact"] .messages article{min-height:66px;padding-top:
  }
  .composeWindow .composeSubject input{height:40px!important;font-size:13px!important}
 }
+
+/* Gmail-like signature settings and compose media controls */
+.signatureSettings textarea{
+ width:100%;
+ min-height:118px;
+ margin-top:12px;
+ padding:10px 11px;
+ resize:vertical;
+ border:1px solid #dfe3e8;
+ border-radius:9px;
+ outline:0;
+ background:#fff;
+ color:#30343a;
+ font:11px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+.signatureSettings textarea:focus{
+ border-color:#d5a500;
+ box-shadow:0 0 0 3px #ffc62b22;
+}
+.signatureSettings textarea::placeholder{color:#a0a6af}
+.signatureToggleRow{
+ min-height:54px;
+ margin-top:10px;
+ padding:8px 0 0;
+ border-top:1px solid #eef0f3;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:14px;
+}
+.signatureToggleRow>div{
+ min-width:0;
+ display:flex;
+ flex-direction:column;
+ gap:2px;
+}
+.signatureToggleRow b{
+ font-size:10px;
+ color:#3a4048;
+}
+.signatureToggleRow>div>span{
+ font-size:9px;
+ line-height:1.4;
+ color:#7a828d;
+}
+.signatureToggleRow.disabled{opacity:.52}
+.signatureToggleRow button:disabled{cursor:not-allowed}
+.composeFoot button[title="Прикрепить изображение"] svg{
+ width:16px!important;
+ height:16px!important;
+}
+@media(min-width:1200px){
+ .signatureSettings textarea{font-size:12px;min-height:128px}
+ .signatureToggleRow b{font-size:11px}
+ .signatureToggleRow>div>span{font-size:10px}
+}
+@media(max-width:850px){
+ .signatureSettings textarea{min-height:104px;font-size:12px}
+ .signatureToggleRow{min-height:52px}
+}
