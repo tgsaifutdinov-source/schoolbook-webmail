@@ -51,7 +51,49 @@ export default function Home(){
  function boxLabel(m:Box){const labels:Record<string,string>={inbox:"Входящие",sent:"Отправленные",drafts:"Черновики",trash:"Корзина",archive:"Архив",junk:"Спам"};return (m.role&&labels[m.role])||m.name}
  function icon(role?:string){if(role==="inbox")return Inbox;if(role==="sent")return Send;if(role==="drafts")return FileText;if(role==="trash")return Trash2;if(role==="archive")return Archive;return Folder}
  function rawHtmlBody(){if(!full)return "";for(const p of full.htmlBody||[]){const v=full.bodyValues?.[p.partId]?.value;if(v)return v}return ""}
- function safeHtmlBody(){const raw=rawHtmlBody();if(!raw||typeof window==="undefined")return raw;const doc=new DOMParser().parseFromString(raw,"text/html");doc.querySelectorAll("script,iframe,object,embed,form,input,button,textarea,select,meta,base,link").forEach(n=>n.remove());doc.querySelectorAll("*").forEach(el=>{for(const a of Array.from(el.attributes)){const n=a.name.toLowerCase(),v=a.value.trim();if(n.startsWith("on")||((n==="href"||n==="src"||n==="action")&&/^javascript:/i.test(v)))el.removeAttribute(a.name)}});const inline=new Map<string,any>();for(const a of full?.attachments||[]){const cid=String(a.cid||a.contentId||"").replace(/^<|>$/g,"");if(cid)inline.set(cid,a)}doc.querySelectorAll("img").forEach(img=>{const src=img.getAttribute("src")||"";if(/^cid:/i.test(src)){const a=inline.get(src.slice(4).replace(/^<|>$/g,""));if(a?.blobId)img.setAttribute("src","/api/mail/attachment?inline=1&blobId="+encodeURIComponent(a.blobId)+"&name="+encodeURIComponent(a.name||"inline")+"&type="+encodeURIComponent(a.type||"application/octet-stream"));else img.removeAttribute("src")}else if(/^https?:\/\//i.test(src)&&!showRemoteImages){img.removeAttribute("src");img.setAttribute("alt",img.getAttribute("alt")||"[Внешнее изображение заблокировано]")}});doc.querySelectorAll("a[href]").forEach(a=>{a.setAttribute("target","_blank");a.setAttribute("rel","noopener noreferrer")});return "<!doctype html><html><head><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><style>html,body{max-width:100%;overflow-wrap:anywhere}img{max-width:100%;height:auto}</style></head><body>"+doc.body.innerHTML+"</body></html>"}
+ function safeHtmlBody(){
+  const raw=rawHtmlBody();
+  if(!raw||typeof window==="undefined")return raw;
+  const doc=new DOMParser().parseFromString(raw,"text/html");
+  doc.querySelectorAll("script,iframe,object,embed,form,input,button,textarea,select,meta,base,link,style,video,audio,source,track,svg,math,canvas").forEach(node=>node.remove());
+  doc.querySelectorAll("*").forEach(el=>{
+   for(const attr of Array.from(el.attributes)){
+    const name=attr.name.toLowerCase();
+    const value=attr.value.trim();
+    if(name.startsWith("on")||name==="style"||name==="srcset"||name==="background"||name==="poster"){el.removeAttribute(attr.name);continue}
+    if(name==="href"&&!/^(https?:|mailto:)/i.test(value)){el.removeAttribute(attr.name);continue}
+    if(name==="src"&&el.tagName!=="IMG")el.removeAttribute(attr.name);
+   }
+  });
+  const inline=new Map<string,any>();
+  for(const attachment of full?.attachments||[]){
+   const cid=String(attachment.cid||attachment.contentId||"").replace(/^<|>$/g,"");
+   if(cid)inline.set(cid,attachment);
+  }
+  doc.querySelectorAll("img").forEach(img=>{
+   const src=(img.getAttribute("src")||"").trim();
+   if(/^cid:/i.test(src)){
+    const attachment=inline.get(src.slice(4).replace(/^<|>$/g,""));
+    if(attachment?.blobId)img.setAttribute("src","/api/mail/attachment?inline=1&blobId="+encodeURIComponent(attachment.blobId)+"&name="+encodeURIComponent(attachment.name||"inline")+"&type="+encodeURIComponent(attachment.type||"application/octet-stream"));
+    else img.removeAttribute("src");
+   }else if(/^(https?:)?\/\//i.test(src)){
+    if(!showRemoteImages)img.removeAttribute("src");
+    else if(src.startsWith("//"))img.setAttribute("src","https:"+src);
+   }else if(!/^data:image\/(png|jpeg|gif|webp);base64,/i.test(src)){
+    img.removeAttribute("src");
+   }
+   img.removeAttribute("srcset");
+   img.setAttribute("loading","lazy");
+   img.setAttribute("referrerpolicy","no-referrer");
+   if(!img.getAttribute("src"))img.setAttribute("alt",img.getAttribute("alt")||"[Изображение заблокировано]");
+  });
+  doc.querySelectorAll("a[href]").forEach(a=>{
+   a.setAttribute("target","_blank");
+   a.setAttribute("rel","noopener noreferrer");
+   a.setAttribute("referrerpolicy","no-referrer");
+  });
+  return "<!doctype html><html><head><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><style>html,body{max-width:100%;overflow-wrap:anywhere;background:#fff;color:#1f2937}body{margin:0;font:14px/1.65 system-ui,-apple-system,Segoe UI,sans-serif}img{max-width:100%;height:auto}table{max-width:100%;border-collapse:collapse}pre{white-space:pre-wrap;overflow-wrap:anywhere}blockquote{margin-left:0;padding-left:12px;border-left:3px solid #e5e7eb;color:#667085}a{color:#245fb5}</style></head><body>"+doc.body.innerHTML+"</body></html>";
+ }
  function selectNeighbor(delta:number){if(!selected)return;const i=emails.findIndex(x=>x.id===selected.id),next=emails[i+delta];if(next)openMail(next)}
  function plainBody(){if(!full)return selected?.preview||"";for(const p of full.textBody||[]){const v=full.bodyValues?.[p.partId]?.value;if(v)return v}for(const p of full.htmlBody||[]){const v=full.bodyValues?.[p.partId]?.value;if(v)return v.replace(/<style[\s\S]*?<\/style>/gi," ").replace(/<[^>]*>/g," ").replace(/&nbsp;/g," ").replace(/&amp;/g,"&").replace(/\s{3,}/g," ").trim()}return full.preview||selected?.preview||""}
  const inTrash=currentBox?.role==="trash";
