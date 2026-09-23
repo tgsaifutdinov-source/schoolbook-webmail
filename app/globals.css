@@ -148,3 +148,80 @@ html[data-mail-density="compact"] .messages article{min-height:66px;padding-top:
 .threadCount{display:inline-flex;align-items:center;justify-content:center;min-width:20px;height:18px;margin-left:6px;padding:0 5px;border-radius:9px;background:#eef1f5;color:#68758a;font-size:9px;font-weight:750;vertical-align:1px}.messages article.unread .threadCount{background:#fff1bd;color:#765800}.selectAllResults{min-height:38px;padding:7px 14px;border-bottom:1px solid var(--line);background:#fffaf0;display:flex;align-items:center;justify-content:center;gap:8px;color:#6f5a1e;font-size:10px}.selectAllResults button{height:27px;padding:0 9px;border-radius:7px;background:#fff0b9;color:#604a08;font-size:10px;font-weight:800}.selectAllResults button:hover{background:#ffe58c}.selectAllResults button:disabled{opacity:.55;cursor:wait}.selectAllResults.active{background:#fff6d8}.searchSyntax{margin-top:13px;padding:11px 12px;border:1px solid #eceff3;border-radius:9px;background:#fafbfc;display:flex;flex-direction:column;gap:5px}.searchSyntax b{font-size:9px!important;margin:0!important;color:#4e5a70!important}.searchSyntax span{font-size:9px;line-height:1.55;color:#7a8597;overflow-wrap:anywhere}
 @media(min-width:1200px){.threadCount{min-width:22px;height:19px;font-size:10px}.selectAllResults{min-height:42px;font-size:11px}.selectAllResults button{font-size:11px}.searchSyntax b,.searchSyntax span{font-size:10px!important}}
 @media(max-width:850px){.selectAllResults{padding-left:10px;padding-right:10px;justify-content:space-between}.selectAllResults span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.threadCount{height:17px;min-width:18px;padding:0 4px}.searchSyntax{padding:9px 10px}}
+
+/* Gmail-style information architecture: full list -> open message, SchoolBook colors */
+.workspace{grid-template-columns:250px minmax(0,1fr)!important}
+.gmailList{grid-column:2;border-right:0!important;background:#fff}
+.gmailList.readerHidden{display:none!important}
+.gmailReader{grid-column:2;display:none!important;min-width:0;background:#f7f8fa}
+.gmailReader.open{display:block!important}
+.gmailReader .backReader{display:grid!important}
+.gmailReader .toolbar{padding-left:14px}
+.gmailReader .letter{max-width:1180px}
+.gmailList .listHead{height:62px;padding:10px 18px 6px}
+.gmailList .tabs{height:42px;align-items:center}
+.gmailList .messages{background:#fff}
+.gmailList .messages article{min-height:48px;height:auto;padding:0 14px;gap:0;align-items:center;border-bottom:1px solid #edf0f3;background:#fff}
+.gmailList .messages article:hover{background:#f6f7f9;box-shadow:inset 0 1px 0 #e7ebf1,inset 0 -1px 0 #e7ebf1}
+.gmailList .messages article.selected{background:#fff7d8}
+.gmailList .messages article.selected:before{display:none}
+.gmailList .mailCheck{margin:0 12px 0 0;width:16px;height:16px}
+.gmailList .senderAvatar{display:none}
+.gmailList .msg{display:grid;grid-template-columns:minmax(150px,220px) minmax(180px,320px) minmax(180px,1fr) auto auto;align-items:center;gap:10px;min-height:48px;width:100%;padding-right:38px}
+.gmailList .msg>div{display:contents}
+.gmailList .msg b{grid-column:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;font-weight:560}
+.gmailList .msg strong{grid-column:2;min-width:0;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;font-weight:560}
+.gmailList .msg p{grid-column:3;min-width:0;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;color:#7b8492}
+.gmailList .msg .tag{grid-column:4;margin:0;white-space:nowrap}
+.gmailList .msg time{grid-column:5;min-width:64px;text-align:right;font-size:11px;color:#798395}
+.gmailList .messages article.unread{background:#fff}
+.gmailList .messages article.unread .msg b,
+.gmailList .messages article.unread .msg strong,
+.gmailList .messages article.unread .msg time{font-weight:800;color:#172138}
+.gmailList .star{left:auto;right:8px;top:50%;transform:translateY(-50%);width:28px;height:28px}
+.gmailList .rowActions{right:42px}
+.gmailList .threadCount{height:17px;min-width:18px;margin-left:5px;padding:0 4px;font-size:9px}
+.gmailList .loadMore{margin:14px auto 22px}
+.gmailReader .toolbar{height:56px;background:#fff;border-bottom:1px solid var(--line);backdrop-filter:none}
+.gmailReader .letter{margin:0 auto 60px;padding:30px 42px 80px;background:#fff;border:0!important;border-radius:0!important;box-shadow:none!important}
+.gmailReader .subjectLine h2{font-size:24px}
+.gmailReader .body{border:0!important;margin-left:0!important;margin-right:0!important}
+.gmailReader .htmlMail{border:1px solid #edf0f3}
+@media(min-width:1200px){
+ .workspace{grid-template-columns:300px minmax(0,1fr)!important}
+ .gmailList .listHead{height:68px;padding:12px 24px 7px}
+ .gmailList .tabs{padding:0 24px}
+ .gmailList .messages article{min-height:50px;padding:0 22px}
+ .gmailList .msg{grid-template-columns:minmax(180px,240px) minmax(220px,360px) minmax(240px,1fr) auto auto;min-height:50px;padding-right:42px}
+ .gmailList .msg b,.gmailList .msg strong,.gmailList .msg p{font-size:13px}
+ .gmailList .msg time{font-size:12px;min-width:74px}
+ .gmailReader .toolbar{height:60px;padding:0 22px}
+ .gmailReader .letter{max-width:1180px;padding:36px 56px 90px}
+}
+@media(min-width:1900px){
+ .workspace{grid-template-columns:320px minmax(0,1fr)!important}
+ .gmailReader .letter{max-width:1280px}
+}
+@media(max-width:1100px) and (min-width:851px){
+ .workspace{grid-template-columns:220px minmax(0,1fr)!important}
+ .gmailList .msg{grid-template-columns:minmax(130px,190px) minmax(160px,260px) minmax(140px,1fr) auto auto}
+ .gmailList .msg p{display:block}
+}
+@media(max-width:850px){
+ .workspace{display:block!important}
+ .gmailList{display:flex!important;height:100%}
+ .gmailList.readerHidden{display:none!important}
+ .gmailReader{display:none!important;position:fixed;z-index:12;inset:62px 0 0}
+ .gmailReader.open{display:block!important}
+ .gmailList .messages article{min-height:74px;padding:10px 12px;align-items:flex-start}
+ .gmailList .senderAvatar{display:grid;width:38px;height:38px;margin-right:10px}
+ .gmailList .mailCheck{margin:11px 8px 0 0}
+ .gmailList .msg{display:block;min-height:0;padding-right:30px}
+ .gmailList .msg>div{display:flex}
+ .gmailList .msg b,.gmailList .msg strong,.gmailList .msg p,.gmailList .msg time,.gmailList .msg .tag{display:block;min-width:0}
+ .gmailList .msg strong{margin:2px 24px 1px 0}
+ .gmailList .msg p{margin:0 22px 4px 0}
+ .gmailList .msg time{min-width:0}
+ .gmailList .star{right:5px;top:38px}
+ .gmailReader .letter{padding:22px 16px 70px}
+}
