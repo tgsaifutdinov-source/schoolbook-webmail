@@ -4,7 +4,7 @@ import {NextRequest,NextResponse} from "next/server";
 export async function POST(req:NextRequest){
  const token=(await cookies()).get("sbmail_auth")?.value;
  if(!token)return NextResponse.json({error:"Unauthorized"},{status:401});
- const {to,subject,text,attachments=[]}=await req.json();
+ const {to,cc="",bcc="",subject,text,attachments=[]}=await req.json();
  if(!to?.trim()||!text?.trim())return NextResponse.json({error:"Укажите получателя и текст"},{status:400});
 
  const headers={Authorization:"Basic "+token,"content-type":"application/json"};
@@ -28,10 +28,10 @@ export async function POST(req:NextRequest){
  if(!identity)return NextResponse.json({error:"Не найдена почтовая идентичность"},{status:400});
  if(!drafts)return NextResponse.json({error:"Не найдена папка Черновики"},{status:400});
 
- const recipients=String(to).split(",").map((x:string)=>x.trim()).filter(Boolean).map((email:string)=>({email}));
+ const addresses=(v:string)=>String(v||"").split(",").map((x:string)=>x.trim()).filter(Boolean).map((email:string)=>({email}));const recipients=addresses(to);
  const email:any={
   mailboxIds:{[drafts]:true},keywords:{"$draft":true},
-  from:[{name:identity.name||"",email:identity.email}],to:recipients,subject:subject||"",
+  from:[{name:identity.name||"",email:identity.email}],to:recipients,cc:addresses(cc),bcc:addresses(bcc),subject:subject||"",
   bodyValues:{body:{value:text,isTruncated:false}},textBody:[{partId:"body",type:"text/plain"}]
  };
  if(attachments.length)email.attachments=attachments.map((a:any)=>({blobId:a.blobId,type:a.type||"application/octet-stream",name:a.name,disposition:"attachment"}));
