@@ -16,10 +16,13 @@ export async function GET(req:NextRequest){
   const search=(req.nextUrl.searchParams.get("q")||"").trim();
   const position=Math.max(0,Number(req.nextUrl.searchParams.get("position")||0)||0);
   const limit=Math.min(100,Math.max(10,Number(req.nextUrl.searchParams.get("limit")||50)||50));
-  const filter:any={}; if(mailboxId)filter.inMailbox=mailboxId;if(search)filter.text=search;
+  const sortDir=req.nextUrl.searchParams.get("sort")==="oldest";
+  const unread=req.nextUrl.searchParams.get("unread")==="1";
+  const starred=req.nextUrl.searchParams.get("starred")==="1";
+  const filter:any={};if(mailboxId)filter.inMailbox=mailboxId;if(search)filter.text=search;if(unread)filter.notKeyword="$seen";if(starred)filter.hasKeyword="$flagged";
   const body={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[
    ["Mailbox/get",{accountId,properties:["id","name","role","sortOrder","totalEmails","unreadEmails"]},"m"],
-   ["Email/query",{accountId,filter,sort:[{property:"receivedAt",isAscending:false}],position,limit,calculateTotal:true},"q"],
+   ["Email/query",{accountId,filter,sort:[{property:"receivedAt",isAscending:sortDir}],position,limit,calculateTotal:true},"q"],
    ["Email/get",{accountId,"#ids":{"resultOf":"q","name":"Email/query","path":"/ids"},properties:["id","mailboxIds","keywords","from","to","cc","subject","receivedAt","preview","hasAttachment","size"]},"e"]
   ]};
   const r=await stalwart(endpoint,token,{method:"POST",body:JSON.stringify(body)}); if(!r.ok)return NextResponse.json({error:"JMAP request failed"},{status:r.status});
