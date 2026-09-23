@@ -50,3 +50,7 @@ nav button,.settings{height:48px;font-size:14px;padding:0 14px}nav button svg,.s
 .composeWindow.maximized{inset:24px!important;width:auto!important;height:auto!important;max-width:none!important;display:flex;flex-direction:column}.composeWindow.maximized textarea{flex:1;min-height:260px;resize:none}.composeWindow.maximized .composeFoot{margin-top:auto}
 .sendHint{font-size:10px;color:#98a2b3;margin-left:-6px;white-space:nowrap}
 @media(max-width:850px){.composeWindow.maximized{inset:0!important;border-radius:0!important}.sendHint{display:none}}
+
+.composeWindow{position:fixed}.dropOverlay{position:absolute;z-index:80;inset:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:2px dashed #e2ad16;border-radius:13px;background:#fff9e9eF;color:#263248;pointer-events:none}.dropOverlay svg{width:34px;height:34px;color:#d8a20d}.dropOverlay b{font-size:15px}.dropOverlay span{font-size:11px;color:#7b8595}.composeWindow.dragging{box-shadow:0 0 0 3px #ffc62b55,0 24px 70px #1018282b}
+.composeFiles>span{max-width:100%;display:flex!important;align-items:center;gap:6px}.composeFiles .fileName{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:240px}.composeFiles small{font-size:9px;color:#98a2b3;white-space:nowrap}.composeFiles button{margin-left:2px}
+@media(min-width:1200px){.composeFiles .fileName{max-width:360px}.composeFiles small{font-size:10px}}
