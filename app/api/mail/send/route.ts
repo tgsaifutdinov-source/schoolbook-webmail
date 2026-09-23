@@ -33,7 +33,7 @@ export async function POST(req:NextRequest){
  if(!drafts)return NextResponse.json({error:"Не найдена папка Черновики"},{status:400});
 
  const addresses=(v:string)=>String(v||"").split(/[;,\n]+/).map((x:string)=>x.trim()).filter(Boolean).map((email:string)=>({email}));const valid=(email:string)=>/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(email);const recipients=addresses(to);
- const allRecipients=[...recipients,...addresses(cc),...addresses(bcc)];if(!recipients.length||allRecipients.some((x:any)=>!valid(x.email)))return NextResponse.json({error:"Проверьте адреса получателей"},{status:400});
+ const allRecipients=[...recipients,...addresses(cc),...addresses(bcc)];if(!recipients.length||allRecipients.some((x:any)=>!valid(x.email)))return NextResponse.json({error:"Проверьте адреса получателей"},{status:400});if(allRecipients.length>200)return NextResponse.json({error:"Слишком много получателей в одном письме"},{status:400});
  const email=buildJmapEmail({drafts,identity,to,cc,bcc,subject,text,attachments,includeFrom:true});
 
  const createBody={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",{accountId,create:{send:email}},"e"]]};
@@ -42,7 +42,7 @@ export async function POST(req:NextRequest){
  if(emailError||!emailId){console.error("JMAP Email/set failed",JSON.stringify(cd));return NextResponse.json({error:emailError?.description||"Не удалось создать письмо",type:emailError?.type||"jmapError",properties:emailError?.properties||[]},{status:400})}
  const submitBody={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail","urn:ietf:params:jmap:submission"],methodCalls:[["EmailSubmission/set",{accountId,create:{send:{identityId:identity.id,emailId}}},"s"]]};
  const rr=await fetch(endpoint,{method:"POST",headers,body:JSON.stringify(submitBody),cache:"no-store"});const sd=await rr.json();const submissionResult=sd.methodResponses?.find((x:any)=>x[0]==="EmailSubmission/set");const sendError=submissionResult?.[1]?.notCreated?.send;
- if(sendError||!submissionResult){console.error("JMAP EmailSubmission/set failed",JSON.stringify(sd));return NextResponse.json({error:sendError?.description||"Не удалось отправить письмо",type:sendError?.type||"jmapError"},{status:400})}
+ if(sendError||!submissionResult){console.error("JMAP EmailSubmission/set failed",JSON.stringify(sd));await fetch(endpoint,{method:"POST",headers,body:JSON.stringify({using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",{accountId,destroy:[emailId]},"cleanupFailedSend"]]}),cache:"no-store"}).catch(()=>null);return NextResponse.json({error:sendError?.description||"Не удалось отправить письмо",type:sendError?.type||"jmapError"},{status:400})}
 
  if(emailId&&sent){
   const patch:any={"keywords/$draft":null};
