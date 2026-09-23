@@ -4,6 +4,8 @@ import {NextRequest,NextResponse} from "next/server";
 
 type MailboxMap=Record<string,boolean>;
 type Context={headers:Record<string,string>;accountId:string;endpoint:string};
+const MAX_MESSAGES=2000;
+function chunks<T>(items:T[],size=500){const out:T[][]=[];for(let i=0;i<items.length;i+=size)out.push(items.slice(i,i+size));return out}
 
 async function context():Promise<Context|null>{
  const token=(await getMailSession())?.token;
@@ -29,20 +31,24 @@ async function jmap(c:Context,methodCalls:any[]){
 }
 
 async function resolveMessageIds(c:Context,directIds:string[],threadIds:string[],mailboxScopeId:string){
- const ids=new Set<string>(directIds);
- if(threadIds.length){
-  const d=await jmap(c,[["Thread/get",{accountId:c.accountId,ids:threadIds.slice(0,100)},"threads"]]);
+ const ids=new Set<string>(directIds.slice(0,MAX_MESSAGES));
+ for(const batch of chunks(threadIds.slice(0,500),100)){
+  if(ids.size>=MAX_MESSAGES)break;
+  const d=await jmap(c,[["Thread/get",{accountId:c.accountId,ids:batch},"threads"]]);
   const list=d.methodResponses?.find((x:any)=>x[0]==="Thread/get")?.[1]?.list||[];
   for(const thread of list)for(const emailId of thread.emailIds||[]){
-   if(ids.size>=500)break;
+   if(ids.size>=MAX_MESSAGES)break;
    if(typeof emailId==="string"&&emailId)ids.add(emailId);
   }
  }
- let resolved=[...ids].slice(0,500);
+ let resolved=[...ids].slice(0,MAX_MESSAGES);
  if(mailboxScopeId&&resolved.length){
-  const d=await jmap(c,[["Email/get",{accountId:c.accountId,ids:resolved,properties:["id","mailboxIds"]},"scope"]]);
-  const list=d.methodResponses?.find((x:any)=>x[0]==="Email/get")?.[1]?.list||[];
-  const allowed=new Set(list.filter((m:any)=>m.mailboxIds?.[mailboxScopeId]).map((m:any)=>String(m.id)));
+  const allowed=new Set<string>();
+  for(const batch of chunks(resolved)){
+   const d=await jmap(c,[["Email/get",{accountId:c.accountId,ids:batch,properties:["id","mailboxIds"]},"scope"]]);
+   const list=d.methodResponses?.find((x:any)=>x[0]==="Email/get")?.[1]?.list||[];
+   for(const message of list)if(message.mailboxIds?.[mailboxScopeId])allowed.add(String(message.id));
+  }
   resolved=resolved.filter(id=>allowed.has(id));
  }
  return resolved;
@@ -50,13 +56,14 @@ async function resolveMessageIds(c:Context,directIds:string[],threadIds:string[]
 
 async function snapshotMailboxes(c:Context,ids:string[]){
  const map:Record<string,MailboxMap>={};
- if(!ids.length)return map;
- const d=await jmap(c,[["Email/get",{accountId:c.accountId,ids,properties:["id","mailboxIds"]},"before"]]);
- const list=d.methodResponses?.find((x:any)=>x[0]==="Email/get")?.[1]?.list||[];
- for(const message of list){
-  const mailboxIds:MailboxMap={};
-  for(const [key,value] of Object.entries(message.mailboxIds||{}))if(value===true)mailboxIds[key]=true;
-  if(message.id&&Object.keys(mailboxIds).length)map[String(message.id)]=mailboxIds;
+ for(const batch of chunks(ids)){
+  const d=await jmap(c,[["Email/get",{accountId:c.accountId,ids:batch,properties:["id","mailboxIds"]},"before"]]);
+  const list=d.methodResponses?.find((x:any)=>x[0]==="Email/get")?.[1]?.list||[];
+  for(const message of list){
+   const mailboxIds:MailboxMap={};
+   for(const [key,value] of Object.entries(message.mailboxIds||{}))if(value===true)mailboxIds[key]=true;
+   if(message.id&&Object.keys(mailboxIds).length)map[String(message.id)]=mailboxIds;
+  }
  }
  return map;
 }
@@ -70,10 +77,10 @@ export async function POST(req:NextRequest){
  const body=await req.json().catch(()=>({}));
  const action=String(body.action||"");
  const directIds:string[]=Array.isArray(body.ids)
-  ?body.ids.filter((x:any)=>typeof x==="string"&&x).slice(0,500)
+  ?body.ids.filter((x:any)=>typeof x==="string"&&x).slice(0,MAX_MESSAGES)
   :typeof body.id==="string"&&body.id?[body.id]:[];
  const threadIds:string[]=Array.isArray(body.threadIds)
-  ?body.threadIds.filter((x:any)=>typeof x==="string"&&x).slice(0,100)
+  ?body.threadIds.filter((x:any)=>typeof x==="string"&&x).slice(0,500)
   :typeof body.threadId==="string"&&body.threadId?[body.threadId]:[];
  const mailboxScopeId=typeof body.mailboxScopeId==="string"?body.mailboxScopeId:"";
 
@@ -92,9 +99,11 @@ export async function POST(req:NextRequest){
    if(!Object.keys(mailboxIds).length)return NextResponse.json({error:"Invalid restore mailbox map"},{status:400});
    safeMap[messageId]=mailboxIds;
   }
-  const d=await jmap(c,[["Email/set",{accountId:c.accountId,update:Object.fromEntries(directIds.map(id=>[id,{mailboxIds:safeMap[id]}]))},"restore"]]);
-  const response=d.methodResponses?.[0];
-  if(response?.[0]==="error"||Object.keys(response?.[1]?.notUpdated||{}).length)return NextResponse.json({error:"Restore failed",details:response?.[1]},{status:400});
+  for(const batch of chunks(directIds)){
+   const d=await jmap(c,[["Email/set",{accountId:c.accountId,update:Object.fromEntries(batch.map(id=>[id,{mailboxIds:safeMap[id]}]))},"restore"]]);
+   const response=d.methodResponses?.[0];
+   if(response?.[0]==="error"||Object.keys(response?.[1]?.notUpdated||{}).length)return NextResponse.json({error:"Restore failed",details:response?.[1]},{status:400});
+  }
   return NextResponse.json({ok:true,ids:directIds});
  }
 
@@ -102,9 +111,11 @@ export async function POST(req:NextRequest){
  if(!messageIds.length)return NextResponse.json({ok:true,ids:[]});
 
  if(action==="delete"){
-  const d=await jmap(c,[["Email/set",{accountId:c.accountId,destroy:messageIds},"delete"]]);
-  const response=d.methodResponses?.[0];
-  if(response?.[0]==="error"||Object.keys(response?.[1]?.notDestroyed||{}).length)return NextResponse.json({error:"Delete failed",details:response?.[1]},{status:400});
+  for(const batch of chunks(messageIds)){
+   const d=await jmap(c,[["Email/set",{accountId:c.accountId,destroy:batch},"delete"]]);
+   const response=d.methodResponses?.[0];
+   if(response?.[0]==="error"||Object.keys(response?.[1]?.notDestroyed||{}).length)return NextResponse.json({error:"Delete failed",details:response?.[1]},{status:400});
+  }
   return NextResponse.json({ok:true,ids:messageIds});
  }
 
@@ -128,8 +139,10 @@ export async function POST(req:NextRequest){
   update={mailboxIds:{[target.id]:true}};
  }else return NextResponse.json({error:"Unknown action"},{status:400});
 
- const d=await jmap(c,[["Email/set",{accountId:c.accountId,update:Object.fromEntries(messageIds.map(id=>[id,update]))},"update"]]);
- const response=d.methodResponses?.[0];
- if(response?.[0]==="error"||Object.keys(response?.[1]?.notUpdated||{}).length)return NextResponse.json({error:"Update failed",details:response?.[1]},{status:400});
+ for(const batch of chunks(messageIds)){
+  const d=await jmap(c,[["Email/set",{accountId:c.accountId,update:Object.fromEntries(batch.map(id=>[id,update]))},"update"]]);
+  const response=d.methodResponses?.[0];
+  if(response?.[0]==="error"||Object.keys(response?.[1]?.notUpdated||{}).length)return NextResponse.json({error:"Update failed",details:response?.[1]},{status:400});
+ }
  return NextResponse.json({ok:true,ids:messageIds,restoreMap:reversible?restoreMap:undefined});
 }
