@@ -10,9 +10,9 @@ async function context(){
 }
 export async function POST(req:NextRequest){
  const c=await context();if(!c)return NextResponse.json({error:"Unauthorized"},{status:401});
- const {id,action,targetMailboxId}=await req.json();if(!id)return NextResponse.json({error:"Missing id"},{status:400});
+ const {id,ids,action,targetMailboxId}=await req.json();const messageIds:Array<string>=Array.isArray(ids)?ids.filter(Boolean):id?[id]:[];if(!messageIds.length)return NextResponse.json({error:"Missing id"},{status:400});
  let update:any={};
- if(action==="delete"){const body={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",{accountId:c.accountId,destroy:[id]},"s"]]};const r=await fetch(c.endpoint,{method:"POST",headers:c.headers,body:JSON.stringify(body),cache:"no-store"});const d=await r.json();const x=d.methodResponses?.[0];if(x?.[0]==="error"||x?.[1]?.notDestroyed?.[id])return NextResponse.json({error:"Delete failed",details:x?.[1]},{status:400});return NextResponse.json({ok:true})}
+ if(action==="delete"){const body={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",{accountId:c.accountId,destroy:messageIds},"s"]]};const r=await fetch(c.endpoint,{method:"POST",headers:c.headers,body:JSON.stringify(body),cache:"no-store"});const d=await r.json();const x=d.methodResponses?.[0];if(x?.[0]==="error"||Object.keys(x?.[1]?.notDestroyed||{}).length)return NextResponse.json({error:"Delete failed",details:x?.[1]},{status:400});return NextResponse.json({ok:true})}
  if(action==="read")update={"keywords/$seen":true};
  else if(action==="unread")update={"keywords/$seen":null};
  else if(action==="star")update={"keywords/$flagged":true};
@@ -26,8 +26,8 @@ export async function POST(req:NextRequest){
   if(!target)return NextResponse.json({error:"Target mailbox not found"},{status:404});
   update={mailboxIds:{[target.id]:true}};
  } else return NextResponse.json({error:"Unknown action"},{status:400});
- const body={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",{accountId:c.accountId,update:{[id]:update}},"s"]]};
+ const body={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",{accountId:c.accountId,update:Object.fromEntries(messageIds.map(messageId=>[messageId,update]))},"s"]]};
  const r=await fetch(c.endpoint,{method:"POST",headers:c.headers,body:JSON.stringify(body),cache:"no-store"});const d=await r.json();
- const response=d.methodResponses?.[0];if(response?.[0]==="error"||response?.[1]?.notUpdated?.[id])return NextResponse.json({error:"Update failed",details:response?.[1]},{status:400});
+ const response=d.methodResponses?.[0];if(response?.[0]==="error"||Object.keys(response?.[1]?.notUpdated||{}).length)return NextResponse.json({error:"Update failed",details:response?.[1]},{status:400});
  return NextResponse.json({ok:true});
 }
