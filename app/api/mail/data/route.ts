@@ -160,7 +160,8 @@ export async function GET(req:NextRequest){
      })});
      const td=await tr.json();
      const list=td.methodResponses?.find((x:any)=>x[0]==="Thread/get")?.[1]?.list||[];
-     const counts=new Map<string,number>(list.map((t:any)=>[String(t.id),Array.isArray(t.emailIds)?t.emailIds.length:1]));
+     const countEntries:Array<[string,number]>=list.map((t:any):[string,number]=>[String(t.id),Array.isArray(t.emailIds)?t.emailIds.length:1]);
+     const counts=new Map<string,number>(countEntries);
      emails=emails.map((m:any)=>({...m,threadCount:counts.get(String(m.threadId||""))||1}));
     }catch{}
    }
