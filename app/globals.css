@@ -455,3 +455,19 @@ html[data-mail-density="compact"] .messages article{min-height:66px;padding-top:
  .composeHeadActions .composeMinimize{display:none!important}
  .gmailReader .readerNav>span{display:none}
 }
+
+/* Gmail selection control */
+.gmailSelectControl{position:relative;display:flex;align-items:center;height:32px;margin-right:2px}
+.gmailSelectControl .toolbarCheck{width:30px!important;height:30px!important;border-radius:15px 0 0 15px!important;display:grid!important;place-items:center!important}
+.gmailSelectControl .selectCaret{width:22px!important;height:30px!important;border-radius:0 15px 15px 0!important}
+.gmailSelectControl .selectCaret svg{width:11px!important}
+.gmailSelectControl .toolbarCheck:hover,.gmailSelectControl .selectCaret:hover{background:#eef0f2!important}
+.gmailSelectControl .toolbarCheck>span{width:15px;height:15px;border:2px solid #747b85;border-radius:2px;position:relative;background:#fff}
+.gmailSelectControl .toolbarCheck>span.checkOn,.gmailSelectControl .toolbarCheck>span.checkSome{background:var(--gmail-yellow);border-color:#c99400}
+.gmailSelectControl .toolbarCheck>span.checkOn:after{content:"";position:absolute;left:3px;top:0;width:5px;height:8px;border-right:2px solid #4d3b00;border-bottom:2px solid #4d3b00;transform:rotate(42deg)}
+.gmailSelectControl .toolbarCheck>span.checkSome:after{content:"";position:absolute;left:2px;right:2px;top:5px;height:2px;background:#4d3b00}
+.selectTypeMenu{position:absolute;z-index:32;top:36px;left:0;width:164px;padding:6px 0;border:1px solid #e0e4e9;border-radius:8px;background:#fff;box-shadow:0 8px 24px #3c404329}
+.selectTypeMenu button{width:100%!important;height:32px!important;padding:0 12px!important;border-radius:0!important;justify-content:flex-start!important;display:flex!important;align-items:center!important;color:#3c4043!important;font-size:10px}
+.selectTypeMenu button:hover{background:#f1f3f4!important}
+@media(min-width:1200px){.selectTypeMenu button{font-size:11px}.selectTypeMenu{width:176px}}
+@media(max-width:850px){.selectTypeMenu{position:fixed;top:104px;left:8px;width:170px}}
