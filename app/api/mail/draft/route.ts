@@ -20,10 +20,18 @@ export async function POST(req:NextRequest){
  if(!c.identity||!c.drafts)return NextResponse.json({error:"Не найдена папка Черновики"},{status:400});
  const allRecipients=[...addresses(to),...addresses(cc),...addresses(bcc)];if(allRecipients.some((x:any)=>!valid(x.email)))return NextResponse.json({error:"Проверьте адреса получателей"},{status:400});
  const email=buildJmapEmail({drafts:c.drafts,identity:c.identity,to,cc,bcc,subject,text,attachments,includeFrom:false});
- const args:any={accountId:c.accountId};if(id)args.update={[id]:email};else args.create={draft:email};
- const r=await fetch(c.endpoint,{method:"POST",headers:c.headers,body:JSON.stringify({using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",args,"d"]]}),cache:"no-store"});const d=await r.json();const x=d.methodResponses?.[0];
- const err=id?x?.[1]?.notUpdated?.[id]:x?.[1]?.notCreated?.draft;if(x?.[0]==="error"||err){console.error("JMAP draft Email/set failed",JSON.stringify(d));return NextResponse.json({error:err?.description||x?.[1]?.description||"Не удалось сохранить черновик",type:err?.type||x?.[1]?.type||"jmapError",properties:err?.properties||x?.[1]?.properties||[]},{status:400})}
- return NextResponse.json({ok:true,id:id||x?.[1]?.created?.draft?.id});
+ // Email bodyStructure/bodyValues are immutable in JMAP. Saving an existing draft
+ // therefore creates a replacement message and removes the previous draft.
+ const args:any={accountId:c.accountId,create:{draft:email}};if(id)args.destroy=[id];
+ const r=await fetch(c.endpoint,{method:"POST",headers:c.headers,body:JSON.stringify({using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",args,"d"]]}),cache:"no-store"});
+ const result=await r.json();const x=result.methodResponses?.[0];
+ const createErr=x?.[1]?.notCreated?.draft;
+ if(x?.[0]==="error"||createErr){console.error("JMAP draft Email/set failed",JSON.stringify(result));return NextResponse.json({error:createErr?.description||x?.[1]?.description||"Не удалось сохранить черновик",type:createErr?.type||x?.[1]?.type||"jmapError",properties:createErr?.properties||x?.[1]?.properties||[]},{status:400})}
+ const newId=x?.[1]?.created?.draft?.id;
+ if(!newId){console.error("JMAP draft Email/set returned no id",JSON.stringify(result));return NextResponse.json({error:"Не удалось получить id сохранённого черновика"},{status:502})}
+ const destroyErr=id?x?.[1]?.notDestroyed?.[id]:null;
+ if(destroyErr)console.warn("JMAP old draft cleanup failed",JSON.stringify(destroyErr));
+ return NextResponse.json({ok:true,id:newId,replacedId:id||null,cleanupWarning:!!destroyErr});
 }
 export async function DELETE(req:NextRequest){
  const blocked=sameOriginGuard(req);if(blocked)return blocked;
