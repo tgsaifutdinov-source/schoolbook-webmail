@@ -12,7 +12,7 @@ async function context(){
 export async function POST(req:NextRequest){
  const blocked=sameOriginGuard(req);if(blocked)return blocked;
  const c=await context();if(!c)return NextResponse.json({error:"Unauthorized"},{status:401});
- const {id,ids,action,targetMailboxId}=await req.json().catch(()=>({}));const messageIds:Array<string>=Array.isArray(ids)?ids.filter((x:any)=>typeof x==="string"&&x).slice(0,500):typeof id==="string"&&id?[id]:[];if(!messageIds.length)return NextResponse.json({error:"Missing id"},{status:400});
+ const {id,ids,action,targetMailboxId,restoreMap}=await req.json().catch(()=>({}));const messageIds:Array<string>=Array.isArray(ids)?ids.filter((x:any)=>typeof x==="string"&&x).slice(0,500):typeof id==="string"&&id?[id]:[];if(!messageIds.length)return NextResponse.json({error:"Missing id"},{status:400});
  let update:any={};
  if(action==="delete"){const body={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",{accountId:c.accountId,destroy:messageIds},"s"]]};const r=await fetch(c.endpoint,{method:"POST",headers:c.headers,body:JSON.stringify(body),cache:"no-store"});const d=await r.json();const x=d.methodResponses?.[0];if(x?.[0]==="error"||Object.keys(x?.[1]?.notDestroyed||{}).length)return NextResponse.json({error:"Delete failed",details:x?.[1]},{status:400});return NextResponse.json({ok:true})}
  if(action==="read")update={"keywords/$seen":true};
@@ -22,6 +22,17 @@ export async function POST(req:NextRequest){
  else if(action==="move"){
   if(!targetMailboxId)return NextResponse.json({error:"Missing target mailbox"},{status:400});
   update={mailboxIds:{[targetMailboxId]:true}};
+ } else if(action==="restoreMailboxes"){
+  const safeMap:Record<string,Record<string,boolean>>={};
+  for(const messageId of messageIds){
+   const raw=restoreMap?.[messageId];
+   if(!raw||typeof raw!=="object")return NextResponse.json({error:"Missing restore mailbox map"},{status:400});
+   const mailboxIds=Object.fromEntries(Object.entries(raw).filter(([key,value])=>typeof key==="string"&&key.length>0&&value===true).slice(0,50));
+   if(!Object.keys(mailboxIds).length)return NextResponse.json({error:"Invalid restore mailbox map"},{status:400});
+   safeMap[messageId]=mailboxIds;
+  }
+  const body={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",{accountId:c.accountId,update:Object.fromEntries(messageIds.map(messageId=>[messageId,{mailboxIds:safeMap[messageId]}]))},"s"]]};
+  const r=await fetch(c.endpoint,{method:"POST",headers:c.headers,body:JSON.stringify(body),cache:"no-store"});const d=await r.json();const response=d.methodResponses?.[0];if(response?.[0]==="error"||Object.keys(response?.[1]?.notUpdated||{}).length)return NextResponse.json({error:"Restore failed",details:response?.[1]},{status:400});return NextResponse.json({ok:true});
  } else if(action==="archive"||action==="restore"||action==="trash"){
   const body={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Mailbox/get",{accountId:c.accountId,properties:["id","role"]},"m"]]};
   const rr=await fetch(c.endpoint,{method:"POST",headers:c.headers,body:JSON.stringify(body),cache:"no-store"});const dd=await rr.json();const wanted=action==="archive"?"archive":action==="restore"?"inbox":"trash";const target=dd.methodResponses?.[0]?.[1]?.list?.find((x:any)=>x.role===wanted);
