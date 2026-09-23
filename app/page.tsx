@@ -2,7 +2,7 @@
 import {useEffect,useMemo,useState} from "react";
 import {useRouter} from "next/navigation";
 import {Archive,ChevronDown,Clock3,FileText,Folder,Inbox,LogOut,Menu,MoreHorizontal,Paperclip,PenLine,Plus,Reply,Search,Send,Settings2,Star,Trash2} from "lucide-react";
-type Box={id:string,name:string,role?:string,totalEmails?:number,unreadEmails?:number};
+type Box={id:string,name:string,role?:string,sortOrder?:number,totalEmails?:number,unreadEmails?:number};
 type Addr={name?:string,email:string};
 type Mail={id:string,mailboxIds:Record<string,boolean>,keywords:Record<string,boolean>,from?:Addr[],subject?:string,receivedAt?:string,preview?:string,hasAttachment?:boolean};
 export default function Home(){
