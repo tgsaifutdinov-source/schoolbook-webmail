@@ -1,18 +1,135 @@
 import {getMailSession} from "../../../../lib/mail-session";
 import {NextRequest,NextResponse} from "next/server";
-async function stalwart(path:string,token:string,init?:RequestInit){return fetch("http://host.docker.internal:18080"+path,{...init,headers:{Authorization:"Basic "+token,"content-type":"application/json",...(init?.headers||{})},cache:"no-store"})}
+
+async function stalwart(path:string,token:string,init?:RequestInit){
+ return fetch("http://host.docker.internal:18080"+path,{
+  ...init,
+  headers:{Authorization:"Basic "+token,"content-type":"application/json",...(init?.headers||{})},
+  cache:"no-store"
+ });
+}
+
 export async function GET(req:NextRequest){
- const auth=await getMailSession();if(!auth)return NextResponse.json({error:"Unauthorized"},{status:401});
+ const auth=await getMailSession();
+ if(!auth)return NextResponse.json({error:"Unauthorized"},{status:401});
  try{
-  const sr=await stalwart("/jmap/session",auth.token);if(!sr.ok)return NextResponse.json({error:"Unauthorized"},{status:401});
-  const s=await sr.json(),accountId=s.primaryAccounts?.["urn:ietf:params:jmap:mail"]||Object.keys(s.accounts||{})[0];if(!accountId)return NextResponse.json({error:"Mail account not found"},{status:404});
-  const u=new URL(s.apiUrl),endpoint=u.pathname+u.search,mailboxId=req.nextUrl.searchParams.get("mailboxId")||"",search=(req.nextUrl.searchParams.get("q")||"").trim(),scope=req.nextUrl.searchParams.get("scope")||"all",days=[7,30,365].includes(Number(req.nextUrl.searchParams.get("days"))) ? Number(req.nextUrl.searchParams.get("days")) : 0,position=Math.max(0,Number(req.nextUrl.searchParams.get("position")||0)||0),limit=Math.min(100,Math.max(10,Number(req.nextUrl.searchParams.get("limit")||50)||50)),sortDir=req.nextUrl.searchParams.get("sort")==="oldest",unread=req.nextUrl.searchParams.get("unread")==="1",starred=req.nextUrl.searchParams.get("starred")==="1",attachment=req.nextUrl.searchParams.get("attachment")==="1";
+  const sr=await stalwart("/jmap/session",auth.token);
+  if(!sr.ok)return NextResponse.json({error:"Unauthorized"},{status:401});
+  const session=await sr.json();
+  const accountId=session.primaryAccounts?.["urn:ietf:params:jmap:mail"]||Object.keys(session.accounts||{})[0];
+  if(!accountId)return NextResponse.json({error:"Mail account not found"},{status:404});
+  const api=new URL(session.apiUrl),endpoint=api.pathname+api.search;
+  const mailboxId=req.nextUrl.searchParams.get("mailboxId")||"";
+  const search=(req.nextUrl.searchParams.get("q")||"").trim();
+  const scope=req.nextUrl.searchParams.get("scope")||"all";
+  const requestedDays=Number(req.nextUrl.searchParams.get("days"));
+  const days=[7,30,365].includes(requestedDays)?requestedDays:0;
+  const position=Math.max(0,Number(req.nextUrl.searchParams.get("position")||0)||0);
+  const limit=Math.min(100,Math.max(10,Number(req.nextUrl.searchParams.get("limit")||50)||50));
+  const oldest=req.nextUrl.searchParams.get("sort")==="oldest";
+  const unread=req.nextUrl.searchParams.get("unread")==="1";
+  const starred=req.nextUrl.searchParams.get("starred")==="1";
+  const attachment=req.nextUrl.searchParams.get("attachment")==="1";
+
   let effectiveMailboxId=mailboxId,preloadedMailboxes:any[]=[];
-  if(!effectiveMailboxId&&!starred){const r=await stalwart(endpoint,auth.token,{method:"POST",body:JSON.stringify({using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Mailbox/get",{accountId,properties:["id","name","role","sortOrder","totalEmails","unreadEmails"]},"m"]]})});if(!r.ok)throw new Error("Mailbox lookup failed");const md=await r.json();const mx=(md.methodResponses||[]).find((x:any)=>x[0]==="Mailbox/get");preloadedMailboxes=mx?.[1]?.list||[];effectiveMailboxId=preloadedMailboxes.find((x:any)=>x.role==="inbox")?.id||preloadedMailboxes[0]?.id||""}
-  const filter:any={};if(effectiveMailboxId)filter.inMailbox=effectiveMailboxId;if(search){if(["from","to","subject","body"].includes(scope))filter[scope]=search;else filter.text=search}if(days)filter.after=new Date(Date.now()-days*86400000).toISOString();if(unread)filter.notKeyword="$seen";if(starred)filter.hasKeyword="$flagged";
-  const call=async(pos:number,chunk:number,mailboxes=false)=>{const calls:any[]=[];if(mailboxes)calls.push(["Mailbox/get",{accountId,properties:["id","name","role","sortOrder","totalEmails","unreadEmails"]},"m"]);calls.push(["Email/query",{accountId,filter,sort:[{property:"receivedAt",isAscending:sortDir}],position:pos,limit:chunk,calculateTotal:true},"q"],["Email/get",{accountId,"#ids":{"resultOf":"q","name":"Email/query","path":"/ids"},properties:["id","threadId","mailboxIds","keywords","from","to","cc","subject","receivedAt","preview","hasAttachment","size"]},"e"]);const r=await stalwart(endpoint,auth.token,{method:"POST",body:JSON.stringify({using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:calls})});if(!r.ok)throw new Error("JMAP request failed");return r.json()};
-  let cursor=position,total=0,mailboxes:any[]=preloadedMailboxes,emails:any[]=[];const maxPasses=attachment?5:1,chunk=attachment?Math.min(100,Math.max(limit,50)):limit;
-  for(let pass=0;pass<maxPasses&&emails.length<limit;pass++){const d=await call(cursor,chunk,pass===0&&mailboxes.length===0);let ids=0;for(const x of d.methodResponses||[]){if(x[0]==="error")return NextResponse.json({error:x[1]?.description||x[1]?.type||"JMAP error"},{status:400});if(x[0]==="Mailbox/get")mailboxes=x[1].list||[];if(x[0]==="Email/query"){total=x[1].total||0;cursor=(x[1].position??cursor)+(x[1].ids?.length||0);ids=x[1].ids?.length||0}if(x[0]==="Email/get"){const list=x[1].list||[];emails.push(...(attachment?list.filter((m:any)=>m.hasAttachment):list))}}if(!ids||cursor>=total)break}
-  emails=emails.slice(0,limit);return NextResponse.json({accountId,username:s.username,mailboxes,emails,position,total,nextPosition:cursor,hasMore:cursor<total,filteredTotal:attachment?null:total,selectedMailboxId:effectiveMailboxId||null});
- }catch{return NextResponse.json({error:"Stalwart unavailable"},{status:502})}
+  if(!effectiveMailboxId&&!starred){
+   const r=await stalwart(endpoint,auth.token,{method:"POST",body:JSON.stringify({
+    using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],
+    methodCalls:[["Mailbox/get",{accountId,properties:["id","name","role","sortOrder","totalEmails","unreadEmails"]},"m"]]
+   })});
+   if(!r.ok)throw new Error("Mailbox lookup failed");
+   const md=await r.json();
+   const mx=(md.methodResponses||[]).find((x:any)=>x[0]==="Mailbox/get");
+   preloadedMailboxes=mx?.[1]?.list||[];
+   effectiveMailboxId=preloadedMailboxes.find((x:any)=>x.role==="inbox")?.id||preloadedMailboxes[0]?.id||"";
+  }
+
+  const filter:any={};
+  if(effectiveMailboxId)filter.inMailbox=effectiveMailboxId;
+  if(search){
+   if(["from","to","subject","body"].includes(scope))filter[scope]=search;
+   else filter.text=search;
+  }
+  if(days)filter.after=new Date(Date.now()-days*86400000).toISOString();
+  if(unread)filter.notKeyword="$seen";
+  if(starred)filter.hasKeyword="$flagged";
+
+  const call=async(pos:number,chunk:number,includeMailboxes:boolean)=>{
+   const calls:any[]=[];
+   if(includeMailboxes)calls.push(["Mailbox/get",{accountId,properties:["id","name","role","sortOrder","totalEmails","unreadEmails"]},"m"]);
+   calls.push(
+    ["Email/query",{accountId,filter,sort:[{property:"receivedAt",isAscending:oldest}],position:pos,limit:chunk,calculateTotal:true},"q"],
+    ["Email/get",{accountId,"#ids":{"resultOf":"q","name":"Email/query","path":"/ids"},properties:["id","threadId","mailboxIds","keywords","from","to","cc","subject","receivedAt","preview","hasAttachment","size"]},"e"]
+   );
+   const r=await stalwart(endpoint,auth.token,{method:"POST",body:JSON.stringify({
+    using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],
+    methodCalls:calls
+   })});
+   if(!r.ok)throw new Error("JMAP request failed");
+   return r.json();
+  };
+
+  let mailboxes:any[]=preloadedMailboxes,total=0,cursor=position,emails:any[]=[];
+  const includeBoxes=()=>mailboxes.length===0;
+  if(!attachment){
+   const response=await call(position,limit,includeBoxes());
+   let query:any=null,list:any[]=[];
+   for(const x of response.methodResponses||[]){
+    if(x[0]==="error")return NextResponse.json({error:x[1]?.description||x[1]?.type||"JMAP error"},{status:400});
+    if(x[0]==="Mailbox/get")mailboxes=x[1].list||[];
+    if(x[0]==="Email/query")query=x[1];
+    if(x[0]==="Email/get")list=x[1].list||[];
+   }
+   const ids:string[]=query?.ids||[];
+   total=query?.total||0;
+   const start=query?.position??position;
+   cursor=start+ids.length;
+   const byId=new Map(list.map((m:any)=>[m.id,m]));
+   emails=ids.map(id=>byId.get(id)).filter(Boolean);
+  }else{
+   const chunk=Math.min(100,Math.max(50,limit));
+   const maxScan=1000;
+   let scanned=0,first=true;
+   while(emails.length<limit&&scanned<maxScan){
+    const response=await call(cursor,chunk,first&&includeBoxes());
+    first=false;
+    let query:any=null,list:any[]=[];
+    for(const x of response.methodResponses||[]){
+     if(x[0]==="error")return NextResponse.json({error:x[1]?.description||x[1]?.type||"JMAP error"},{status:400});
+     if(x[0]==="Mailbox/get")mailboxes=x[1].list||[];
+     if(x[0]==="Email/query")query=x[1];
+     if(x[0]==="Email/get")list=x[1].list||[];
+    }
+    const ids:string[]=query?.ids||[];
+    total=query?.total||0;
+    const start=query?.position??cursor;
+    if(!ids.length){cursor=start;break}
+    const byId=new Map(list.map((m:any)=>[m.id,m]));
+    for(let i=0;i<ids.length;i++){
+     cursor=start+i+1;
+     scanned++;
+     const message=byId.get(ids[i]);
+     if(message?.hasAttachment)emails.push(message);
+     if(emails.length>=limit||scanned>=maxScan)break;
+    }
+    if(cursor>=total)break;
+   }
+  }
+
+  return NextResponse.json({
+   accountId,
+   username:session.username,
+   mailboxes,
+   emails,
+   position,
+   total,
+   nextPosition:cursor,
+   hasMore:cursor<total,
+   filteredTotal:attachment?null:total,
+   selectedMailboxId:effectiveMailboxId||null
+  });
+ }catch(error){
+  console.error("Mail data load failed",error);
+  return NextResponse.json({error:"Stalwart unavailable"},{status:502});
+ }
 }
