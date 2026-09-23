@@ -50,7 +50,7 @@ export async function GET(req:NextRequest){
   const starred=req.nextUrl.searchParams.get("starred")==="1";
   let attachment=req.nextUrl.searchParams.get("attachment")==="1";
 
-  let effectiveMailboxId=mailboxId,preloadedMailboxes:any[]=[];
+  let effectiveMailboxId=mailboxId,preloadedMailboxes:any[]=[],invalidMailboxFilter=false;
   const needsMailboxLookup=!effectiveMailboxId&&!starred||!!search||!!parsed.ops.in?.length;
   if(needsMailboxLookup){
    const r=await stalwart(endpoint,auth.token,{method:"POST",body:JSON.stringify({
@@ -67,16 +67,25 @@ export async function GET(req:NextRequest){
    const inValue=parsed.ops.in?.at(-1)?.toLowerCase();
    if(inValue){
     const roleMap:Record<string,string>={inbox:"inbox",sent:"sent",drafts:"drafts",trash:"trash",spam:"junk",junk:"junk",archive:"archive"};
-    effectiveMailboxId=preloadedMailboxes.find((x:any)=>x.role===roleMap[inValue]||x.name?.toLowerCase()===inValue)?.id||"";
+    const matched=preloadedMailboxes.find((x:any)=>x.role===roleMap[inValue]||x.name?.toLowerCase()===inValue);
+    if(matched?.id)effectiveMailboxId=matched.id;
+    else invalidMailboxFilter=true;
    }
   }else if(!effectiveMailboxId&&!starred){
    effectiveMailboxId=preloadedMailboxes.find((x:any)=>x.role==="inbox")?.id||preloadedMailboxes[0]?.id||"";
   }
 
+  if(invalidMailboxFilter){
+   return NextResponse.json({accountId,username:session.username,mailboxes:preloadedMailboxes,emails:[],position:0,total:0,nextPosition:0,hasMore:false,filteredTotal:0,selectedMailboxId:null});
+  }
+
   const conditions:any[]=[];
   if(effectiveMailboxId)conditions.push({inMailbox:effectiveMailboxId});
-  const from=parsed.ops.from?.at(-1),to=parsed.ops.to?.at(-1),cc=parsed.ops.cc?.at(-1),bcc=parsed.ops.bcc?.at(-1),subjectOp=parsed.ops.subject?.at(-1);
-  if(from)conditions.push({from});if(to)conditions.push({to});if(cc)conditions.push({cc});if(bcc)conditions.push({bcc});if(subjectOp)conditions.push({subject:subjectOp});
+  for(const value of parsed.ops.from||[])if(value)conditions.push({from:value});
+  for(const value of parsed.ops.to||[])if(value)conditions.push({to:value});
+  for(const value of parsed.ops.cc||[])if(value)conditions.push({cc:value});
+  for(const value of parsed.ops.bcc||[])if(value)conditions.push({bcc:value});
+  for(const value of parsed.ops.subject||[])if(value)conditions.push({subject:value});
   if(parsed.free){
    if(["from","to","subject","body"].includes(scope))conditions.push({[scope]:parsed.free});
    else conditions.push({text:parsed.free});
@@ -91,7 +100,8 @@ export async function GET(req:NextRequest){
   if(unread||isOps.includes("unread"))conditions.push({notKeyword:"$seen"});
   if(isOps.includes("read"))conditions.push({hasKeyword:"$seen"});
   if(starred||isOps.includes("starred"))conditions.push({hasKeyword:"$flagged"});
-  const larger=parseSize(parsed.ops.larger?.at(-1)||""),smaller=parseSize(parsed.ops.smaller?.at(-1)||"");
+  const largerValues=(parsed.ops.larger||[]).map(parseSize).filter(n=>n>0),smallerValues=(parsed.ops.smaller||[]).map(parseSize).filter(n=>n>1);
+  const larger=largerValues.length?Math.max(...largerValues):0,smaller=smallerValues.length?Math.min(...smallerValues):0;
   if(larger>0)conditions.push({minSize:larger+1});
   if(smaller>1)conditions.push({maxSize:smaller-1});
   if((parsed.ops.has||[]).some(x=>x.toLowerCase()==="attachment"))attachment=true;
