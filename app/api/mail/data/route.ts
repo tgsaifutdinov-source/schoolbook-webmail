@@ -20,7 +20,7 @@ export async function GET(req:NextRequest){
   const unread=req.nextUrl.searchParams.get("unread")==="1";
   const starred=req.nextUrl.searchParams.get("starred")==="1";
   const attachment=req.nextUrl.searchParams.get("attachment")==="1";
-  const filter:any={};if(mailboxId)filter.inMailbox=mailboxId;if(search)filter.text=search;if(unread)filter.notKeyword="$seen";if(starred)filter.hasKeyword="$flagged";if(attachment)filter.hasAttachment=true;
+  const filter:any={};if(mailboxId)filter.inMailbox=mailboxId;if(search)filter.text=search;if(unread)filter.notKeyword="$seen";if(starred)filter.hasKeyword="$flagged";
   const body={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[
    ["Mailbox/get",{accountId,properties:["id","name","role","sortOrder","totalEmails","unreadEmails"]},"m"],
    ["Email/query",{accountId,filter,sort:[{property:"receivedAt",isAscending:sortDir}],position,limit,calculateTotal:true},"q"],
@@ -31,10 +31,10 @@ export async function GET(req:NextRequest){
   for(const x of d.methodResponses||[]){
    if(x[0]==="Mailbox/get")result.mailboxes=x[1].list||[];
    if(x[0]==="Email/query"){result.total=x[1].total||0;result.position=x[1].position||position}
-   if(x[0]==="Email/get")result.emails=x[1].list||[];
+   if(x[0]==="Email/get")result.emails=(x[1].list||[]).filter((mail:any)=>!attachment||mail.hasAttachment);
    if(x[0]==="error")return NextResponse.json({error:x[1]?.description||x[1]?.type||"JMAP error"},{status:400});
   }
-  result.hasMore=result.position+result.emails.length<result.total;
+  result.hasMore=attachment?position+limit<result.total:result.position+result.emails.length<result.total;
   return NextResponse.json(result);
  }catch(e){return NextResponse.json({error:"Stalwart unavailable"},{status:502})}
 }
