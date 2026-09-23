@@ -4,7 +4,7 @@ import {NextRequest,NextResponse} from "next/server";
 export async function POST(req:NextRequest){
  const token=(await cookies()).get("sbmail_auth")?.value;
  if(!token)return NextResponse.json({error:"Unauthorized"},{status:401});
- const {to,cc="",bcc="",subject,text,attachments=[]}=await req.json();
+ const {to,cc="",bcc="",subject,text,attachments=[],draftId=""}=await req.json();
  if(!to?.trim()||!text?.trim())return NextResponse.json({error:"Укажите получателя и текст"},{status:400});
 
  const headers={Authorization:"Basic "+token,"content-type":"application/json"};
@@ -36,9 +36,10 @@ export async function POST(req:NextRequest){
  };
  if(attachments.length)email.attachments=attachments.map((a:any)=>({blobId:a.blobId,type:a.type||"application/octet-stream",name:a.name,disposition:"attachment"}));
 
- const createBody={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",{accountId,create:{draft:email}},"e"]]};
+ const setArgs:any={accountId};if(draftId)setArgs.update={[draftId]:email};else setArgs.create={draft:email};
+ const createBody={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",setArgs,"e"]]};
  const cr=await fetch(endpoint,{method:"POST",headers,body:JSON.stringify(createBody),cache:"no-store"});const cd=await cr.json();
- const created=cd.methodResponses?.find((x:any)=>x[0]==="Email/set");const emailError=created?.[1]?.notCreated?.draft;const emailId=created?.[1]?.created?.draft?.id;
+ const created=cd.methodResponses?.find((x:any)=>x[0]==="Email/set");const emailError=draftId?created?.[1]?.notUpdated?.[draftId]:created?.[1]?.notCreated?.draft;const emailId=draftId||created?.[1]?.created?.draft?.id;
  if(emailError||!emailId){console.error("JMAP Email/set failed",JSON.stringify(cd));return NextResponse.json({error:emailError?.description||"Не удалось создать письмо",type:emailError?.type||"jmapError"},{status:400})}
  const submitBody={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail","urn:ietf:params:jmap:submission"],methodCalls:[["EmailSubmission/set",{accountId,create:{send:{identityId:identity.id,emailId}}},"s"]]};
  const rr=await fetch(endpoint,{method:"POST",headers,body:JSON.stringify(submitBody),cache:"no-store"});const sd=await rr.json();const submissionResult=sd.methodResponses?.find((x:any)=>x[0]==="EmailSubmission/set");const sendError=submissionResult?.[1]?.notCreated?.send;
