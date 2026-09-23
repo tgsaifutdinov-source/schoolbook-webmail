@@ -1402,3 +1402,160 @@ html[data-mail-density="compact"] .messages article{min-height:66px;padding-top:
     flex-basis:30px!important;
   }
 }
+
+/* Contact autocomplete: compact two-line rows with deterministic avatar tones */
+.composeWindow .recipientChipField{
+  position:relative!important;
+}
+.composeWindow .recipientChipField .recipientSuggestions{
+  position:absolute!important;
+  z-index:180!important;
+  top:calc(100% + 4px)!important;
+  left:92px!important;
+  right:12px!important;
+  max-height:340px!important;
+  overflow:auto!important;
+  padding:6px 0!important;
+  border:1px solid #d9dee5!important;
+  border-radius:9px!important;
+  background:#fff!important;
+  box-shadow:0 12px 34px rgba(32,33,36,.18)!important;
+  scrollbar-width:thin;
+  scrollbar-color:#c8cdd4 transparent;
+}
+.composeWindow .recipientChipField .recipientSuggestions::-webkit-scrollbar{
+  width:8px;
+}
+.composeWindow .recipientChipField .recipientSuggestions::-webkit-scrollbar-thumb{
+  background:#c8cdd4;
+  border-radius:8px;
+}
+.composeWindow .recipientSuggestion{
+  width:100%!important;
+  min-height:54px!important;
+  padding:7px 12px!important;
+  margin:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:11px!important;
+  text-align:left!important;
+  color:#202124!important;
+  cursor:pointer!important;
+}
+.composeWindow .recipientSuggestion:hover,
+.composeWindow .recipientSuggestion.active{
+  background:#eef0f2!important;
+}
+.composeWindow .recipientSuggestion[aria-selected="true"]{
+  background:#e9ecef!important;
+}
+.composeWindow .contactAvatar{
+  width:34px!important;
+  height:34px!important;
+  min-width:34px!important;
+  border-radius:50%!important;
+  display:grid!important;
+  place-items:center!important;
+  flex:0 0 34px!important;
+  color:#fff!important;
+  font-size:14px!important;
+  font-weight:600!important;
+  line-height:1!important;
+  text-transform:uppercase!important;
+  box-shadow:none!important;
+}
+.composeWindow .contactAvatar.tone1{background:#c62828!important}
+.composeWindow .contactAvatar.tone2{background:#7b1fa2!important}
+.composeWindow .contactAvatar.tone3{background:#8d6e63!important}
+.composeWindow .contactAvatar.tone4{background:#e91e63!important}
+.composeWindow .contactAvatar.tone5{background:#455a64!important}
+.composeWindow .contactAvatar.tone6{background:#689f38!important}
+.composeWindow .contactAvatar.tone7{background:#00897b!important}
+.composeWindow .contactAvatar.tone8{background:#546e7a!important}
+.composeWindow .contactMeta{
+  min-width:0!important;
+  flex:1 1 auto!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-start!important;
+  gap:2px!important;
+  overflow:hidden!important;
+}
+.composeWindow .contactName{
+  display:block!important;
+  width:100%!important;
+  color:#202124!important;
+  font-size:12px!important;
+  font-weight:500!important;
+  line-height:1.2!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.composeWindow .contactEmail{
+  display:block!important;
+  width:100%!important;
+  color:#5f6368!important;
+  font-size:10px!important;
+  font-weight:400!important;
+  line-height:1.2!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.composeWindow .recipientEmpty{
+  padding:12px 14px!important;
+  color:#7a828d!important;
+  font-size:10px!important;
+}
+@media(min-width:1200px){
+  .composeWindow .recipientSuggestion{
+    min-height:56px!important;
+    padding:8px 13px!important;
+  }
+  .composeWindow .contactAvatar{
+    width:36px!important;
+    height:36px!important;
+    min-width:36px!important;
+    flex-basis:36px!important;
+    font-size:15px!important;
+  }
+  .composeWindow .contactName{font-size:13px!important}
+  .composeWindow .contactEmail{font-size:11px!important}
+}
+@media(max-width:850px){
+  .composeWindow .recipientChipField .recipientSuggestions{
+    left:8px!important;
+    right:8px!important;
+    max-height:300px!important;
+  }
+  .composeWindow .recipientSuggestion{
+    min-height:56px!important;
+    padding:8px 11px!important;
+  }
+  .composeWindow .contactAvatar{
+    width:36px!important;
+    height:36px!important;
+    min-width:36px!important;
+    flex-basis:36px!important;
+  }
+  .composeWindow .contactName{font-size:13px!important}
+  .composeWindow .contactEmail{font-size:11px!important}
+}
+@media(max-width:560px){
+  .composeWindow .recipientChipField .recipientSuggestions{
+    position:fixed!important;
+    z-index:220!important;
+    left:8px!important;
+    right:8px!important;
+    top:auto!important;
+    bottom:66px!important;
+    max-height:46dvh!important;
+    border-radius:10px!important;
+    box-shadow:0 -10px 32px rgba(32,33,36,.18)!important;
+  }
+}
