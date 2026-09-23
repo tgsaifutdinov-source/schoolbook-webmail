@@ -1,6 +1,6 @@
-import {cookies} from "next/headers";import {NextRequest,NextResponse} from "next/server";
+import {getMailSession} from "../../../../lib/mail-session";import {NextRequest,NextResponse} from "next/server";
 export async function GET(req:NextRequest){
- const token=(await cookies()).get("sbmail_auth")?.value;if(!token)return NextResponse.json({error:"Unauthorized"},{status:401});
+ const token=(await getMailSession())?.token;if(!token)return NextResponse.json({error:"Unauthorized"},{status:401});
  const id=req.nextUrl.searchParams.get("id");if(!id)return NextResponse.json({error:"Missing id"},{status:400});
  const h={Authorization:"Basic "+token,"content-type":"application/json"};
  const sr=await fetch("http://host.docker.internal:18080/jmap/session",{headers:h,cache:"no-store"});if(!sr.ok)return NextResponse.json({error:"Unauthorized"},{status:401});
