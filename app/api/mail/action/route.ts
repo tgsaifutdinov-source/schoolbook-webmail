@@ -12,6 +12,7 @@ export async function POST(req:NextRequest){
  const c=await context();if(!c)return NextResponse.json({error:"Unauthorized"},{status:401});
  const {id,action}=await req.json();if(!id)return NextResponse.json({error:"Missing id"},{status:400});
  let update:any={};
+ if(action==="delete"){const body={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",{accountId:c.accountId,destroy:[id]},"s"]]};const r=await fetch(c.endpoint,{method:"POST",headers:c.headers,body:JSON.stringify(body),cache:"no-store"});const d=await r.json();const x=d.methodResponses?.[0];if(x?.[0]==="error"||x?.[1]?.notDestroyed?.[id])return NextResponse.json({error:"Delete failed",details:x?.[1]},{status:400});return NextResponse.json({ok:true})}
  if(action==="read")update={"keywords/$seen":true};
  else if(action==="unread")update={"keywords/$seen":null};
  else if(action==="star")update={"keywords/$flagged":true};
