@@ -28,7 +28,7 @@ export async function POST(req:NextRequest){
  if(!identity)return NextResponse.json({error:"Не найдена почтовая идентичность"},{status:400});
  if(!drafts)return NextResponse.json({error:"Не найдена папка Черновики"},{status:400});
 
- const addresses=(v:string)=>String(v||"").split(/[;,\\n]+/).map((x:string)=>x.trim()).filter(Boolean).map((email:string)=>({email}));const valid=(email:string)=>/^[^\\s@<>]+@[^\\s@<>]+\\.[^\\s@<>]+$/.test(email);const recipients=addresses(to);
+ const addresses=(v:string)=>String(v||"").split(/[;,\n]+/).map((x:string)=>x.trim()).filter(Boolean).map((email:string)=>({email}));const valid=(email:string)=>/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(email);const recipients=addresses(to);
  const allRecipients=[...recipients,...addresses(cc),...addresses(bcc)];if(!recipients.length||allRecipients.some((x:any)=>!valid(x.email)))return NextResponse.json({error:"Проверьте адреса получателей"},{status:400});
  const email:any={
   mailboxIds:{[drafts]:true},keywords:{"$draft":true},
