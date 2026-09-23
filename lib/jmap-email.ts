@@ -5,9 +5,8 @@ type Attachment={blobId:string;type?:string;name?:string;size?:number};
 function addresses(value:string):Address[]{
  return String(value||"").split(/[;,\n]+/).map(v=>v.trim()).filter(Boolean).map(email=>({email}));
 }
-function attachmentPart(a:Attachment,index:number){
+function attachmentPart(a:Attachment,_index:number){
  return {
-  partId:"attachment-"+(index+1),
   blobId:String(a.blobId),
   type:String(a.type||"application/octet-stream"),
   name:String(a.name||"attachment").slice(0,255),
@@ -27,7 +26,7 @@ export function buildJmapEmail(input:{
 }){
  const to=addresses(input.to||""),cc=addresses(input.cc||""),bcc=addresses(input.bcc||"");
  const attachments=(input.attachments||[]).filter(a=>a&&typeof a.blobId==="string"&&a.blobId).slice(0,100);
- const textPart={partId:"body",type:"text/plain",charset:"utf-8"};
+ const textPart={partId:"body",type:"text/plain"};
  const bodyStructure:any=attachments.length
   ?{type:"multipart/mixed",subParts:[textPart,...attachments.map(attachmentPart)]}
   :textPart;
