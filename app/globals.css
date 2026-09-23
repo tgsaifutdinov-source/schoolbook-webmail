@@ -76,3 +76,6 @@ nav button,.settings{height:48px;font-size:14px;padding:0 14px}nav button svg,.s
 /* Production message list, filters and bulk operations */
 .tabs{overflow:visible}.tabs button[aria-pressed="true"]{color:var(--ink);font-weight:750}.bulkBar button:disabled,.loadMore:disabled{opacity:.45;cursor:not-allowed}.messages{scrollbar-gutter:stable}.messages article:focus-within{background:#fafbfc}.resetFilters{margin-top:10px;padding:8px 12px;border:1px solid var(--line);border-radius:8px;background:#fff;font-size:11px;font-weight:700;color:#465269}.resetFilters:hover{background:#f5f7fa}.loadMore:disabled{background:#f7f8fa}.listHead>div{min-width:0}.listHead h1{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 @media(max-width:520px){.tabs{gap:12px;padding-left:12px;padding-right:12px;overflow-x:auto;overflow-y:hidden}.tabs>button{flex:0 0 auto}.bulkBar{min-width:max-content}.listHead{padding-left:14px;padding-right:14px}.sortButton{white-space:nowrap}}
+
+/* Background mailbox synchronization */
+.syncing svg{animation:mailSyncSpin .8s linear infinite}@keyframes mailSyncSpin{to{transform:rotate(360deg)}}@media(prefers-reduced-motion:reduce){.syncing svg{animation:none;opacity:.55}}
