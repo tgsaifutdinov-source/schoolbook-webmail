@@ -1,7 +1,7 @@
-import {cookies} from "next/headers";
+import {getMailSession} from "../../../../lib/mail-session";
 import {NextRequest,NextResponse} from "next/server";
 async function context(){
- const token=(await cookies()).get("sbmail_auth")?.value;if(!token)return null;
+ const token=(await getMailSession())?.token;if(!token)return null;
  const headers={Authorization:"Basic "+token,"content-type":"application/json"};
  const sr=await fetch("http://host.docker.internal:18080/jmap/session",{headers,cache:"no-store"});if(!sr.ok)return null;
  const s=await sr.json();const accountId=s.primaryAccounts?.["urn:ietf:params:jmap:mail"]||Object.keys(s.accounts||{})[0];const u=new URL(s.apiUrl);
