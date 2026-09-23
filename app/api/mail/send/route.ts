@@ -1,8 +1,8 @@
-import {cookies} from "next/headers";
+import {getMailSession} from "../../../../lib/mail-session";
 import {NextRequest,NextResponse} from "next/server";
 
 export async function POST(req:NextRequest){
- const token=(await cookies()).get("sbmail_auth")?.value;
+ const token=(await getMailSession())?.token;
  if(!token)return NextResponse.json({error:"Unauthorized"},{status:401});
  const {to,cc="",bcc="",subject,text,attachments=[],draftId=""}=await req.json();
  if(!to?.trim())return NextResponse.json({error:"Укажите получателя"},{status:400});
