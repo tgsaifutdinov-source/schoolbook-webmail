@@ -1,7 +1,7 @@
-import {cookies} from "next/headers";
+import {getMailSession} from "../../../../lib/mail-session";
 import {NextRequest,NextResponse} from "next/server";
 
-async function getAuth(){return (await cookies()).get("sbmail_auth")?.value}
+async function getAuth(){return (await getMailSession())?.token}
 async function stalwart(path:string,token:string,init?:RequestInit){
  return fetch("http://host.docker.internal:18080"+path,{...init,headers:{Authorization:"Basic "+token,"content-type":"application/json",...(init?.headers||{})},cache:"no-store"})
 }
