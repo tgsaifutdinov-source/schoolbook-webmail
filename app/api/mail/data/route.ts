@@ -19,7 +19,8 @@ export async function GET(req:NextRequest){
   const sortDir=req.nextUrl.searchParams.get("sort")==="oldest";
   const unread=req.nextUrl.searchParams.get("unread")==="1";
   const starred=req.nextUrl.searchParams.get("starred")==="1";
-  const filter:any={};if(mailboxId)filter.inMailbox=mailboxId;if(search)filter.text=search;if(unread)filter.notKeyword="$seen";if(starred)filter.hasKeyword="$flagged";
+  const attachment=req.nextUrl.searchParams.get("attachment")==="1";
+  const filter:any={};if(mailboxId)filter.inMailbox=mailboxId;if(search)filter.text=search;if(unread)filter.notKeyword="$seen";if(starred)filter.hasKeyword="$flagged";if(attachment)filter.hasAttachment=true;
   const body={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[
    ["Mailbox/get",{accountId,properties:["id","name","role","sortOrder","totalEmails","unreadEmails"]},"m"],
    ["Email/query",{accountId,filter,sort:[{property:"receivedAt",isAscending:sortDir}],position,limit,calculateTotal:true},"q"],
