@@ -403,3 +403,21 @@ html[data-mail-density="compact"] .messages article{min-height:66px;padding-top:
 .inlineReplyFoot{height:50px;padding:0 10px;border-top:1px solid #edf0f3;display:flex;align-items:center;gap:6px}.inlineReplyFoot>button{height:32px;min-width:32px;border-radius:16px;display:flex;align-items:center;justify-content:center;gap:5px}.inlineReplyFoot>button:not(.send){width:32px;padding:0}.inlineReplyFoot>button:not(.send):hover{background:#f1f3f4}.inlineReplyFoot button svg{width:14px}.inlineReplyFoot .send{padding:0 14px;background:var(--gmail-yellow);color:#332900;font-size:10px;font-weight:750}.inlineReplyFoot .send:disabled{opacity:.5;cursor:default}.inlineReplyFoot small{margin-left:auto;color:#858c95;font-size:9px}
 @media(min-width:1200px){.inlineReplyComposer textarea{min-height:175px;font-size:14px}.inlineReplyHead b{font-size:12px}.inlineReplyHead small,.inlineReplyFoot .send{font-size:10px}}
 @media(max-width:850px){.inlineReplyComposer{margin-top:12px;border-radius:9px}.inlineReplyComposer textarea{min-height:130px;font-size:12px}.inlineReplyHead{min-height:42px;padding:6px 8px}.inlineReplyFoot{height:46px;padding:0 8px}.inlineReplyFiles b{max-width:150px}}
+
+/* Gmail-style keyboard cursor and range selection */
+.gmailList .mailRow.keyboardActive{
+ position:relative;
+ box-shadow:inset 3px 0 0 var(--gmail-yellow),inset 0 1px 0 #e5e8ec,inset 0 -1px 0 #e5e8ec;
+ z-index:1;
+}
+.gmailList .mailRow.keyboardActive:not(.checked){background:#fffbea!important}
+.gmailList .mailRow.keyboardActive.checked{background:#fff0b8!important}
+.gmailList .mailRow.keyboardActive .mailParty,
+.gmailList .mailRow.keyboardActive .mailSubject{color:#242018}
+.gmailList .mailRow.keyboardActive:focus-visible{outline:2px solid #e9b40055;outline-offset:-2px}
+.gmailList .mailRow.checked .mailCheck{accent-color:#d5a000}
+.gmailMailboxBar .mailbarPaging button:disabled{opacity:.28}
+.shortcutGrid kbd{white-space:nowrap}
+@media(max-width:850px){
+ .gmailList .mailRow.keyboardActive{box-shadow:inset 3px 0 0 var(--gmail-yellow)}
+}
