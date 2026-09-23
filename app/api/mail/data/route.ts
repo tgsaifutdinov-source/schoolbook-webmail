@@ -92,7 +92,7 @@ export async function GET(req:NextRequest){
    const calls:any[]=[];
    if(includeMailboxes)calls.push(["Mailbox/get",{accountId,properties:["id","name","role","sortOrder","totalEmails","unreadEmails"]},"m"]);
    calls.push(
-    ["Email/query",{accountId,filter,sort:[{property:"receivedAt",isAscending:oldest}],position:pos,limit:chunk,calculateTotal:true},"q"],
+    ["Email/query",{accountId,filter,sort:[{property:"receivedAt",isAscending:oldest}],position:pos,limit:chunk,calculateTotal:true,collapseThreads:!attachment},"q"],
     ["Email/get",{accountId,"#ids":{"resultOf":"q","name":"Email/query","path":"/ids"},properties:["id","threadId","mailboxIds","keywords","from","to","cc","subject","receivedAt","preview","hasAttachment","size"]},"e"]
    );
    const r=await stalwart(endpoint,auth.token,{method:"POST",body:JSON.stringify({
@@ -147,6 +147,22 @@ export async function GET(req:NextRequest){
      if(emails.length>=limit||scanned>=maxScan)break;
     }
     if(cursor>=total)break;
+   }
+  }
+
+  if(!attachment&&emails.length){
+   const threadIds=[...new Set(emails.map((m:any)=>m.threadId).filter((x:any)=>typeof x==="string"&&x))].slice(0,100);
+   if(threadIds.length){
+    try{
+     const tr=await stalwart(endpoint,auth.token,{method:"POST",body:JSON.stringify({
+      using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],
+      methodCalls:[["Thread/get",{accountId,ids:threadIds,properties:["id","emailIds"]},"threads"]]
+     })});
+     const td=await tr.json();
+     const list=td.methodResponses?.find((x:any)=>x[0]==="Thread/get")?.[1]?.list||[];
+     const counts=new Map<string,number>(list.map((t:any)=>[String(t.id),Array.isArray(t.emailIds)?t.emailIds.length:1]));
+     emails=emails.map((m:any)=>({...m,threadCount:counts.get(String(m.threadId||""))||1}));
+    }catch{}
    }
   }
 
