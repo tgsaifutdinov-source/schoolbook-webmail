@@ -1348,3 +1348,57 @@ html[data-mail-density="compact"] .messages article{min-height:66px;padding-top:
     min-height:30px!important;
   }
 }
+
+/* Fix legacy composeHead direct-child rules: keep Gmail header strictly horizontal */
+.composeWindow .composeHead > .composeHeadMain{
+  flex:1 1 auto!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  width:auto!important;
+  text-align:left!important;
+}
+.composeWindow .composeHead > .composeHeadControls{
+  flex:0 0 84px!important;
+  width:84px!important;
+  min-width:84px!important;
+  height:100%!important;
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  align-self:stretch!important;
+  overflow:visible!important;
+}
+.composeWindow .composeHeadTitleWrap{
+  flex-direction:row!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  width:100%!important;
+  text-align:left!important;
+}
+.composeWindow .composeHeadTitleWrap b{
+  display:block!important;
+  text-align:left!important;
+  margin:0!important;
+}
+.composeWindow .composeHeadControls .composeHeadBtn{
+  flex:0 0 28px!important;
+  display:grid!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+.composeWindow .composeHeadControls .composeMinimizeBtn,
+.composeWindow .composeHeadControls .composeMaximizeBtn,
+.composeWindow .composeHeadControls .composeCloseBtn{
+  display:grid!important;
+}
+@media(max-width:850px){
+  .composeWindow .composeHead > .composeHeadControls{
+    flex-basis:90px!important;
+    width:90px!important;
+    min-width:90px!important;
+  }
+  .composeWindow .composeHeadControls .composeHeadBtn{
+    flex-basis:30px!important;
+  }
+}
