@@ -1,4 +1,5 @@
 import {getMailSession} from "../../../../lib/mail-session";
+import {sameOriginGuard} from "../../../../lib/security";
 import {NextRequest,NextResponse} from "next/server";
 
 async function context(){
@@ -9,8 +10,9 @@ async function context(){
  return {headers,accountId,endpoint:"http://host.docker.internal:18080"+u.pathname+u.search};
 }
 export async function POST(req:NextRequest){
+ const blocked=sameOriginGuard(req);if(blocked)return blocked;
  const c=await context();if(!c)return NextResponse.json({error:"Unauthorized"},{status:401});
- const {id,ids,action,targetMailboxId}=await req.json();const messageIds:Array<string>=Array.isArray(ids)?ids.filter(Boolean):id?[id]:[];if(!messageIds.length)return NextResponse.json({error:"Missing id"},{status:400});
+ const {id,ids,action,targetMailboxId}=await req.json().catch(()=>({}));const messageIds:Array<string>=Array.isArray(ids)?ids.filter((x:any)=>typeof x==="string"&&x).slice(0,500):typeof id==="string"&&id?[id]:[];if(!messageIds.length)return NextResponse.json({error:"Missing id"},{status:400});
  let update:any={};
  if(action==="delete"){const body={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",{accountId:c.accountId,destroy:messageIds},"s"]]};const r=await fetch(c.endpoint,{method:"POST",headers:c.headers,body:JSON.stringify(body),cache:"no-store"});const d=await r.json();const x=d.methodResponses?.[0];if(x?.[0]==="error"||Object.keys(x?.[1]?.notDestroyed||{}).length)return NextResponse.json({error:"Delete failed",details:x?.[1]},{status:400});return NextResponse.json({ok:true})}
  if(action==="read")update={"keywords/$seen":true};
