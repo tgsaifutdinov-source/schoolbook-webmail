@@ -9,3 +9,24 @@ body{font-size:16px}.shell{max-width:1920px;margin:0 auto;min-height:100vh}.topb
 @media(min-width:1921px){.shell{max-width:none}.workspace{grid-template-columns:300px 540px minmax(650px,1fr)}}
 @media(max-width:1250px){.workspace{grid-template-columns:230px 390px minmax(430px,1fr)}.topbar{margin-left:230px}.brand{width:185px}.workspace aside{padding-left:12px;padding-right:12px}}
 @media(max-width:850px){.workspace{display:block}.topbar{height:62px}.workspace{height:calc(100vh - 62px)}}
+
+/* Final desktop density pass based on production screenshot */
+@media(min-width:851px){
+.shell{padding:10px 12px;max-width:none}
+.topbar{margin-left:270px;height:78px;padding:0 22px}
+.workspace{height:calc(100vh - 98px);grid-template-columns:270px 470px minmax(620px,1fr)}
+.brand{left:28px;top:22px;width:220px}
+.brandMark{width:50px;height:50px}
+.brand b{font-size:19px}.brand small{font-size:10px}
+.workspace aside{padding:90px 15px 18px}
+.compose{height:54px;font-size:15px;margin-bottom:22px}
+nav button,.settings{min-height:45px;font-size:14px}
+.folderMocks span{height:42px;font-size:13px}
+.listHead{height:78px;padding:15px 18px 9px}.listHead h1{font-size:25px}.listHead span,.sortButton{font-size:12px}
+.messages article{min-height:96px;padding:16px 15px;gap:13px}.senderAvatar{width:44px;height:44px;font-size:14px}.msg b,.msg time{font-size:12px}.msg strong{font-size:14px;margin-top:5px}.msg p{font-size:12px;margin-top:2px}
+.toolbar{height:62px;padding:0 24px}.toolbar button{width:40px;height:40px}.toolbar svg{width:19px}
+.letter{max-width:980px;padding:44px 48px 90px;margin:0 auto}.subjectLine h2{font-size:32px}.eyebrow{font-size:10px}.from{margin:24px 0 30px}.from b{font-size:14px}.from small,.from time{font-size:11px}.senderAvatar.big{width:50px;height:50px;font-size:15px}
+.body{font-size:16px;min-height:250px;padding:28px;border-radius:14px}.actions button{font-size:12px;height:44px}
+.storageBox{font-size:10px}.storageBox b{font-size:10px}.proCard{padding:16px 14px}.proCard strong{font-size:13px}.proCard small{font-size:10px}.proCard button{height:40px;font-size:11px}
+}
+@media(min-width:1600px){.workspace{grid-template-columns:290px 520px minmax(700px,1fr)}.topbar{margin-left:290px}.brand{left:34px}.letter{max-width:1080px}.messages article{min-height:100px}}
