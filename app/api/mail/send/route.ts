@@ -5,7 +5,7 @@ export async function POST(req:NextRequest){
  const token=(await cookies()).get("sbmail_auth")?.value;
  if(!token)return NextResponse.json({error:"Unauthorized"},{status:401});
  const {to,cc="",bcc="",subject,text,attachments=[],draftId=""}=await req.json();
- if(!to?.trim()||!text?.trim())return NextResponse.json({error:"Укажите получателя и текст"},{status:400});
+ if(!to?.trim())return NextResponse.json({error:"Укажите получателя"},{status:400});
 
  const headers={Authorization:"Basic "+token,"content-type":"application/json"};
  const sr=await fetch("http://host.docker.internal:18080/jmap/session",{headers,cache:"no-store"});
@@ -28,7 +28,8 @@ export async function POST(req:NextRequest){
  if(!identity)return NextResponse.json({error:"Не найдена почтовая идентичность"},{status:400});
  if(!drafts)return NextResponse.json({error:"Не найдена папка Черновики"},{status:400});
 
- const addresses=(v:string)=>String(v||"").split(",").map((x:string)=>x.trim()).filter(Boolean).map((email:string)=>({email}));const recipients=addresses(to);
+ const addresses=(v:string)=>String(v||"").split(/[;,\\n]+/).map((x:string)=>x.trim()).filter(Boolean).map((email:string)=>({email}));const valid=(email:string)=>/^[^\\s@<>]+@[^\\s@<>]+\\.[^\\s@<>]+$/.test(email);const recipients=addresses(to);
+ const allRecipients=[...recipients,...addresses(cc),...addresses(bcc)];if(!recipients.length||allRecipients.some((x:any)=>!valid(x.email)))return NextResponse.json({error:"Проверьте адреса получателей"},{status:400});
  const email:any={
   mailboxIds:{[drafts]:true},keywords:{"$draft":true},
   from:[{name:identity.name||"",email:identity.email}],to:recipients,cc:addresses(cc),bcc:addresses(bcc),subject:subject||"",
