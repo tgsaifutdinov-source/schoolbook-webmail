@@ -12,14 +12,15 @@ export async function POST(req:NextRequest){
  const c=await context();if(!c)return NextResponse.json({error:"Unauthorized"},{status:401});
  const {id,action}=await req.json();if(!id)return NextResponse.json({error:"Missing id"},{status:400});
  let update:any={};
- if(action==="read")update={keywords:{"$seen":true}};
- else if(action==="star")update={keywords:{"$flagged":true}};
- else if(action==="unstar")update={keywords:{"$flagged":null}};
- else if(action==="trash"){
+ if(action==="read")update={"keywords/$seen":true};
+ else if(action==="unread")update={"keywords/$seen":null};
+ else if(action==="star")update={"keywords/$flagged":true};
+ else if(action==="unstar")update={"keywords/$flagged":null};
+ else if(action==="archive"||action==="restore"||action==="trash"){
   const body={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Mailbox/get",{accountId:c.accountId,properties:["id","role"]},"m"]]};
-  const rr=await fetch(c.endpoint,{method:"POST",headers:c.headers,body:JSON.stringify(body),cache:"no-store"});const dd=await rr.json();const trash=dd.methodResponses?.[0]?.[1]?.list?.find((x:any)=>x.role==="trash");
-  if(!trash)return NextResponse.json({error:"Trash mailbox not found"},{status:404});
-  update={mailboxIds:{[trash.id]:true}};
+  const rr=await fetch(c.endpoint,{method:"POST",headers:c.headers,body:JSON.stringify(body),cache:"no-store"});const dd=await rr.json();const wanted=action==="archive"?"archive":action==="restore"?"inbox":"trash";const target=dd.methodResponses?.[0]?.[1]?.list?.find((x:any)=>x.role===wanted);
+  if(!target)return NextResponse.json({error:"Target mailbox not found"},{status:404});
+  update={mailboxIds:{[target.id]:true}};
  } else return NextResponse.json({error:"Unknown action"},{status:400});
  const body={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",{accountId:c.accountId,update:{[id]:update}},"s"]]};
  const r=await fetch(c.endpoint,{method:"POST",headers:c.headers,body:JSON.stringify(body),cache:"no-store"});const d=await r.json();
