@@ -709,3 +709,173 @@ html[data-mail-density="compact"] .messages article{min-height:66px;padding-top:
  .composeFoot{height:56px!important;min-height:56px!important;padding:0 9px max(0px,env(safe-area-inset-bottom))!important}
  .composeSaveState{display:none}
 }
+
+/* Gmail-like recipient chips and compose attachment polish */
+.composeWindow .recipientChipField{
+ height:auto!important;
+ min-height:38px!important;
+ padding:4px 10px 4px 14px!important;
+ align-items:flex-start!important;
+ gap:8px!important;
+}
+.composeWindow .recipientChipField>span{
+ padding-top:6px;
+}
+.recipientChipEditor{
+ min-width:0;
+ flex:1;
+ display:flex;
+ align-items:center;
+ flex-wrap:wrap;
+ gap:4px;
+ padding:1px 0;
+}
+.recipientChipEditor input{
+ min-width:120px!important;
+ flex:1 1 150px!important;
+ height:28px!important;
+ padding:0 3px!important;
+ border:0!important;
+ outline:0!important;
+ background:transparent!important;
+}
+.recipientChip{
+ max-width:210px;
+ height:27px;
+ padding:0 3px 0 9px;
+ border:1px solid #d9dde3;
+ border-radius:14px;
+ background:#f2f4f7;
+ display:inline-flex;
+ align-items:center;
+ gap:4px;
+ color:#414852;
+}
+.recipientChip b{
+ max-width:165px;
+ overflow:hidden;
+ text-overflow:ellipsis;
+ white-space:nowrap;
+ font-size:10px;
+ font-weight:600;
+}
+.recipientChip>button{
+ width:22px!important;
+ height:22px!important;
+ min-width:22px!important;
+ border-radius:50%!important;
+ display:grid!important;
+ place-items:center!important;
+ color:#6f7781!important;
+}
+.recipientChip>button:hover{background:#dfe3e8!important;color:#2f353d!important}
+.recipientChip>button svg{width:12px!important}
+.recipientExtras{
+ flex:0 0 auto;
+ display:flex;
+ align-items:center;
+ gap:7px;
+ padding-top:4px;
+}
+.recipientExtras button{
+ width:auto!important;
+ height:26px!important;
+ padding:0!important;
+ border-radius:0!important;
+ color:#6b7380!important;
+ font-size:9px!important;
+}
+.recipientExtras button:hover{
+ background:transparent!important;
+ color:#20252b!important;
+ text-decoration:underline;
+}
+.recipientChipField .recipientSuggestions{
+ top:calc(100% - 1px)!important;
+ left:92px!important;
+ right:12px!important;
+}
+
+.composeFiles{
+ max-height:150px;
+ overflow:auto;
+ align-content:flex-start;
+}
+.composeFiles>span{
+ flex:0 1 270px;
+ min-width:0;
+ min-height:42px!important;
+ padding:5px 6px!important;
+ border-radius:7px!important;
+ display:flex!important;
+ align-items:center!important;
+ gap:7px!important;
+ background:#f8f9fa!important;
+}
+.composeFiles>span:hover{background:#f3f5f7!important;border-color:#d8dde4!important}
+.composeFiles .fileName{
+ min-width:0;
+ max-width:160px;
+ overflow:hidden;
+ text-overflow:ellipsis;
+ white-space:nowrap;
+ font-size:9px;
+ font-weight:600;
+ color:#444b55;
+}
+.composeFiles>span>small{
+ margin-left:auto;
+ font-size:8px;
+ color:#8a919b;
+ white-space:nowrap;
+}
+.composeThumb{
+ width:32px!important;
+ height:32px!important;
+ min-width:32px!important;
+ border-radius:5px!important;
+}
+.composeFiles>span>svg{flex:0 0 auto}
+.composeFiles>span>button:last-child{
+ flex:0 0 auto;
+ border-radius:50%!important;
+}
+
+@media(min-width:1200px){
+ .recipientChip{max-width:240px;height:28px}
+ .recipientChip b{max-width:190px;font-size:11px}
+ .recipientExtras button{font-size:10px!important}
+ .composeFiles>span{flex-basis:290px}
+ .composeFiles .fileName{max-width:180px;font-size:10px}
+}
+@media(max-width:850px){
+ .composeWindow .recipientChipField{
+  min-height:42px!important;
+  height:auto!important;
+  padding:5px 9px 5px 12px!important;
+ }
+ .composeWindow .recipientChipField>span{
+  width:70px!important;
+  flex-basis:70px!important;
+  padding-top:7px;
+ }
+ .recipientChipEditor{gap:3px}
+ .recipientChipEditor input{min-width:90px!important;flex-basis:110px!important}
+ .recipientChip{max-width:170px;height:28px}
+ .recipientChip b{max-width:125px;font-size:10px}
+ .recipientExtras{gap:5px;padding-top:5px}
+ .recipientChipField .recipientSuggestions{
+  left:8px!important;
+  right:8px!important;
+ }
+ .composeFiles{
+  max-height:150px!important;
+  padding:7px 9px!important;
+ }
+ .composeFiles>span{
+  flex:1 1 100%!important;
+ }
+ .composeFiles .fileName{
+  max-width:calc(100vw - 190px)!important;
+ }
+}
