@@ -1124,3 +1124,85 @@ html[data-mail-density="compact"] .messages article{min-height:66px;padding-top:
   width:220px;
  }
 }
+
+/* Gmail compose titlebar controls: minimize, maximize/restore, close */
+.composeHead{
+ padding:0 7px 0 15px!important;
+ background:#eef3fb!important;
+}
+.composeHeadTitle{
+ min-width:0;
+ flex:1;
+ display:flex;
+ align-items:center;
+ gap:9px;
+ overflow:hidden;
+}
+.composeHeadTitle b{
+ min-width:0;
+ overflow:hidden;
+ text-overflow:ellipsis;
+ white-space:nowrap;
+}
+.composeHeadTitle small{
+ flex:0 0 auto;
+ max-width:180px;
+ overflow:hidden;
+ text-overflow:ellipsis;
+ white-space:nowrap;
+}
+.composeHeadActions{
+ gap:0!important;
+ margin-left:8px;
+ flex:0 0 auto;
+}
+.composeHeadActions .composeWindowControl{
+ width:27px!important;
+ height:27px!important;
+ min-width:27px!important;
+ padding:0!important;
+ border:0!important;
+ border-radius:2px!important;
+ background:transparent!important;
+ display:grid!important;
+ place-items:center!important;
+ color:#4f5966!important;
+}
+.composeHeadActions .composeWindowControl:hover{
+ background:#dfe6ef!important;
+ color:#20252b!important;
+}
+.composeHeadActions .composeWindowControl:active{
+ background:#d2dbe6!important;
+}
+.composeHeadActions .composeWindowControl svg{
+ width:13px!important;
+ height:13px!important;
+ stroke-width:1.8!important;
+}
+.composeHeadActions .composeMinimize svg{
+ width:14px!important;
+ transform:none!important;
+}
+.composeHeadActions .composeClose:hover{
+ background:#d9e1eb!important;
+}
+.composeWindow.minimized .composeHead{
+ cursor:default!important;
+}
+.composeWindow.minimized .composeHeadTitle small{
+ display:none!important;
+}
+.composeWindow.minimized .composeHeadActions .composeMaximize{
+ display:grid!important;
+}
+@media(max-width:850px){
+ .composeHeadActions .composeMinimize{
+  display:grid!important;
+ }
+ .composeHeadActions .composeWindowControl{
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+ }
+}
