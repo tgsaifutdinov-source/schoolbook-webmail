@@ -9,6 +9,18 @@ async function stalwart(path:string,token:string,init?:RequestInit){
  });
 }
 
+function parseMailSearch(input:string){
+ const ops:Record<string,string[]>={};
+ const re=/\b(from|to|subject|has|is|after|before|newer_than|older_than|in):(?:"([^"]+)"|(\S+))/gi;
+ const free=input.replace(re,(_all,key:string,quoted:string,bare:string)=>{(ops[key.toLowerCase()]||=[]).push((quoted||bare||"").trim());return " "}).replace(/\s+/g," ").trim();
+ return {ops,free};
+}
+function relativeDate(value:string,past=true){
+ const m=/^(\d+)([dmy])$/i.exec(value.trim());if(!m)return "";
+ const n=Math.max(1,Math.min(3650,Number(m[1]))),unit=m[2].toLowerCase(),ms=n*(unit==="d"?86400000:unit==="m"?30*86400000:365*86400000);
+ return new Date(Date.now()+(past?-ms:ms)).toISOString();
+}
+
 export async function GET(req:NextRequest){
  const auth=await getMailSession();
  if(!auth)return NextResponse.json({error:"Unauthorized"},{status:401});
@@ -22,6 +34,7 @@ export async function GET(req:NextRequest){
   const mailboxId=req.nextUrl.searchParams.get("mailboxId")||"";
   const search=(req.nextUrl.searchParams.get("q")||"").trim();
   const scope=req.nextUrl.searchParams.get("scope")||"all";
+  const parsed=parseMailSearch(search);
   const requestedDays=Number(req.nextUrl.searchParams.get("days"));
   const days=[7,30,365].includes(requestedDays)?requestedDays:0;
   const position=Math.max(0,Number(req.nextUrl.searchParams.get("position")||0)||0);
@@ -29,10 +42,11 @@ export async function GET(req:NextRequest){
   const oldest=req.nextUrl.searchParams.get("sort")==="oldest";
   const unread=req.nextUrl.searchParams.get("unread")==="1";
   const starred=req.nextUrl.searchParams.get("starred")==="1";
-  const attachment=req.nextUrl.searchParams.get("attachment")==="1";
+  let attachment=req.nextUrl.searchParams.get("attachment")==="1";
 
   let effectiveMailboxId=mailboxId,preloadedMailboxes:any[]=[];
-  if(!effectiveMailboxId&&!starred){
+  const needsMailboxLookup=!effectiveMailboxId&&!starred||!!search||!!parsed.ops.in?.length;
+  if(needsMailboxLookup){
    const r=await stalwart(endpoint,auth.token,{method:"POST",body:JSON.stringify({
     using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],
     methodCalls:[["Mailbox/get",{accountId,properties:["id","name","role","sortOrder","totalEmails","unreadEmails"]},"m"]]
@@ -41,18 +55,37 @@ export async function GET(req:NextRequest){
    const md=await r.json();
    const mx=(md.methodResponses||[]).find((x:any)=>x[0]==="Mailbox/get");
    preloadedMailboxes=mx?.[1]?.list||[];
+  }
+  if(search){
+   effectiveMailboxId="";
+   const inValue=parsed.ops.in?.at(-1)?.toLowerCase();
+   if(inValue){
+    const roleMap:Record<string,string>={inbox:"inbox",sent:"sent",drafts:"drafts",trash:"trash",spam:"junk",junk:"junk",archive:"archive"};
+    effectiveMailboxId=preloadedMailboxes.find((x:any)=>x.role===roleMap[inValue]||x.name?.toLowerCase()===inValue)?.id||"";
+   }
+  }else if(!effectiveMailboxId&&!starred){
    effectiveMailboxId=preloadedMailboxes.find((x:any)=>x.role==="inbox")?.id||preloadedMailboxes[0]?.id||"";
   }
 
   const filter:any={};
   if(effectiveMailboxId)filter.inMailbox=effectiveMailboxId;
-  if(search){
-   if(["from","to","subject","body"].includes(scope))filter[scope]=search;
-   else filter.text=search;
+  const from=parsed.ops.from?.at(-1),to=parsed.ops.to?.at(-1),subjectOp=parsed.ops.subject?.at(-1);
+  if(from)filter.from=from;if(to)filter.to=to;if(subjectOp)filter.subject=subjectOp;
+  if(parsed.free){
+   if(["from","to","subject","body"].includes(scope)&&!filter[scope])filter[scope]=parsed.free;
+   else filter.text=parsed.free;
   }
-  if(days)filter.after=new Date(Date.now()-days*86400000).toISOString();
-  if(unread)filter.notKeyword="$seen";
-  if(starred)filter.hasKeyword="$flagged";
+  const after=parsed.ops.after?.at(-1),before=parsed.ops.before?.at(-1),newer=parsed.ops.newer_than?.at(-1),older=parsed.ops.older_than?.at(-1);
+  if(after){const t=Date.parse(after);if(!Number.isNaN(t))filter.after=new Date(t).toISOString()}
+  else if(newer){const iso=relativeDate(newer,true);if(iso)filter.after=iso}
+  else if(days)filter.after=new Date(Date.now()-days*86400000).toISOString();
+  if(before){const t=Date.parse(before);if(!Number.isNaN(t))filter.before=new Date(t).toISOString()}
+  else if(older){const iso=relativeDate(older,true);if(iso)filter.before=iso}
+  const isOps=(parsed.ops.is||[]).map(x=>x.toLowerCase());
+  if(unread||isOps.includes("unread"))filter.notKeyword="$seen";
+  if(isOps.includes("read"))filter.hasKeyword="$seen";
+  if(starred||isOps.includes("starred"))filter.hasKeyword="$flagged";
+  if((parsed.ops.has||[]).some(x=>x.toLowerCase()==="attachment"))attachment=true;
 
   const call=async(pos:number,chunk:number,includeMailboxes:boolean)=>{
    const calls:any[]=[];
