@@ -67,25 +67,26 @@ export async function GET(req:NextRequest){
    effectiveMailboxId=preloadedMailboxes.find((x:any)=>x.role==="inbox")?.id||preloadedMailboxes[0]?.id||"";
   }
 
-  const filter:any={};
-  if(effectiveMailboxId)filter.inMailbox=effectiveMailboxId;
+  const conditions:any[]=[];
+  if(effectiveMailboxId)conditions.push({inMailbox:effectiveMailboxId});
   const from=parsed.ops.from?.at(-1),to=parsed.ops.to?.at(-1),subjectOp=parsed.ops.subject?.at(-1);
-  if(from)filter.from=from;if(to)filter.to=to;if(subjectOp)filter.subject=subjectOp;
+  if(from)conditions.push({from});if(to)conditions.push({to});if(subjectOp)conditions.push({subject:subjectOp});
   if(parsed.free){
-   if(["from","to","subject","body"].includes(scope)&&!filter[scope])filter[scope]=parsed.free;
-   else filter.text=parsed.free;
+   if(["from","to","subject","body"].includes(scope))conditions.push({[scope]:parsed.free});
+   else conditions.push({text:parsed.free});
   }
   const after=parsed.ops.after?.at(-1),before=parsed.ops.before?.at(-1),newer=parsed.ops.newer_than?.at(-1),older=parsed.ops.older_than?.at(-1);
-  if(after){const t=Date.parse(after);if(!Number.isNaN(t))filter.after=new Date(t).toISOString()}
-  else if(newer){const iso=relativeDate(newer,true);if(iso)filter.after=iso}
-  else if(days)filter.after=new Date(Date.now()-days*86400000).toISOString();
-  if(before){const t=Date.parse(before);if(!Number.isNaN(t))filter.before=new Date(t).toISOString()}
-  else if(older){const iso=relativeDate(older,true);if(iso)filter.before=iso}
+  if(after){const t=Date.parse(after);if(!Number.isNaN(t))conditions.push({after:new Date(t).toISOString()})}
+  else if(newer){const iso=relativeDate(newer,true);if(iso)conditions.push({after:iso})}
+  else if(days)conditions.push({after:new Date(Date.now()-days*86400000).toISOString()});
+  if(before){const t=Date.parse(before);if(!Number.isNaN(t))conditions.push({before:new Date(t).toISOString()})}
+  else if(older){const iso=relativeDate(older,true);if(iso)conditions.push({before:iso})}
   const isOps=(parsed.ops.is||[]).map(x=>x.toLowerCase());
-  if(unread||isOps.includes("unread"))filter.notKeyword="$seen";
-  if(isOps.includes("read"))filter.hasKeyword="$seen";
-  if(starred||isOps.includes("starred"))filter.hasKeyword="$flagged";
+  if(unread||isOps.includes("unread"))conditions.push({notKeyword:"$seen"});
+  if(isOps.includes("read"))conditions.push({hasKeyword:"$seen"});
+  if(starred||isOps.includes("starred"))conditions.push({hasKeyword:"$flagged"});
   if((parsed.ops.has||[]).some(x=>x.toLowerCase()==="attachment"))attachment=true;
+  const filter:any=conditions.length===0?{}:conditions.length===1?conditions[0]:{operator:"AND",conditions};
 
   const call=async(pos:number,chunk:number,includeMailboxes:boolean)=>{
    const calls:any[]=[];
