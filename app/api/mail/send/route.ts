@@ -36,23 +36,14 @@ export async function POST(req:NextRequest){
  };
  if(attachments.length)email.attachments=attachments.map((a:any)=>({blobId:a.blobId,type:a.type||"application/octet-stream",name:a.name,disposition:"attachment"}));
 
- const submission:any={identityId:identity.id,"#emailId":{resultOf:"e",name:"Email/set",path:"/created/draft/id"}};
- const calls:any[]=[
-  ["Email/set",{accountId,create:{draft:email}},"e"],
-  ["EmailSubmission/set",{accountId,create:{send:submission}},"s"]
- ];
- const body={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail","urn:ietf:params:jmap:submission"],methodCalls:calls};
- const r=await fetch(endpoint,{method:"POST",headers,body:JSON.stringify(body),cache:"no-store"});
- const d=await r.json();
- const created=d.methodResponses?.find((x:any)=>x[0]==="Email/set");
- const submissionResult=d.methodResponses?.find((x:any)=>x[0]==="EmailSubmission/set");
- const emailError=created?.[1]?.notCreated?.draft;
- const sendError=submissionResult?.[1]?.notCreated?.send;
- if(emailError||sendError||!submissionResult){
-  console.error("JMAP send failed",JSON.stringify(d));
-  return NextResponse.json({error:sendError?.description||emailError?.description||"Не удалось отправить письмо",type:sendError?.type||emailError?.type||"jmapError"},{status:400});
- }
- const emailId=created?.[1]?.created?.draft?.id;
+ const createBody={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",{accountId,create:{draft:email}},"e"]]};
+ const cr=await fetch(endpoint,{method:"POST",headers,body:JSON.stringify(createBody),cache:"no-store"});const cd=await cr.json();
+ const created=cd.methodResponses?.find((x:any)=>x[0]==="Email/set");const emailError=created?.[1]?.notCreated?.draft;const emailId=created?.[1]?.created?.draft?.id;
+ if(emailError||!emailId){console.error("JMAP Email/set failed",JSON.stringify(cd));return NextResponse.json({error:emailError?.description||"Не удалось создать письмо",type:emailError?.type||"jmapError"},{status:400})}
+ const submitBody={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail","urn:ietf:params:jmap:submission"],methodCalls:[["EmailSubmission/set",{accountId,create:{send:{identityId:identity.id,emailId}}},"s"]]};
+ const rr=await fetch(endpoint,{method:"POST",headers,body:JSON.stringify(submitBody),cache:"no-store"});const sd=await rr.json();const submissionResult=sd.methodResponses?.find((x:any)=>x[0]==="EmailSubmission/set");const sendError=submissionResult?.[1]?.notCreated?.send;
+ if(sendError||!submissionResult){console.error("JMAP EmailSubmission/set failed",JSON.stringify(sd));return NextResponse.json({error:sendError?.description||"Не удалось отправить письмо",type:sendError?.type||"jmapError"},{status:400})}
+
  if(emailId&&sent){
   const patch:any={"keywords/$draft":null};
   patch["mailboxIds/"+drafts]=null;patch["mailboxIds/"+sent]=true;
