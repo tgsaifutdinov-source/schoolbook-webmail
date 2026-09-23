@@ -2484,3 +2484,466 @@ html[data-mail-density="compact"] .messages article{min-height:66px;padding-top:
     padding-left:2px!important;
   }
 }
+
+
+/* Gmail visual system v3 — composer and row-interaction polish */
+.scrim{
+  background:transparent!important;
+  backdrop-filter:none!important;
+  pointer-events:none!important;
+}
+.composeWindow{
+  right:28px!important;
+  bottom:0!important;
+  width:min(610px,calc(100vw - 44px))!important;
+  height:min(620px,calc(100vh - 82px))!important;
+  border:1px solid #d8dde5!important;
+  border-bottom:0!important;
+  border-radius:10px 10px 0 0!important;
+  background:#fff!important;
+  box-shadow:0 8px 28px rgba(60,64,67,.24),0 2px 8px rgba(60,64,67,.16)!important;
+  overflow:visible!important;
+}
+.composeWindow.maximized{
+  inset:66px 3.5vw 18px!important;
+  width:auto!important;
+  height:auto!important;
+  border:1px solid #d8dde5!important;
+  border-radius:10px!important;
+  box-shadow:0 12px 44px rgba(60,64,67,.28)!important;
+}
+.composeWindow.minimized{
+  width:min(510px,calc(100vw - 44px))!important;
+  height:42px!important;
+  min-height:42px!important;
+  bottom:0!important;
+  border-radius:10px 10px 0 0!important;
+  overflow:hidden!important;
+}
+.composeWindow:not(.minimized){
+  overflow:hidden!important;
+}
+.composeWindow .composeHead{
+  height:40px!important;
+  min-height:40px!important;
+  padding:0 6px 0 14px!important;
+  border:0!important;
+  border-radius:9px 9px 0 0!important;
+  background:#f2f6fc!important;
+  color:#202124!important;
+}
+.composeWindow .composeHead > .composeHeadMain{
+  min-width:0!important;
+}
+.composeWindow .composeHeadTitleWrap{
+  min-width:0!important;
+  gap:9px!important;
+}
+.composeWindow .composeHeadTitleWrap b{
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  color:#202124!important;
+  font-size:12px!important;
+  line-height:1!important;
+  font-weight:600!important;
+}
+.composeWindow .composeDraftState{
+  flex:0 0 auto!important;
+  color:#747a84!important;
+  font-size:9px!important;
+  font-weight:400!important;
+}
+.composeWindow .composeHead > .composeHeadControls{
+  flex:0 0 82px!important;
+  width:82px!important;
+  min-width:82px!important;
+  gap:0!important;
+}
+.composeWindow .composeHeadControls .composeHeadBtn{
+  width:27px!important;
+  height:27px!important;
+  min-width:27px!important;
+  min-height:27px!important;
+  flex-basis:27px!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:50%!important;
+  background:transparent!important;
+  color:#5f6368!important;
+}
+.composeWindow .composeHeadControls .composeHeadBtn:hover{
+  background:#e3e8ef!important;
+  color:#202124!important;
+}
+.composeWindow .composeHeadControls .composeHeadBtn:active{
+  background:#d8dfe8!important;
+}
+.composeWindow .composeHeadControls .composeHeadBtn svg{
+  width:14px!important;
+  height:14px!important;
+  stroke-width:1.8!important;
+}
+.composeWindow .recipientField,
+.composeWindow .composeSubject{
+  border-bottom:1px solid #e8eaed!important;
+  background:#fff!important;
+}
+.composeWindow .recipientChipField{
+  min-height:36px!important;
+  padding:3px 10px 3px 14px!important;
+  gap:7px!important;
+  align-items:flex-start!important;
+}
+.composeWindow .recipientChipField>span{
+  width:58px!important;
+  flex:0 0 58px!important;
+  padding-top:7px!important;
+  color:#5f6368!important;
+  font-size:11px!important;
+  line-height:20px!important;
+}
+.composeWindow .recipientChipEditor{
+  min-height:29px!important;
+  gap:4px!important;
+  padding:0!important;
+}
+.composeWindow .recipientChipEditor input{
+  height:29px!important;
+  min-width:110px!important;
+  padding:0 2px!important;
+  color:#202124!important;
+  font-size:12px!important;
+}
+.composeWindow .recipientChipEditor input::placeholder{
+  color:#9aa0a6!important;
+}
+.composeWindow .recipientChip{
+  max-width:210px!important;
+  height:25px!important;
+  margin:2px 0!important;
+  padding:0 2px 0 9px!important;
+  border:1px solid #dadce0!important;
+  border-radius:13px!important;
+  background:#f1f3f4!important;
+  color:#3c4043!important;
+}
+.composeWindow .recipientChip b{
+  max-width:164px!important;
+  font-size:10px!important;
+  font-weight:500!important;
+}
+.composeWindow .recipientChip>button{
+  width:21px!important;
+  height:21px!important;
+  min-width:21px!important;
+}
+.composeWindow .recipientExtras{
+  gap:2px!important;
+  padding-top:3px!important;
+}
+.composeWindow .recipientExtras button{
+  height:27px!important;
+  padding:0 5px!important;
+  border-radius:4px!important;
+  color:#5f6368!important;
+  font-size:10px!important;
+  font-weight:500!important;
+}
+.composeWindow .recipientExtras button:hover{
+  background:#f1f3f4!important;
+  color:#202124!important;
+}
+.composeWindow .composeSubject{
+  height:36px!important;
+  min-height:36px!important;
+  padding:0 14px!important;
+}
+.composeWindow .composeSubject input{
+  height:35px!important;
+  color:#202124!important;
+  font-size:12px!important;
+  font-weight:400!important;
+}
+.composeWindow .composeSubject input::placeholder{
+  color:#5f6368!important;
+  opacity:1!important;
+}
+.composeWindow .composeEditor{
+  flex:1 1 auto!important;
+  min-height:160px!important;
+  padding:14px 15px 10px!important;
+  overflow:auto!important;
+  color:#202124!important;
+  background:#fff!important;
+  font-size:14px!important;
+  line-height:1.55!important;
+}
+.composeWindow .composeEditor:empty:before{
+  color:#a0a5ad!important;
+}
+.composeWindow .composeFiles{
+  margin:0!important;
+  padding:6px 14px 4px!important;
+  gap:5px!important;
+  background:#fff!important;
+}
+.composeWindow .composeFilesHead{
+  margin-bottom:2px!important;
+}
+.composeWindow .composeFiles>span{
+  min-height:30px!important;
+  border:1px solid #e1e4e8!important;
+  border-radius:5px!important;
+  background:#f8f9fa!important;
+}
+.composeWindow .composeStatus,
+.composeWindow .sendError{
+  padding:3px 15px!important;
+  font-size:10px!important;
+}
+.composeWindow .composeFormatBar{
+  min-height:38px!important;
+  margin:0 10px 1px!important;
+  padding:3px 5px!important;
+  gap:1px!important;
+  border:0!important;
+  border-radius:6px!important;
+  background:#f8fafd!important;
+  box-shadow:0 1px 2px rgba(60,64,67,.08)!important;
+}
+.composeWindow .composeFormatBar button{
+  width:29px!important;
+  height:29px!important;
+  min-width:29px!important;
+  border-radius:4px!important;
+  color:#5f6368!important;
+  font-size:12px!important;
+}
+.composeWindow .composeFormatBar button:hover{
+  background:#edf1f5!important;
+  color:#202124!important;
+}
+.composeWindow .composeFormatBar button.active{
+  background:#e2e8f0!important;
+  color:#202124!important;
+  box-shadow:none!important;
+}
+.composeWindow .composeFormatBar i{
+  height:18px!important;
+  margin:0 3px!important;
+  border-left-color:#d9dde3!important;
+}
+.composeWindow .gmailComposeFoot{
+  height:54px!important;
+  min-height:54px!important;
+  padding:0 9px 0 14px!important;
+  gap:2px!important;
+  border-top:0!important;
+  background:#fff!important;
+}
+.composeWindow .gmailComposeFoot .send{
+  min-width:94px!important;
+  width:auto!important;
+  height:36px!important;
+  margin-right:6px!important;
+  padding:0 18px!important;
+  border-radius:18px!important;
+  background:var(--gmail-yellow)!important;
+  color:#302700!important;
+  font-size:12px!important;
+  font-weight:700!important;
+  box-shadow:none!important;
+}
+.composeWindow .gmailComposeFoot .send:hover:not(:disabled){
+  background:var(--gmail-yellow-hover)!important;
+  box-shadow:0 1px 2px rgba(60,64,67,.18)!important;
+}
+.composeWindow .gmailComposeFoot .send:disabled{
+  background:#f1f3f4!important;
+  color:#9aa0a6!important;
+  opacity:1!important;
+}
+.composeWindow .composeToolGroup{
+  gap:0!important;
+}
+.composeWindow .gmailComposeFoot .composeToolGroup>button,
+.composeWindow .gmailComposeFoot .composeEmojiWrap>button,
+.composeWindow .gmailComposeFoot .composeMoreWrap>button,
+.composeWindow .gmailComposeFoot .discardDraftButton{
+  width:32px!important;
+  height:32px!important;
+  min-width:32px!important;
+  border-radius:50%!important;
+  color:#5f6368!important;
+}
+.composeWindow .gmailComposeFoot .composeToolGroup>button:hover,
+.composeWindow .gmailComposeFoot .composeEmojiWrap>button:hover,
+.composeWindow .gmailComposeFoot .composeMoreWrap>button:hover,
+.composeWindow .gmailComposeFoot .discardDraftButton:hover{
+  background:#f1f3f4!important;
+  color:#202124!important;
+}
+.composeWindow .gmailComposeFoot .formatToggle{
+  font-size:12px!important;
+  font-weight:500!important;
+}
+.composeWindow .gmailComposeFoot .formatToggle.active{
+  background:#eef2f7!important;
+  color:#202124!important;
+}
+.composeWindow .composeSaveState{
+  color:#8a9099!important;
+  font-size:9px!important;
+  font-weight:400!important;
+}
+.composeWindow .recipientChipField .recipientSuggestions{
+  top:calc(100% + 2px)!important;
+  left:78px!important;
+  right:10px!important;
+  max-height:286px!important;
+  padding:4px 0!important;
+  border:1px solid #dadce0!important;
+  border-radius:7px!important;
+  box-shadow:0 8px 24px rgba(60,64,67,.20)!important;
+}
+.composeWindow .recipientSuggestionCaption{
+  height:28px!important;
+  padding:0 12px!important;
+  color:#80868b!important;
+  font-size:9px!important;
+  line-height:28px!important;
+}
+.composeWindow .recipientSuggestion{
+  min-height:44px!important;
+  padding:5px 10px!important;
+  gap:9px!important;
+}
+.composeWindow .recipientSuggestion:hover,
+.composeWindow .recipientSuggestion.active,
+.composeWindow .recipientSuggestion[aria-selected="true"]{
+  background:#f1f3f4!important;
+}
+.composeWindow .contactAvatar{
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+  flex-basis:30px!important;
+  font-size:12px!important;
+}
+.composeWindow .contactName{
+  font-size:11px!important;
+  line-height:1.25!important;
+}
+.composeWindow .contactEmail{
+  margin-top:1px!important;
+  color:#747a84!important;
+  font-size:9px!important;
+  line-height:1.2!important;
+}
+
+/* Gmail rows: metadata yields to hover actions without jumping layout */
+.gmailList .rowActions{
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+  transition:opacity .08s ease!important;
+}
+.gmailList .mailRow:hover .rowActions,
+.gmailList .mailRow:focus-within .rowActions{
+  opacity:1!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+}
+.gmailList .mailRow:hover .mailRowMeta,
+.gmailList .mailRow:focus-within .mailRowMeta{
+  opacity:0!important;
+}
+.gmailList .mailRow.checked .mailRowMeta{
+  opacity:1!important;
+}
+.gmailList .mailRow.checked:hover .mailRowMeta,
+.gmailList .mailRow.checked:focus-within .mailRowMeta{
+  opacity:0!important;
+}
+
+@media(min-width:1200px){
+  .composeWindow{
+    width:min(640px,calc(100vw - 56px))!important;
+    height:min(650px,calc(100vh - 86px))!important;
+    right:34px!important;
+  }
+  .composeWindow .composeHeadTitleWrap b,
+  .composeWindow .composeSubject input,
+  .composeWindow .recipientChipEditor input{
+    font-size:13px!important;
+  }
+}
+@media(max-width:850px){
+  .scrim{display:none!important}
+  .composeWindow,
+  .composeWindow.maximized,
+  .composeWindow.minimized{
+    inset:58px 0 0!important;
+    width:100%!important;
+    height:auto!important;
+    min-height:0!important;
+    border:0!important;
+    border-radius:0!important;
+    box-shadow:none!important;
+  }
+  .composeWindow.minimized{
+    inset:auto 8px 0 8px!important;
+    width:auto!important;
+    height:44px!important;
+    border:1px solid #d8dde5!important;
+    border-bottom:0!important;
+    border-radius:10px 10px 0 0!important;
+    box-shadow:0 4px 18px rgba(60,64,67,.22)!important;
+  }
+  .composeWindow .composeHead{
+    height:44px!important;
+    min-height:44px!important;
+    padding:0 6px 0 13px!important;
+    border-radius:0!important;
+  }
+  .composeWindow.minimized .composeHead{
+    border-radius:9px 9px 0 0!important;
+  }
+  .composeWindow .recipientChipField{
+    min-height:42px!important;
+    padding:4px 8px 4px 12px!important;
+  }
+  .composeWindow .recipientChipField>span{
+    width:62px!important;
+    flex-basis:62px!important;
+  }
+  .composeWindow .composeSubject{
+    height:42px!important;
+    min-height:42px!important;
+    padding:0 12px!important;
+  }
+  .composeWindow .composeEditor{
+    padding:13px 13px 9px!important;
+    font-size:14px!important;
+  }
+  .composeWindow .composeFormatBar{
+    margin:0 7px 1px!important;
+  }
+  .composeWindow .gmailComposeFoot{
+    height:56px!important;
+    min-height:56px!important;
+    padding:0 8px max(0px,env(safe-area-inset-bottom)) 10px!important;
+  }
+  .composeWindow .gmailComposeFoot .send{
+    min-width:88px!important;
+    height:36px!important;
+    padding:0 14px!important;
+  }
+  .composeWindow .recipientChipField .recipientSuggestions{
+    left:8px!important;
+    right:8px!important;
+    width:auto!important;
+  }
+}
