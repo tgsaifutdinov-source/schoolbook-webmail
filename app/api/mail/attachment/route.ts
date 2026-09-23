@@ -7,12 +7,12 @@ async function ctx(){
 }
 export async function GET(req:NextRequest){
  const c=await ctx();if(!c)return NextResponse.json({error:"Unauthorized"},{status:401});
- const blobId=req.nextUrl.searchParams.get("blobId");const name=req.nextUrl.searchParams.get("name")||"attachment";const type=req.nextUrl.searchParams.get("type")||"application/octet-stream";
+ const blobId=req.nextUrl.searchParams.get("blobId");const name=req.nextUrl.searchParams.get("name")||"attachment";const type=req.nextUrl.searchParams.get("type")||"application/octet-stream";const inline=req.nextUrl.searchParams.get("inline")==="1";
  if(!blobId)return NextResponse.json({error:"Missing blobId"},{status:400});
  const raw=String(c.s.downloadUrl).replace("{accountId}",encodeURIComponent(String(c.accountId))).replace("{blobId}",encodeURIComponent(blobId)).replace("{name}",encodeURIComponent(name)).replace("{type}",encodeURIComponent(type));
  const u=new URL(raw);const target="http://host.docker.internal:18080"+u.pathname+u.search;
  const r=await fetch(target,{headers:{Authorization:"Basic "+c.token},cache:"no-store"});if(!r.ok)return NextResponse.json({error:"Download failed"},{status:r.status});
- return new NextResponse(r.body,{status:200,headers:{"content-type":r.headers.get("content-type")||type,"content-disposition":'attachment; filename="'+name.replace(/"/g,"")+'"'}});
+ return new NextResponse(r.body,{status:200,headers:{"content-type":r.headers.get("content-type")||type,"content-disposition":(inline?"inline":"attachment")+'; filename="'+name.replace(/"/g,"")+'"'}});
 }
 export async function POST(req:NextRequest){
  const c=await ctx();if(!c)return NextResponse.json({error:"Unauthorized"},{status:401});
