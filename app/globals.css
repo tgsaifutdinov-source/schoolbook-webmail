@@ -1740,3 +1740,23 @@ html[data-mail-density="compact"] .messages article{min-height:66px;padding-top:
     font-size:10px;
   }
 }
+
+/* Contact search emphasis and custom-address row */
+.composeWindow .recipientSuggestion mark{
+  padding:0!important;
+  background:transparent!important;
+  color:inherit!important;
+  font-weight:700!important;
+}
+.composeWindow .contactAvatar.custom{
+  background:#eef1f4!important;
+  color:#5f6368!important;
+  font-size:12px!important;
+  font-weight:700!important;
+}
+.composeWindow .recipientSuggestion.customAddress{
+  border-top:1px solid #eceff2!important;
+}
+.composeWindow .recipientSuggestion.customAddress .contactEmail{
+  color:#7a828c!important;
+}
