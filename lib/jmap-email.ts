@@ -24,7 +24,8 @@ export function buildJmapEmail(input:{
  attachments?:Attachment[];
  includeFrom?:boolean;
 }){
- const to=addresses(input.to||""),cc=addresses(input.cc||""),bcc=addresses(input.bcc||"");
+ const seen=new Set<string>();const unique=(items:Address[])=>items.filter(a=>{const key=a.email.toLowerCase();if(seen.has(key))return false;seen.add(key);return true});
+ const to=unique(addresses(input.to||"")),cc=unique(addresses(input.cc||"")),bcc=unique(addresses(input.bcc||""));
  const attachments=(input.attachments||[]).filter(a=>a&&typeof a.blobId==="string"&&a.blobId).slice(0,100);
  const textPart={partId:"body",type:"text/plain"};
  const bodyStructure:any=attachments.length
