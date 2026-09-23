@@ -11,7 +11,7 @@ async function stalwart(path:string,token:string,init?:RequestInit){
 
 function parseMailSearch(input:string){
  const ops:Record<string,string[]>={};
- const re=/\b(from|to|subject|has|is|after|before|newer_than|older_than|in):(?:"([^"]+)"|(\S+))/gi;
+ const re=/\b(from|to|cc|bcc|subject|has|is|after|before|newer_than|older_than|larger|smaller|in):(?:"([^"]+)"|(\S+))/gi;
  const free=input.replace(re,(_all,key:string,quoted:string,bare:string)=>{(ops[key.toLowerCase()]||=[]).push((quoted||bare||"").trim());return " "}).replace(/\s+/g," ").trim();
  return {ops,free};
 }
@@ -19,6 +19,12 @@ function relativeDate(value:string,past=true){
  const m=/^(\d+)([dmy])$/i.exec(value.trim());if(!m)return "";
  const n=Math.max(1,Math.min(3650,Number(m[1]))),unit=m[2].toLowerCase(),ms=n*(unit==="d"?86400000:unit==="m"?30*86400000:365*86400000);
  return new Date(Date.now()+(past?-ms:ms)).toISOString();
+}
+function parseSize(value:string){
+ const m=/^(\d+(?:\.\d+)?)([kmg]?)(?:b)?$/i.exec(value.trim());if(!m)return 0;
+ const n=Number(m[1]);if(!Number.isFinite(n)||n<0)return 0;
+ const unit=m[2].toLowerCase(),mult=unit==="k"?1024:unit==="m"?1024*1024:unit==="g"?1024*1024*1024:1;
+ return Math.min(2*1024*1024*1024*1024,Math.floor(n*mult));
 }
 
 export async function GET(req:NextRequest){
@@ -69,8 +75,8 @@ export async function GET(req:NextRequest){
 
   const conditions:any[]=[];
   if(effectiveMailboxId)conditions.push({inMailbox:effectiveMailboxId});
-  const from=parsed.ops.from?.at(-1),to=parsed.ops.to?.at(-1),subjectOp=parsed.ops.subject?.at(-1);
-  if(from)conditions.push({from});if(to)conditions.push({to});if(subjectOp)conditions.push({subject:subjectOp});
+  const from=parsed.ops.from?.at(-1),to=parsed.ops.to?.at(-1),cc=parsed.ops.cc?.at(-1),bcc=parsed.ops.bcc?.at(-1),subjectOp=parsed.ops.subject?.at(-1);
+  if(from)conditions.push({from});if(to)conditions.push({to});if(cc)conditions.push({cc});if(bcc)conditions.push({bcc});if(subjectOp)conditions.push({subject:subjectOp});
   if(parsed.free){
    if(["from","to","subject","body"].includes(scope))conditions.push({[scope]:parsed.free});
    else conditions.push({text:parsed.free});
@@ -85,6 +91,9 @@ export async function GET(req:NextRequest){
   if(unread||isOps.includes("unread"))conditions.push({notKeyword:"$seen"});
   if(isOps.includes("read"))conditions.push({hasKeyword:"$seen"});
   if(starred||isOps.includes("starred"))conditions.push({hasKeyword:"$flagged"});
+  const larger=parseSize(parsed.ops.larger?.at(-1)||""),smaller=parseSize(parsed.ops.smaller?.at(-1)||"");
+  if(larger>0)conditions.push({minSize:larger+1});
+  if(smaller>1)conditions.push({maxSize:smaller-1});
   if((parsed.ops.has||[]).some(x=>x.toLowerCase()==="attachment"))attachment=true;
   const filter:any=conditions.length===0?{}:conditions.length===1?conditions[0]:{operator:"AND",conditions};
 
