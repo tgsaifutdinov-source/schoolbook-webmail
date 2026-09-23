@@ -15,11 +15,11 @@ const addresses=(v:string)=>String(v||"").split(/[;,\n]+/).map(x=>x.trim()).filt
 export async function POST(req:NextRequest){
  const blocked=sameOriginGuard(req);if(blocked)return blocked;
  const c=await ctx();if(!c)return NextResponse.json({error:"Unauthorized"},{status:401});
- const body=await req.json().catch(()=>({}));const id=String(body.id||""),to=String(body.to||""),cc=String(body.cc||""),bcc=String(body.bcc||""),subject=String(body.subject||""),text=String(body.text||""),attachments=Array.isArray(body.attachments)?body.attachments.slice(0,100):[];
- if(subject.length>998||text.length>5_000_000)return NextResponse.json({error:"Черновик слишком большой"},{status:413});
+ const body=await req.json().catch(()=>({}));const id=String(body.id||""),to=String(body.to||""),cc=String(body.cc||""),bcc=String(body.bcc||""),subject=String(body.subject||""),text=String(body.text||""),html=String(body.html||""),attachments=Array.isArray(body.attachments)?body.attachments.slice(0,100):[];
+ if(subject.length>998||text.length>5_000_000||html.length>5_000_000)return NextResponse.json({error:"Черновик слишком большой"},{status:413});
  if(!c.identity||!c.drafts)return NextResponse.json({error:"Не найдена папка Черновики"},{status:400});
  const allRecipients=[...addresses(to),...addresses(cc),...addresses(bcc)];if(allRecipients.some((x:any)=>!valid(x.email)))return NextResponse.json({error:"Проверьте адреса получателей"},{status:400});if(allRecipients.length>200)return NextResponse.json({error:"Слишком много получателей в одном письме"},{status:400});
- const email=buildJmapEmail({drafts:c.drafts,identity:c.identity,to,cc,bcc,subject,text,attachments,includeFrom:false});
+ const email=buildJmapEmail({drafts:c.drafts,identity:c.identity,to,cc,bcc,subject,text,html,attachments,includeFrom:false});
  // Email bodyStructure/bodyValues are immutable in JMAP. Saving an existing draft
  // therefore creates a replacement message and removes the previous draft.
  const args:any={accountId:c.accountId,create:{draft:email}};if(id)args.destroy=[id];
