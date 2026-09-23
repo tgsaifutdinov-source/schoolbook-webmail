@@ -23,6 +23,7 @@ export function buildJmapEmail(input:{
  subject?:string;
  text?:string;
  attachments?:Attachment[];
+ includeFrom?:boolean;
 }){
  const to=addresses(input.to||""),cc=addresses(input.cc||""),bcc=addresses(input.bcc||"");
  const attachments=(input.attachments||[]).filter(a=>a&&typeof a.blobId==="string"&&a.blobId).slice(0,100);
@@ -36,11 +37,11 @@ export function buildJmapEmail(input:{
  const email:any={
   mailboxIds:{[input.drafts]:true},
   keywords:{"$draft":true},
-  from,
   subject:String(input.subject||""),
   bodyStructure,
   bodyValues:{body:{value:String(input.text||""),isTruncated:false}}
  };
+ if(input.includeFrom)email.from=from;
  if(to.length)email.to=to;
  if(cc.length)email.cc=cc;
  if(bcc.length)email.bcc=bcc;
