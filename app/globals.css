@@ -390,3 +390,16 @@ html[data-mail-density="compact"] .messages article{min-height:66px;padding-top:
  .gmailConversation>.mobileReplyBar{display:flex}
  .gmailReader .messageDetails{min-width:280px;max-width:calc(100vw - 32px)}
 }
+
+/* Inline Gmail-like reply editor inside a conversation */
+.inlineReplyComposer{margin-top:18px;border:1px solid #dfe3e8;border-radius:12px;background:#fff;overflow:hidden;box-shadow:0 1px 2px #3c40430d}
+.inlineReplyHead{min-height:46px;padding:8px 10px;display:flex;align-items:center;gap:9px;border-bottom:1px solid #edf0f3}
+.inlineReplyHead>span{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:var(--gmail-yellow-soft);color:#725600}
+.inlineReplyHead>span svg{width:15px}.inlineReplyHead>div{min-width:0;flex:1;display:flex;flex-direction:column}.inlineReplyHead b{font-size:11px;color:#30343a}.inlineReplyHead small{font-size:9px;color:#767e89;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.inlineReplyHead>button{width:30px;height:30px;border-radius:50%;display:grid;place-items:center}.inlineReplyHead>button:hover{background:#f1f3f4}.inlineReplyHead>button svg{width:14px}
+.inlineReplyComposer textarea{display:block;width:100%;min-height:150px;max-height:360px;resize:vertical;border:0;outline:0;padding:13px 14px;font:13px/1.55 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:#2f3338;background:#fff}
+.inlineReplyFiles{padding:0 12px 8px;display:flex;gap:6px;flex-wrap:wrap}.inlineReplyFiles>span{max-width:100%;height:28px;padding:0 6px;border:1px solid #e1e5ea;border-radius:6px;display:flex;align-items:center;gap:5px;background:#f8f9fa}.inlineReplyFiles svg{width:12px}.inlineReplyFiles b{max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9px;font-weight:600}.inlineReplyFiles button{width:22px;height:22px;border-radius:50%;display:grid;place-items:center}.inlineReplyFiles button:hover{background:#e9ecef}
+.inlineReplyComposer .sendError{padding:0 12px 7px}
+.inlineReplyFoot{height:50px;padding:0 10px;border-top:1px solid #edf0f3;display:flex;align-items:center;gap:6px}.inlineReplyFoot>button{height:32px;min-width:32px;border-radius:16px;display:flex;align-items:center;justify-content:center;gap:5px}.inlineReplyFoot>button:not(.send){width:32px;padding:0}.inlineReplyFoot>button:not(.send):hover{background:#f1f3f4}.inlineReplyFoot button svg{width:14px}.inlineReplyFoot .send{padding:0 14px;background:var(--gmail-yellow);color:#332900;font-size:10px;font-weight:750}.inlineReplyFoot .send:disabled{opacity:.5;cursor:default}.inlineReplyFoot small{margin-left:auto;color:#858c95;font-size:9px}
+@media(min-width:1200px){.inlineReplyComposer textarea{min-height:175px;font-size:14px}.inlineReplyHead b{font-size:12px}.inlineReplyHead small,.inlineReplyFoot .send{font-size:10px}}
+@media(max-width:850px){.inlineReplyComposer{margin-top:12px;border-radius:9px}.inlineReplyComposer textarea{min-height:130px;font-size:12px}.inlineReplyHead{min-height:42px;padding:6px 8px}.inlineReplyFoot{height:46px;padding:0 8px}.inlineReplyFiles b{max-width:150px}}
