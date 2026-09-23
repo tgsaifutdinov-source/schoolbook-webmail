@@ -1,4 +1,5 @@
 import {getMailSession} from "../../../../lib/mail-session";
+import {sameOriginGuard} from "../../../../lib/security";
 import {NextRequest,NextResponse} from "next/server";
 async function ctx(){
  const token=(await getMailSession())?.token;if(!token)return null;
@@ -11,8 +12,10 @@ async function ctx(){
 }
 const addresses=(v:string)=>String(v||"").split(/[;,\n]+/).map(x=>x.trim()).filter(Boolean).map(email=>({email}));const valid=(email:string)=>/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(email);
 export async function POST(req:NextRequest){
+ const blocked=sameOriginGuard(req);if(blocked)return blocked;
  const c=await ctx();if(!c)return NextResponse.json({error:"Unauthorized"},{status:401});
- const {id,to="",cc="",bcc="",subject="",text="",attachments=[]}=await req.json();
+ const body=await req.json().catch(()=>({}));const id=String(body.id||""),to=String(body.to||""),cc=String(body.cc||""),bcc=String(body.bcc||""),subject=String(body.subject||""),text=String(body.text||""),attachments=Array.isArray(body.attachments)?body.attachments.slice(0,100):[];
+ if(subject.length>998||text.length>5_000_000)return NextResponse.json({error:"Черновик слишком большой"},{status:413});
  if(!c.identity||!c.drafts)return NextResponse.json({error:"Не найдена папка Черновики"},{status:400});
  const allRecipients=[...addresses(to),...addresses(cc),...addresses(bcc)];if(allRecipients.some((x:any)=>!valid(x.email)))return NextResponse.json({error:"Проверьте адреса получателей"},{status:400});
  const email:any={mailboxIds:{[c.drafts]:true},keywords:{"$draft":true},from:[{name:c.identity.name||"",email:c.identity.email}],to:addresses(to),cc:addresses(cc),bcc:addresses(bcc),subject,bodyValues:{body:{value:text,isTruncated:false}},textBody:[{partId:"body",type:"text/plain"}]};
@@ -23,6 +26,7 @@ export async function POST(req:NextRequest){
  return NextResponse.json({ok:true,id:id||x?.[1]?.created?.draft?.id});
 }
 export async function DELETE(req:NextRequest){
+ const blocked=sameOriginGuard(req);if(blocked)return blocked;
  const c=await ctx();if(!c)return NextResponse.json({error:"Unauthorized"},{status:401});const id=req.nextUrl.searchParams.get("id");if(!id)return NextResponse.json({error:"Missing id"},{status:400});
  const r=await fetch(c.endpoint,{method:"POST",headers:c.headers,body:JSON.stringify({using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",{accountId:c.accountId,destroy:[id]},"d"]]}),cache:"no-store"});const d=await r.json();if(d.methodResponses?.[0]?.[1]?.notDestroyed?.[id])return NextResponse.json({error:"Не удалось удалить черновик"},{status:400});return NextResponse.json({ok:true});
 }
