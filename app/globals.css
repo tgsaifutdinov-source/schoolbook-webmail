@@ -879,3 +879,32 @@ html[data-mail-density="compact"] .messages article{min-height:66px;padding-top:
   max-width:calc(100vw - 190px)!important;
  }
 }
+
+/* Gmail subject row: one clean full-width field */
+.composeWindow .composeSubject{
+ height:38px!important;
+ min-height:38px!important;
+ padding:0 14px!important;
+ display:flex!important;
+ align-items:center!important;
+}
+.composeWindow .composeSubject input{
+ width:100%!important;
+ height:36px!important;
+ padding:0!important;
+ font-size:12px!important;
+ font-weight:500;
+ color:#2e3339!important;
+}
+.composeWindow .composeSubject input::placeholder{color:#7c848e!important;font-weight:400}
+@media(min-width:1200px){
+ .composeWindow .composeSubject input{font-size:13px!important}
+}
+@media(max-width:850px){
+ .composeWindow .composeSubject{
+  height:42px!important;
+  min-height:42px!important;
+  padding:0 12px!important;
+ }
+ .composeWindow .composeSubject input{height:40px!important;font-size:13px!important}
+}
