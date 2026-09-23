@@ -1,10 +1,13 @@
 import {getMailSession} from "../../../../lib/mail-session";
+import {sameOriginGuard} from "../../../../lib/security";
 import {NextRequest,NextResponse} from "next/server";
 
 export async function POST(req:NextRequest){
+ const blocked=sameOriginGuard(req);if(blocked)return blocked;
  const token=(await getMailSession())?.token;
  if(!token)return NextResponse.json({error:"Unauthorized"},{status:401});
- const {to,cc="",bcc="",subject,text,attachments=[],draftId=""}=await req.json();
+ const body=await req.json().catch(()=>({}));const to=String(body.to||""),cc=String(body.cc||""),bcc=String(body.bcc||""),subject=String(body.subject||""),text=String(body.text||""),attachments=Array.isArray(body.attachments)?body.attachments.slice(0,100):[],draftId=String(body.draftId||"");
+ if(subject.length>998||text.length>5_000_000)return NextResponse.json({error:"Письмо слишком большое"},{status:413});
  if(!to?.trim())return NextResponse.json({error:"Укажите получателя"},{status:400});
 
  const headers={Authorization:"Basic "+token,"content-type":"application/json"};
