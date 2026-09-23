@@ -9,11 +9,12 @@ async function ctx(){
  const mr=await fetch(endpoint,{method:"POST",headers,body:JSON.stringify({using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail","urn:ietf:params:jmap:submission"],methodCalls:[["Identity/get",{accountId},"i"],["Mailbox/get",{accountId,properties:["id","role"]},"m"]]}),cache:"no-store"});
  const md=await mr.json();return {headers,accountId,endpoint,identity:md.methodResponses?.find((x:any)=>x[0]==="Identity/get")?.[1]?.list?.[0],drafts:md.methodResponses?.find((x:any)=>x[0]==="Mailbox/get")?.[1]?.list?.find((x:any)=>x.role==="drafts")?.id};
 }
-const addresses=(v:string)=>String(v||"").split(",").map(x=>x.trim()).filter(Boolean).map(email=>({email}));
+const addresses=(v:string)=>String(v||"").split(/[;,\\n]+/).map(x=>x.trim()).filter(Boolean).map(email=>({email}));const valid=(email:string)=>/^[^\\s@<>]+@[^\\s@<>]+\\.[^\\s@<>]+$/.test(email);
 export async function POST(req:NextRequest){
  const c=await ctx();if(!c)return NextResponse.json({error:"Unauthorized"},{status:401});
  const {id,to="",cc="",bcc="",subject="",text="",attachments=[]}=await req.json();
  if(!c.identity||!c.drafts)return NextResponse.json({error:"Не найдена папка Черновики"},{status:400});
+ const allRecipients=[...addresses(to),...addresses(cc),...addresses(bcc)];if(allRecipients.some((x:any)=>!valid(x.email)))return NextResponse.json({error:"Проверьте адреса получателей"},{status:400});
  const email:any={mailboxIds:{[c.drafts]:true},keywords:{"$draft":true},from:[{name:c.identity.name||"",email:c.identity.email}],to:addresses(to),cc:addresses(cc),bcc:addresses(bcc),subject,bodyValues:{body:{value:text,isTruncated:false}},textBody:[{partId:"body",type:"text/plain"}]};
  if(attachments.length)email.attachments=attachments.map((a:any)=>({blobId:a.blobId,type:a.type||"application/octet-stream",name:a.name,disposition:"attachment"}));
  const args:any={accountId:c.accountId};if(id)args.update={[id]:email};else args.create={draft:email};
