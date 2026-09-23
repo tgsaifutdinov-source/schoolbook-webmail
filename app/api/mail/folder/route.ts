@@ -1,4 +1,5 @@
 import {getMailSession} from "../../../../lib/mail-session";
+import {sameOriginGuard} from "../../../../lib/security";
 import {NextRequest,NextResponse} from "next/server";
 async function context(){
  const token=(await getMailSession())?.token;if(!token)return null;
@@ -8,8 +9,9 @@ async function context(){
  return {headers,accountId,endpoint:"http://host.docker.internal:18080"+u.pathname+u.search};
 }
 export async function POST(req:NextRequest){
+ const blocked=sameOriginGuard(req);if(blocked)return blocked;
  const c=await context();if(!c)return NextResponse.json({error:"Unauthorized"},{status:401});
- const {action,id,name}=await req.json();if(!action)return NextResponse.json({error:"Missing action"},{status:400});
+ const body=await req.json().catch(()=>({}));const action=String(body.action||""),id=String(body.id||""),name=String(body.name||"");if(!action)return NextResponse.json({error:"Missing action"},{status:400});if(name.length>255)return NextResponse.json({error:"Название папки слишком длинное"},{status:400});
  let args:any={accountId:c.accountId};
  if(action==="create"){if(!name?.trim())return NextResponse.json({error:"Укажите название папки"},{status:400});args.create={folder:{name:name.trim()}}}
  else if(action==="rename"){if(!id||!name?.trim())return NextResponse.json({error:"Missing folder data"},{status:400});args.update={[id]:{name:name.trim()}}}
