@@ -19,7 +19,7 @@ export async function POST(req:NextRequest){
  if(subject.length>998||text.length>5_000_000)return NextResponse.json({error:"Черновик слишком большой"},{status:413});
  if(!c.identity||!c.drafts)return NextResponse.json({error:"Не найдена папка Черновики"},{status:400});
  const allRecipients=[...addresses(to),...addresses(cc),...addresses(bcc)];if(allRecipients.some((x:any)=>!valid(x.email)))return NextResponse.json({error:"Проверьте адреса получателей"},{status:400});
- const email=buildJmapEmail({drafts:c.drafts,identity:c.identity,to,cc,bcc,subject,text,attachments});
+ const email=buildJmapEmail({drafts:c.drafts,identity:c.identity,to,cc,bcc,subject,text,attachments,includeFrom:false});
  const args:any={accountId:c.accountId};if(id)args.update={[id]:email};else args.create={draft:email};
  const r=await fetch(c.endpoint,{method:"POST",headers:c.headers,body:JSON.stringify({using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",args,"d"]]}),cache:"no-store"});const d=await r.json();const x=d.methodResponses?.[0];
  const err=id?x?.[1]?.notUpdated?.[id]:x?.[1]?.notCreated?.draft;if(x?.[0]==="error"||err){console.error("JMAP draft Email/set failed",JSON.stringify(d));return NextResponse.json({error:err?.description||x?.[1]?.description||"Не удалось сохранить черновик",type:err?.type||x?.[1]?.type||"jmapError",properties:err?.properties||x?.[1]?.properties||[]},{status:400})}
