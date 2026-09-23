@@ -1,2 +1,2 @@
-import {NextResponse} from "next/server";
-export async function POST(){const r=NextResponse.json({ok:true});r.cookies.set("sbmail_auth","",{httpOnly:true,secure:true,sameSite:"lax",path:"/",maxAge:0});return r}
+import {NextResponse} from "next/server";import {getMailSession,destroyMailSession,mailSessionCookie} from "../../../../lib/mail-session";
+export async function POST(){const s=await getMailSession();destroyMailSession(s?.id);const r=NextResponse.json({ok:true});r.cookies.set("sbmail_session","",{...mailSessionCookie,maxAge:0});r.cookies.set("sbmail_auth","",{...mailSessionCookie,maxAge:0});return r}
