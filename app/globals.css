@@ -421,3 +421,37 @@ html[data-mail-density="compact"] .messages article{min-height:66px;padding-top:
 @media(max-width:850px){
  .gmailList .mailRow.keyboardActive{box-shadow:inset 3px 0 0 var(--gmail-yellow)}
 }
+
+/* Gmail-like floating composer lifecycle and reader position */
+@media(min-width:851px){
+ .composeWindow.minimized{
+  width:360px!important;
+  height:42px!important;
+  min-height:42px!important;
+  overflow:hidden!important;
+  border-radius:10px 10px 0 0!important;
+ }
+ .composeWindow.minimized .composeHead{cursor:default;border-radius:10px 10px 0 0!important}
+ .composeWindow.minimized .composeHead>div:first-child{min-width:0;flex:1}
+ .composeWindow.minimized .composeHead b{display:block;max-width:220px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ .composeWindow.minimized .composeHead small{display:none}
+ .composeWindow.minimized .composeHeadActions .composeMinimize svg{transform:rotate(180deg)}
+ .composeHeadActions .composeMinimize svg{transition:transform .16s ease}
+ .composeHeadActions .composeMinimize svg.up{transform:rotate(180deg)}
+}
+.gmailReader .readerNav{display:flex;align-items:center;gap:2px!important}
+.gmailReader .readerNav>span{min-width:58px;margin:0 3px;color:#7b818a;font-size:9px;text-align:right;white-space:nowrap}
+.gmailReader .readerNav button{width:30px!important;height:30px!important}
+.gmailMailboxBar .mailbarBulk button[title="В спам"],
+.gmailMailboxBar .mailbarBulk button[title="Не спам"],
+.gmailReader .toolbar button[title="В спам"],
+.gmailReader .toolbar button[title="Не спам"]{color:#656b74}
+.gmailMailboxBar .mailbarBulk button[title="В спам"]:hover,
+.gmailReader .toolbar button[title="В спам"]:hover{color:#765700;background:#fff4ca!important}
+@media(min-width:1200px){
+ .gmailReader .readerNav>span{font-size:10px;min-width:66px}
+}
+@media(max-width:850px){
+ .composeHeadActions .composeMinimize{display:none!important}
+ .gmailReader .readerNav>span{display:none}
+}
