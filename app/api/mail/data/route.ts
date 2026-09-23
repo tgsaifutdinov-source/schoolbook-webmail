@@ -27,14 +27,14 @@ export async function GET(req:NextRequest){
    ["Email/get",{accountId,"#ids":{"resultOf":"q","name":"Email/query","path":"/ids"},properties:["id","mailboxIds","keywords","from","to","cc","subject","receivedAt","preview","hasAttachment","size"]},"e"]
   ]};
   const r=await stalwart(endpoint,token,{method:"POST",body:JSON.stringify(body)}); if(!r.ok)return NextResponse.json({error:"JMAP request failed"},{status:r.status});
-  const d=await r.json(); const result:any={accountId,username:s.username,mailboxes:[],emails:[],position,total:0};
+  const d=await r.json(); const result:any={accountId,username:s.username,mailboxes:[],emails:[],position,total:0,nextPosition:position};
   for(const x of d.methodResponses||[]){
    if(x[0]==="Mailbox/get")result.mailboxes=x[1].list||[];
-   if(x[0]==="Email/query"){result.total=x[1].total||0;result.position=x[1].position||position}
+   if(x[0]==="Email/query"){result.total=x[1].total||0;result.position=x[1].position??position;result.nextPosition=result.position+(x[1].ids?.length||0)}
    if(x[0]==="Email/get")result.emails=(x[1].list||[]).filter((mail:any)=>!attachment||mail.hasAttachment);
    if(x[0]==="error")return NextResponse.json({error:x[1]?.description||x[1]?.type||"JMAP error"},{status:400});
   }
-  result.hasMore=attachment?position+limit<result.total:result.position+result.emails.length<result.total;
+  result.hasMore=result.nextPosition<result.total;
   return NextResponse.json(result);
  }catch(e){return NextResponse.json({error:"Stalwart unavailable"},{status:502})}
 }
