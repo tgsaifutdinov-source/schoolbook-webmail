@@ -1559,3 +1559,85 @@ html[data-mail-density="compact"] .messages article{min-height:66px;padding-top:
     box-shadow:0 -10px 32px rgba(32,33,36,.18)!important;
   }
 }
+
+/* Compact Gmail-like recipient dropdown */
+.composeWindow .recipientChipField .recipientSuggestions{
+  width:min(340px,calc(100% - 108px))!important;
+  right:auto!important;
+  max-height:252px!important;
+  padding:4px 0!important;
+  border-radius:7px!important;
+  box-shadow:0 8px 24px rgba(32,33,36,.16)!important;
+}
+.composeWindow .recipientSuggestion{
+  min-height:42px!important;
+  padding:5px 10px!important;
+  gap:9px!important;
+}
+.composeWindow .contactAvatar{
+  width:28px!important;
+  height:28px!important;
+  min-width:28px!important;
+  flex-basis:28px!important;
+  font-size:12px!important;
+}
+.composeWindow .contactMeta{
+  gap:1px!important;
+}
+.composeWindow .contactName{
+  font-size:11px!important;
+  line-height:1.15!important;
+  font-weight:500!important;
+}
+.composeWindow .contactEmail{
+  font-size:9px!important;
+  line-height:1.15!important;
+}
+.composeWindow .recipientEmpty{
+  padding:9px 11px!important;
+  font-size:9px!important;
+}
+@media(min-width:1200px){
+  .composeWindow .recipientChipField .recipientSuggestions{
+    width:min(360px,calc(100% - 112px))!important;
+  }
+  .composeWindow .recipientSuggestion{
+    min-height:44px!important;
+    padding:5px 11px!important;
+  }
+  .composeWindow .contactAvatar{
+    width:30px!important;
+    height:30px!important;
+    min-width:30px!important;
+    flex-basis:30px!important;
+    font-size:12px!important;
+  }
+  .composeWindow .contactName{font-size:11px!important}
+  .composeWindow .contactEmail{font-size:9px!important}
+}
+@media(max-width:850px){
+  .composeWindow .recipientChipField .recipientSuggestions{
+    left:80px!important;
+    right:auto!important;
+    width:min(330px,calc(100vw - 100px))!important;
+    max-height:240px!important;
+  }
+  .composeWindow .recipientSuggestion{
+    min-height:44px!important;
+    padding:6px 10px!important;
+  }
+  .composeWindow .contactAvatar{
+    width:30px!important;
+    height:30px!important;
+    min-width:30px!important;
+    flex-basis:30px!important;
+  }
+}
+@media(max-width:560px){
+  .composeWindow .recipientChipField .recipientSuggestions{
+    left:8px!important;
+    right:8px!important;
+    width:auto!important;
+    max-height:40dvh!important;
+  }
+}
