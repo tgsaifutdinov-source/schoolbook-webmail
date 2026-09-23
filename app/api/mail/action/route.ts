@@ -27,7 +27,11 @@ export async function POST(req:NextRequest){
   for(const messageId of messageIds){
    const raw=restoreMap?.[messageId];
    if(!raw||typeof raw!=="object")return NextResponse.json({error:"Missing restore mailbox map"},{status:400});
-   const mailboxIds=Object.fromEntries(Object.entries(raw).filter(([key,value])=>typeof key==="string"&&key.length>0&&value===true).slice(0,50));
+   const mailboxIds:Record<string,boolean>={};
+   for(const [key,value] of Object.entries(raw as Record<string,unknown>)){
+    if(Object.keys(mailboxIds).length>=50)break;
+    if(key.length>0&&value===true)mailboxIds[key]=true;
+   }
    if(!Object.keys(mailboxIds).length)return NextResponse.json({error:"Invalid restore mailbox map"},{status:400});
    safeMap[messageId]=mailboxIds;
   }
