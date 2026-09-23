@@ -471,3 +471,40 @@ html[data-mail-density="compact"] .messages article{min-height:66px;padding-top:
 .selectTypeMenu button:hover{background:#f1f3f4!important}
 @media(min-width:1200px){.selectTypeMenu button{font-size:11px}.selectTypeMenu{width:176px}}
 @media(max-width:850px){.selectTypeMenu{position:fixed;top:104px;left:8px;width:170px}}
+
+/* Gmail-style account, sidebar More and reader More menus */
+.accountMenuWrap{position:relative;display:flex;align-items:center}
+.accountMenu{position:absolute;z-index:90;top:48px;right:0;width:260px;padding:10px;border:1px solid #e0e4e9;border-radius:14px;background:#fff;box-shadow:0 16px 42px #3c40432e}
+.accountIdentity{display:flex;align-items:center;gap:11px;padding:8px 8px 12px;border-bottom:1px solid #eceff2;margin-bottom:6px}
+.accountIdentity .avatar.large{width:42px!important;height:42px!important;border-radius:50%;background:var(--gmail-yellow-soft)!important;color:#5f4700;font-size:14px}
+.accountIdentity>div{min-width:0;display:flex;flex-direction:column}
+.accountIdentity b{max-width:175px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;color:#2f3338}
+.accountIdentity small{font-size:9px;color:#858c95}
+.accountMenu>button{width:100%;height:36px;padding:0 9px;border-radius:8px;display:flex;align-items:center;gap:9px;color:#4c535d;font-size:11px}
+.accountMenu>button:hover{background:#f1f3f4}.accountMenu>button svg{width:15px;color:#737a84}
+
+.sidebarMoreButton{position:relative}
+.sidebarMoreButton .sidebarMoreChevron{width:12px!important;margin-left:auto;transition:transform .16s ease}
+.sidebarMoreButton.open .sidebarMoreChevron{transform:rotate(180deg)}
+.sidebarCollapsed .sidebarMoreButton .sidebarMoreChevron{display:none}
+.sidebarCollapsed .sidebarMoreButton span{display:none!important}
+
+.readerMoreWrap{position:relative;display:inline-flex}
+.readerMoreMenu{position:absolute;z-index:70;top:42px;left:0;width:220px;padding:6px;border:1px solid #e0e4e9;border-radius:9px;background:#fff;box-shadow:0 12px 34px #3c40432a}
+.readerMoreMenu button{width:100%!important;height:34px!important;padding:0 10px!important;border-radius:6px!important;display:flex!important;align-items:center!important;justify-content:flex-start!important;gap:9px!important;color:#454b54!important;font-size:10px!important;white-space:nowrap}
+.readerMoreMenu button:hover{background:#f1f3f4!important}.readerMoreMenu button svg{width:14px!important;flex:0 0 auto;color:#747b85}
+.readerMoreMenu button span{overflow:hidden;text-overflow:ellipsis}
+
+.bulkMoreMenu{width:214px!important}
+.bulkMoreMenu button span{overflow:hidden;text-overflow:ellipsis}
+.gmailMailboxBar .mailbarBulk{position:relative}
+
+@media(min-width:1200px){
+ .accountMenu{width:278px}.accountMenu>button,.readerMoreMenu button{font-size:11px!important}
+ .readerMoreMenu{width:232px}
+}
+@media(max-width:850px){
+ .accountMenu{position:fixed;top:56px;right:8px;width:min(280px,calc(100vw - 16px))}
+ .readerMoreMenu{position:fixed;top:106px;left:10px;width:min(230px,calc(100vw - 20px))}
+ .sidebarMoreButton .sidebarMoreChevron{margin-left:auto}
+}
