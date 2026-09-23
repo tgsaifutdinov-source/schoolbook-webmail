@@ -17,3 +17,7 @@ nav button,.settings{height:48px;font-size:14px;padding:0 14px}nav button svg,.s
 
 .virtualFolder{height:42px;border-radius:8px;padding:0 12px;display:flex;align-items:center;gap:11px;font-size:13px;color:#465269;text-align:left;margin-top:4px}.virtualFolder:hover{background:#f5f7fa}.virtualFolder.active{background:var(--accent-soft);color:#172138;font-weight:700}.virtualFolder svg{width:18px}.virtualFolder.active svg{color:#d39b00;fill:#ffc62b}
 @media(min-width:1200px){.virtualFolder{height:48px;font-size:14px;padding:0 14px}.virtualFolder svg{width:19px}}
+
+.brandLogo{display:block;width:190px;max-width:100%;height:48px;object-fit:contain;object-position:left center}
+@media(min-width:1200px){.brandLogo{width:220px;height:54px}}
+@media(max-width:850px){.brandLogo{width:145px;height:38px}}
