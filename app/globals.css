@@ -1206,3 +1206,145 @@ html[data-mail-density="compact"] .messages article{min-height:66px;padding-top:
   min-width:30px!important;
  }
 }
+
+/* Final clean Gmail composer titlebar — reset conflicting legacy rules */
+.composeWindow .composeHead{
+  height:42px!important;
+  min-height:42px!important;
+  padding:0 8px 0 14px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  background:#f2f6fc!important;
+  border-bottom:1px solid #e3e7ed!important;
+  border-radius:10px 10px 0 0!important;
+  color:#202124!important;
+}
+.composeWindow .composeHeadMain{
+  min-width:0!important;
+  flex:1 1 auto!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+}
+.composeWindow .composeHeadTitleWrap{
+  min-width:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:9px!important;
+  overflow:hidden!important;
+}
+.composeWindow .composeHeadTitleWrap b{
+  min-width:0!important;
+  margin:0!important;
+  color:#24344f!important;
+  font-size:13px!important;
+  font-weight:600!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.composeWindow .composeDraftState{
+  flex:0 1 auto!important;
+  max-width:150px!important;
+  color:#7b8490!important;
+  font-size:10px!important;
+  font-weight:400!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.composeWindow .composeHeadControls{
+  flex:0 0 auto!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:0!important;
+  margin-left:auto!important;
+}
+.composeWindow .composeHeadBtn{
+  width:28px!important;
+  height:28px!important;
+  min-width:28px!important;
+  min-height:28px!important;
+  padding:0!important;
+  margin:0!important;
+  border:0!important;
+  border-radius:4px!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  display:grid!important;
+  place-items:center!important;
+  color:#5f6368!important;
+  cursor:pointer!important;
+}
+.composeWindow .composeHeadBtn:hover{
+  background:#e4e9f0!important;
+  color:#202124!important;
+}
+.composeWindow .composeHeadBtn:active{
+  background:#d9e0e8!important;
+}
+.composeWindow .composeHeadBtn svg{
+  width:13px!important;
+  height:13px!important;
+  stroke-width:1.8!important;
+  transform:none!important;
+}
+.composeWindow .composeMinimizeBtn svg{
+  width:14px!important;
+}
+.composeWindow .composeCloseBtn:hover{
+  background:#dde4ec!important;
+}
+.composeWindow.minimized{
+  height:42px!important;
+  min-height:42px!important;
+  overflow:hidden!important;
+}
+.composeWindow.minimized .composeHead{
+  height:42px!important;
+  min-height:42px!important;
+  border-radius:10px 10px 0 0!important;
+}
+.composeWindow.minimized .composeHeadTitleWrap{
+  max-width:calc(100% - 90px)!important;
+}
+.composeWindow.minimized .composeDraftState{
+  display:none!important;
+}
+.composeWindow.minimized .recipientField,
+.composeWindow.minimized .composeSubject,
+.composeWindow.minimized .composeEditor,
+.composeWindow.minimized .composeFiles,
+.composeWindow.minimized .composeStatus,
+.composeWindow.minimized .sendError,
+.composeWindow.minimized .sendConfirm,
+.composeWindow.minimized .composeFormatBar,
+.composeWindow.minimized .composeFoot{
+  display:none!important;
+}
+@media(max-width:850px){
+  .composeWindow .composeHead{
+    height:46px!important;
+    min-height:46px!important;
+    padding:0 8px 0 13px!important;
+    border-radius:0!important;
+  }
+  .composeWindow .composeHeadTitleWrap b{
+    font-size:14px!important;
+  }
+  .composeWindow .composeDraftState{
+    display:none!important;
+  }
+  .composeWindow .composeHeadBtn{
+    width:30px!important;
+    height:30px!important;
+    min-width:30px!important;
+    min-height:30px!important;
+  }
+}
