@@ -1,5 +1,6 @@
 import {getMailSession} from "../../../../lib/mail-session";
 import {sameOriginGuard} from "../../../../lib/security";
+import {buildJmapEmail} from "../../../../lib/jmap-email";
 import {NextRequest,NextResponse} from "next/server";
 
 export async function POST(req:NextRequest){
@@ -33,12 +34,7 @@ export async function POST(req:NextRequest){
 
  const addresses=(v:string)=>String(v||"").split(/[;,\n]+/).map((x:string)=>x.trim()).filter(Boolean).map((email:string)=>({email}));const valid=(email:string)=>/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(email);const recipients=addresses(to);
  const allRecipients=[...recipients,...addresses(cc),...addresses(bcc)];if(!recipients.length||allRecipients.some((x:any)=>!valid(x.email)))return NextResponse.json({error:"Проверьте адреса получателей"},{status:400});
- const email:any={
-  mailboxIds:{[drafts]:true},keywords:{"$draft":true},
-  from:[{name:identity.name||"",email:identity.email}],to:recipients,cc:addresses(cc),bcc:addresses(bcc),subject:subject||"",
-  bodyValues:{body:{value:text,isTruncated:false}},textBody:[{partId:"body",type:"text/plain"}]
- };
- if(attachments.length)email.attachments=attachments.map((a:any)=>({blobId:a.blobId,type:a.type||"application/octet-stream",name:a.name,disposition:"attachment"}));
+ const email=buildJmapEmail({drafts,identity,to,cc,bcc,subject,text,attachments});
 
  const setArgs:any={accountId};if(draftId)setArgs.update={[draftId]:email};else setArgs.create={draft:email};
  const createBody={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",setArgs,"e"]]};
