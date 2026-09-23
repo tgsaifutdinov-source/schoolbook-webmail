@@ -328,3 +328,65 @@ html[data-mail-density="compact"] .messages article{min-height:66px;padding-top:
  .gmailFilterChips{width:100%}.gmailFilterChips button{height:27px;padding:0 9px;font-size:9px}
  .gmailList .messages{height:auto}
 }
+
+/* Gmail-style conversation reader */
+.gmailConversation{padding-top:22px!important}
+.gmailConversation .subjectLine{padding:0 6px 18px 56px;position:relative}
+.gmailConversation .subjectLine>div{display:flex;align-items:center;gap:8px;min-width:0;flex-wrap:wrap}
+.conversationCount{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:11px;background:#f1f3f4;color:#6f7785;font-size:10px;font-weight:650}
+.conversationStack{display:flex;flex-direction:column;gap:8px}
+.conversationMessage{border:1px solid #e6e9ed;border-radius:12px;background:#fff;overflow:visible}
+.conversationMessage.collapsed{cursor:pointer}
+.conversationMessage.collapsed:hover{box-shadow:0 1px 4px #3c40431f;border-color:#d9dde3}
+.conversationMessage.collapsed:focus-within{outline:2px solid #e8b00033;outline-offset:1px}
+.conversationHeader{min-height:68px;padding:12px 14px;display:flex;align-items:flex-start;gap:11px;position:relative}
+.conversationMessage.collapsed .conversationHeader{align-items:center}
+.conversationWho{min-width:0;flex:1;position:relative}
+.conversationWho>div{display:flex;align-items:center;gap:8px;min-width:0}
+.conversationWho b{font-size:12px;color:#202124;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.conversationWho>div>span{min-width:0;flex:1;color:#7b828c;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.conversationWho>small{display:block;margin-top:1px;font-size:10px;color:#777f89}
+.conversationWho .recipientToggle{margin-top:2px}
+.conversationMeta{display:flex;align-items:center;gap:5px;color:#7c838d;margin-left:auto;white-space:nowrap}
+.conversationMeta time{font-size:10px}
+.conversationMeta>svg{width:13px}
+.conversationMeta button{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#9097a1}
+.conversationMeta button:hover{background:#f1f3f4;color:#5f6368}
+.conversationMeta button svg{width:15px}
+.conversationExpanded{padding:0 16px 18px 65px}
+.conversationExpanded .body{min-height:120px!important;margin:0!important;padding:4px 0 12px!important}
+.conversationExpanded .htmlMail{min-height:460px!important}
+.conversationExpanded .attachmentGallery{margin-top:10px}
+.conversationExpanded .attachment{max-width:620px}
+.conversationReply{display:flex;gap:7px;margin-top:18px;padding-top:2px}
+.conversationReply button{height:36px;padding:0 13px;border:1px solid #dfe3e8;border-radius:18px;display:flex;align-items:center;gap:6px;font-size:11px;color:#4d5156;background:#fff}
+.conversationReply button:hover{background:#f6f7f9;border-color:#d2d6dc}
+.conversationReply button:first-child{border-color:#e3bd35;background:#fff9e4;color:#493a05}
+.conversationReply svg{width:14px}
+.gmailConversation>.mobileReplyBar{display:none}
+.gmailReader .messageDetails{left:0;right:auto;z-index:15;min-width:360px}
+@media(min-width:1200px){
+ .gmailConversation{padding-top:26px!important}
+ .gmailConversation .subjectLine{padding-left:60px;padding-bottom:20px}
+ .conversationHeader{min-height:72px;padding:14px 16px}
+ .conversationWho b{font-size:13px}.conversationWho>div>span{font-size:12px}.conversationWho>small,.conversationMeta time{font-size:11px}
+ .conversationExpanded{padding:0 20px 20px 72px}
+ .conversationExpanded .body{font-size:15px!important}
+}
+@media(max-width:850px){
+ .gmailConversation{padding-top:14px!important}
+ .gmailConversation .subjectLine{padding:0 4px 14px 4px}
+ .gmailConversation .subjectLine h2{font-size:19px!important}
+ .conversationCount{height:20px;font-size:9px}
+ .conversationStack{gap:6px}
+ .conversationMessage{border-radius:9px}
+ .conversationHeader{min-height:60px;padding:10px 9px;gap:8px}
+ .conversationHeader .senderAvatar.big{width:36px!important;height:36px!important;font-size:11px}
+ .conversationWho b{font-size:11px}.conversationWho>div>span{font-size:10px}.conversationWho>small,.conversationMeta time{font-size:9px}
+ .conversationMeta{gap:1px}.conversationMeta button{width:27px;height:27px}.conversationMeta>svg{display:none}
+ .conversationExpanded{padding:0 10px 14px 53px}
+ .conversationExpanded .htmlMail{min-height:420px!important}
+ .conversationReply{display:none}
+ .gmailConversation>.mobileReplyBar{display:flex}
+ .gmailReader .messageDetails{min-width:280px;max-width:calc(100vw - 32px)}
+}
