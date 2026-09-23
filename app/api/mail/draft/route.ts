@@ -9,7 +9,7 @@ async function ctx(){
  const mr=await fetch(endpoint,{method:"POST",headers,body:JSON.stringify({using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail","urn:ietf:params:jmap:submission"],methodCalls:[["Identity/get",{accountId},"i"],["Mailbox/get",{accountId,properties:["id","role"]},"m"]]}),cache:"no-store"});
  const md=await mr.json();return {headers,accountId,endpoint,identity:md.methodResponses?.find((x:any)=>x[0]==="Identity/get")?.[1]?.list?.[0],drafts:md.methodResponses?.find((x:any)=>x[0]==="Mailbox/get")?.[1]?.list?.find((x:any)=>x.role==="drafts")?.id};
 }
-const addresses=(v:string)=>String(v||"").split(/[;,\\n]+/).map(x=>x.trim()).filter(Boolean).map(email=>({email}));const valid=(email:string)=>/^[^\\s@<>]+@[^\\s@<>]+\\.[^\\s@<>]+$/.test(email);
+const addresses=(v:string)=>String(v||"").split(/[;,\n]+/).map(x=>x.trim()).filter(Boolean).map(email=>({email}));const valid=(email:string)=>/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(email);
 export async function POST(req:NextRequest){
  const c=await ctx();if(!c)return NextResponse.json({error:"Unauthorized"},{status:401});
  const {id,to="",cc="",bcc="",subject="",text="",attachments=[]}=await req.json();
