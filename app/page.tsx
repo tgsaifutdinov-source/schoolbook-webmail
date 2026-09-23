@@ -1,44 +1,21 @@
 "use client";
-import {useMemo,useState} from "react";
-import {Archive,ChevronDown,Clock3,FileText,Folder,Inbox,Menu,MoreHorizontal,Paperclip,PenLine,Plus,Reply,Search,Send,Settings2,Sparkles,Star,Trash2,X} from "lucide-react";
-
-const messages=[
-{id:1,name:"Анна Иванова",initial:"А",subject:"Выпускной альбом — заказ №4587",preview:"Добрый день! Хотела уточнить статус заказа...",time:"14:32",unread:true,tag:"Клиенты",body:"Добрый день! Хотела уточнить статус нашего заказа на выпускной альбом. Подскажите, пожалуйста, когда будет готов макет?"},
-{id:2,name:"SchoolBook",initial:"S",subject:"Ваш заказ готов к проверке",preview:"Макет альбома готов. Можно посмотреть...",time:"12:10",unread:true,tag:"Заказы",body:"Макет альбома готов к проверке. Откройте заказ и оставьте комментарии, если потребуются изменения."},
-{id:3,name:"Максим Орлов",initial:"М",subject:"Фотографии для альбома",preview:"Загрузил фотографии с последней съёмки...",time:"10:45",tag:"Клиенты",body:"Загрузил фотографии с последней съёмки. Посмотрите, пожалуйста, всё ли подходит."},
-{id:4,name:"Елена Смирнова",initial:"Е",subject:"Re: Дизайн обложки",preview:"Мне нравится второй вариант...",time:"Вчера",tag:"Клиенты",body:"Мне нравится второй вариант обложки. Давайте остановимся на нём."},
-{id:5,name:"Photo Lab",initial:"P",subject:"Печать заказа завершена",preview:"Заказ передан в отдел упаковки...",time:"Вчера",tag:"Производство",body:"Печать заказа завершена. Заказ передан в отдел упаковки."},
-{id:6,name:"Ольга Сергеева",initial:"О",subject:"Оплата заказа прошла",preview:"Спасибо, оплату получили. Что дальше?",time:"Пн",tag:"Заказы",body:"Спасибо, оплату получили. Подскажите, пожалуйста, какой следующий этап?"}
-];
-const folders=[["Входящие",Inbox,"12"],["Избранное",Star,""],["Отправленные",Send,""],["Черновики",FileText,"3"],["Архив",Archive,""],["Корзина",Trash2,""]] as const;
-
+import {useEffect,useMemo,useState} from "react";
+import {useRouter} from "next/navigation";
+import {Archive,ChevronDown,Clock3,FileText,Folder,Inbox,LogOut,Menu,MoreHorizontal,Paperclip,PenLine,Plus,Reply,Search,Send,Settings2,Star,Trash2} from "lucide-react";
+type Box={id:string,name:string,role?:string,totalEmails?:number,unreadEmails?:number};
+type Addr={name?:string,email:string};
+type Mail={id:string,mailboxIds:Record<string,boolean>,keywords:Record<string,boolean>,from?:Addr[],subject?:string,receivedAt?:string,preview?:string,hasAttachment?:boolean};
 export default function Home(){
- const [selected,setSelected]=useState(messages[0]); const [compose,setCompose]=useState(false); const [mobile,setMobile]=useState(false); const [query,setQuery]=useState(""); const [tab,setTab]=useState("Все");
- const filtered=useMemo(()=>messages.filter(m=>(tab==="Все"||tab==="Непрочитанные"&&m.unread)&&(m.name+" "+m.subject+" "+m.preview).toLowerCase().includes(query.toLowerCase())),[query,tab]);
- return <main className="shell">
-  <header className="topbar"><button className="mobileMenu" onClick={()=>setMobile(!mobile)}><Menu/></button><div className="brand"><span className="brandMark"><span>S</span></span><div><b>SchoolBook</b><small>MAIL</small></div></div>
-   <div className="search"><Search/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Поиск писем, контактов, файлов…"/><kbd>⌘ K</kbd></div>
-   <button className="aiButton"><Sparkles/><span>AI-помощник</span></button><div className="account"><span className="avatar">ТС</span><div><b>Тимур</b><small>admin@schoolbook.kg</small></div><ChevronDown/></div>
-  </header>
-  <div className="workspace">
-   <aside className={mobile?"open":""}><button className="compose" onClick={()=>setCompose(true)}><PenLine/>Новое письмо</button>
-    <nav>{folders.map(([label,Icon,count],i)=><button className={i===0?"active":""} key={label}><Icon/><span>{label}</span>{count&&<em>{count}</em>}</button>)}</nav>
-    <div className="sectionTitle"><span>Мои папки</span><button><Plus/></button></div><nav className="customFolders"><button><i className="dot clients"/>Клиенты</button><button><i className="dot orders"/>Заказы</button><button><i className="dot production"/>Производство</button></nav>
-    <div className="asideBottom"><div className="storage"><div><span>Хранилище</span><b>2,4 / 15 ГБ</b></div><i><u/></i><small>Использовано 16%</small></div><button className="settings"><Settings2/>Настройки</button></div>
-   </aside>
-   <section className="list"><div className="listHead"><div><h1>Входящие</h1><span>12 непрочитанных</span></div><button className="iconButton"><MoreHorizontal/></button></div>
-    <div className="tabs">{["Все","Непрочитанные"].map(x=><button key={x} onClick={()=>setTab(x)} className={tab===x?"active":""}>{x}</button>)}</div>
-    <div className="messages">{filtered.map(m=><article onClick={()=>setSelected(m)} className={(selected.id===m.id?"selected ":"")+(m.unread?"unread":"")} key={m.id}><span className={"senderAvatar a"+m.id}>{m.initial}</span><div className="msg"><div><b>{m.name}</b><time>{m.time}</time></div><strong>{m.subject}</strong><p>{m.preview}</p><small className="tag">{m.tag}</small></div><button className="star"><Star/></button></article>)}</div>
-   </section>
-   <section className="reader"><div className="toolbar"><div><button><Archive/></button><button><Trash2/></button><button><Clock3/></button></div><div><button><Reply/></button><button><MoreHorizontal/></button></div></div>
-    <div className="letter"><div className="subjectLine"><div><span className="eyebrow">ВХОДЯЩИЕ · {selected.tag.toUpperCase()}</span><h2>{selected.subject}</h2></div><button className="favorite"><Star/></button></div>
-     <div className="from"><span className={"senderAvatar big a"+selected.id}>{selected.initial}</span><div><b>{selected.name}</b><small>кому: мне <ChevronDown/></small></div><time>{selected.time}</time></div>
-     <div className="body"><p>Здравствуйте!</p><p>{selected.body}</p><p>Спасибо!</p></div>
-     <div className="attachment"><div className="fileIcon"><FileText/></div><div><b>Материалы заказа.pdf</b><small>PDF · 4,8 МБ</small></div><button>Открыть</button></div>
-     <div className="actions"><button className="primary"><Reply/>Ответить</button><button>Переслать</button></div>
-    </div>
-   </section>
-  </div>
-  {compose&&<><div className="scrim" onClick={()=>setCompose(false)}/><div className="composeWindow"><div className="composeHead"><div><b>Новое сообщение</b><small>Черновик сохранён</small></div><button onClick={()=>setCompose(false)}><X/></button></div><label><span>Кому</span><input autoFocus placeholder="Имя или email"/></label><label><span>Тема</span><input placeholder="Тема письма"/></label><textarea placeholder="Напишите сообщение…"/><div className="composeFoot"><button className="send"><Send/>Отправить</button><button><Paperclip/></button><span/><button onClick={()=>setCompose(false)}><Trash2/></button></div></div></>}
- </main>
+ const router=useRouter();const [data,setData]=useState<{username?:string,mailboxes:Box[],emails:Mail[]}|null>(null);const [selected,setSelected]=useState<Mail|null>(null);const [full,setFull]=useState<any>(null);const [box,setBox]=useState<string>("");const [query,setQuery]=useState("");const [mobile,setMobile]=useState(false);const [error,setError]=useState("");
+ useEffect(()=>{fetch("/api/mail/data").then(async r=>{if(r.status===401){router.replace("/login");return}const d=await r.json();if(!r.ok){setError(d.error||"Ошибка загрузки");return}setData(d);const inbox=d.mailboxes.find((x:Box)=>x.role==="inbox")||d.mailboxes[0];setBox(inbox?.id||"")}).catch(()=>setError("Нет связи с сервером"))},[router]);
+ const emails=useMemo(()=>{if(!data)return[];return data.emails.filter(m=>(!box||m.mailboxIds?.[box])&&(m.from?.[0]?.name+" "+m.from?.[0]?.email+" "+m.subject+" "+m.preview).toLowerCase().includes(query.toLowerCase()))},[data,box,query]);
+ useEffect(()=>{if(!selected&&emails[0])setSelected(emails[0])},[emails,selected]);
+ useEffect(()=>{if(!selected)return;setFull(null);fetch("/api/mail/message?id="+encodeURIComponent(selected.id)).then(r=>r.json()).then(setFull)},[selected]);
+ async function logout(){await fetch("/api/auth/logout",{method:"POST"});router.replace("/login")}
+ function icon(role?:string){if(role==="inbox")return Inbox;if(role==="sent")return Send;if(role==="drafts")return FileText;if(role==="trash")return Trash2;if(role==="archive")return Archive;return Folder}
+ function body(){if(!full)return "Загрузка письма…";const parts=[...(full.textBody||[]),...(full.htmlBody||[])];for(const p of parts){const v=full.bodyValues?.[p.partId]?.value;if(v)return v.replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim()}return full.preview||selected?.preview||""}
+ return <main className="shell"><header className="topbar"><button className="mobileMenu" onClick={()=>setMobile(!mobile)}><Menu/></button><div className="brand"><span className="brandMark"><span>S</span></span><div><b>SchoolBook</b><small>MAIL</small></div></div><div className="search"><Search/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Поиск по почте…"/><kbd>⌘ K</kbd></div><div className="account"><span className="avatar">{(data?.username||"S")[0].toUpperCase()}</span><div><b>{data?.username?.split("@")[0]||"Почта"}</b><small>{data?.username||"Загрузка…"}</small></div><ChevronDown/></div></header>
+ <div className="workspace"><aside className={mobile?"open":""}><button className="compose"><PenLine/>Новое письмо</button><nav>{(data?.mailboxes||[]).sort((a,b)=>(a.sortOrder||0)-(b.sortOrder||0)).map(m=>{const Icon=icon(m.role);return <button key={m.id} onClick={()=>{setBox(m.id);setSelected(null)}} className={box===m.id?"active":""}><Icon/><span>{m.name}</span>{!!m.unreadEmails&&<em>{m.unreadEmails}</em>}</button>})}</nav><div className="sectionTitle"><span>Папки Stalwart</span><button><Plus/></button></div><div className="asideBottom"><button className="settings"><Settings2/>Настройки</button><button className="settings" onClick={logout}><LogOut/>Выйти</button></div></aside>
+ <section className="list"><div className="listHead"><div><h1>{data?.mailboxes.find(x=>x.id===box)?.name||"Почта"}</h1><span>{emails.length} писем</span></div><button className="iconButton"><MoreHorizontal/></button></div><div className="tabs"><button className="active">Все</button></div><div className="messages">{error&&<p style={{padding:20}}>{error}</p>}{!data&&!error&&<p style={{padding:20}}>Загрузка почты…</p>}{data&&emails.length===0&&<p style={{padding:20,color:"#858985"}}>В этой папке нет писем</p>}{emails.map((m,i)=>{const a=m.from?.[0];const unread=!m.keywords?.["$seen"];return <article onClick={()=>setSelected(m)} className={(selected?.id===m.id?"selected ":"")+(unread?"unread":"")} key={m.id}><span className={"senderAvatar a"+((i%6)+1)}>{(a?.name||a?.email||"?")[0].toUpperCase()}</span><div className="msg"><div><b>{a?.name||a?.email||"Без отправителя"}</b><time>{m.receivedAt?new Date(m.receivedAt).toLocaleDateString("ru-RU",{day:"2-digit",month:"short"}):""}</time></div><strong>{m.subject||"(Без темы)"}</strong><p>{m.preview||""}</p>{m.hasAttachment&&<small className="tag">Вложение</small>}</div><button className="star"><Star/></button></article>})}</div></section>
+ <section className="reader"><div className="toolbar"><div><button><Archive/></button><button><Trash2/></button><button><Clock3/></button></div><div><button><Reply/></button><button><MoreHorizontal/></button></div></div>{selected?<div className="letter"><div className="subjectLine"><div><span className="eyebrow">SCHOOLBOOK MAIL</span><h2>{selected.subject||"(Без темы)"}</h2></div><button className="favorite"><Star/></button></div><div className="from"><span className="senderAvatar big">{(selected.from?.[0]?.name||selected.from?.[0]?.email||"?")[0].toUpperCase()}</span><div><b>{selected.from?.[0]?.name||selected.from?.[0]?.email}</b><small>{selected.from?.[0]?.email}</small></div><time>{selected.receivedAt?new Date(selected.receivedAt).toLocaleString("ru-RU"):""}</time></div><div className="body"><p>{body()}</p></div>{selected.hasAttachment&&<div className="attachment"><div className="fileIcon"><Paperclip/></div><div><b>В письме есть вложения</b><small>Поддержка скачивания — следующий этап</small></div></div>}<div className="actions"><button className="primary"><Reply/>Ответить</button><button>Переслать</button></div></div>:<div className="letter"><div className="body"><p>Выберите письмо.</p></div></div>}</section></div></main>
 }
