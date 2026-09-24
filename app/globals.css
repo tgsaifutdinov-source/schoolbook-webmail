@@ -11558,3 +11558,188 @@ body{
     height:30px!important;
   }
 }
+
+
+/* Gmail visual system v24 — compose popover fix */
+
+/* Emoji and “more” live inside this group, so it must never clip them */
+.composeWindow .gmailComposeFoot{
+  position:relative!important;
+  z-index:240!important;
+  overflow:visible!important;
+}
+.composeWindow .gmailComposeFoot .composeToolGroup,
+.composeWindow .composeToolGroup{
+  position:relative!important;
+  z-index:241!important;
+  min-width:0!important;
+  overflow:visible!important;
+  overflow-x:visible!important;
+  overflow-y:visible!important;
+}
+.composeWindow .composeEmojiWrap,
+.composeWindow .composeMoreWrap{
+  position:relative!important;
+  z-index:250!important;
+  overflow:visible!important;
+  isolation:auto!important;
+}
+.composeWindow .composeEmojiWrap>button,
+.composeWindow .composeMoreWrap>button{
+  position:relative!important;
+  z-index:252!important;
+}
+.composeWindow .composeEmojiMenu,
+.composeWindow .composeMoreMenu{
+  z-index:400!important;
+  pointer-events:auto!important;
+  visibility:visible!important;
+  opacity:1!important;
+}
+
+/* Emoji popup */
+.composeWindow .composeEmojiMenu{
+  position:absolute!important;
+  left:-90px!important;
+  right:auto!important;
+  bottom:38px!important;
+  width:220px!important;
+  max-width:calc(100vw - 20px)!important;
+  max-height:210px!important;
+  padding:8px!important;
+  overflow:auto!important;
+  grid-template-columns:repeat(6,30px)!important;
+  justify-content:center!important;
+  gap:3px!important;
+  border:0!important;
+  border-radius:9px!important;
+  background:#fff!important;
+  box-shadow:0 10px 34px rgba(60,64,67,.28),0 2px 8px rgba(60,64,67,.14)!important;
+}
+.composeWindow .composeEmojiMenu button{
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+  min-height:30px!important;
+  padding:0!important;
+  border-radius:5px!important;
+  display:grid!important;
+  place-items:center!important;
+  background:transparent!important;
+  font-size:17px!important;
+  line-height:1!important;
+}
+.composeWindow .composeEmojiMenu button:hover{
+  background:#f1f3f4!important;
+}
+
+/* More popup */
+.composeWindow .composeMoreMenu{
+  position:absolute!important;
+  right:0!important;
+  left:auto!important;
+  bottom:38px!important;
+  width:220px!important;
+  max-width:calc(100vw - 20px)!important;
+  padding:6px 0!important;
+  overflow:hidden!important;
+  border:0!important;
+  border-radius:9px!important;
+  background:#fff!important;
+  box-shadow:0 10px 34px rgba(60,64,67,.28),0 2px 8px rgba(60,64,67,.14)!important;
+}
+.composeWindow .composeMoreMenu button{
+  width:100%!important;
+  height:38px!important;
+  min-width:0!important;
+  padding:0 13px!important;
+  border-radius:0!important;
+  display:grid!important;
+  grid-template-columns:22px minmax(0,1fr)!important;
+  align-items:center!important;
+  justify-items:start!important;
+  gap:9px!important;
+  background:#fff!important;
+  color:#3c4043!important;
+  font-size:10px!important;
+  font-weight:400!important;
+  text-align:left!important;
+}
+.composeWindow .composeMoreMenu button:hover{
+  background:#f1f3f4!important;
+}
+.composeWindow .composeMoreMenu button svg{
+  width:15px!important;
+  height:15px!important;
+  color:#5f6368!important;
+}
+.composeWindow .composeMoreMenu button span{
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+
+/* Buttons explicitly show their active/open state */
+.composeWindow .composeEmojiWrap:has(.composeEmojiMenu)>button,
+.composeWindow .composeMoreWrap:has(.composeMoreMenu)>button{
+  background:#e8eaed!important;
+  color:#202124!important;
+}
+
+/* Mobile: keep all seven compose tools visible instead of creating a clipping scroller */
+@media(max-width:850px){
+  .composeWindow .gmailComposeFoot{
+    overflow:visible!important;
+  }
+  .composeWindow .gmailComposeFoot .composeToolGroup,
+  .composeWindow .composeToolGroup{
+    flex:1 1 auto!important;
+    overflow:visible!important;
+    overflow-x:visible!important;
+    overflow-y:visible!important;
+    scrollbar-width:none!important;
+  }
+  .composeWindow .gmailComposeFoot .composeToolGroup>button,
+  .composeWindow .gmailComposeFoot .composeEmojiWrap>button,
+  .composeWindow .gmailComposeFoot .composeMoreWrap>button{
+    width:28px!important;
+    height:28px!important;
+    min-width:28px!important;
+  }
+  .composeWindow .composeEmojiMenu{
+    position:fixed!important;
+    z-index:500!important;
+    left:8px!important;
+    right:8px!important;
+    bottom:max(62px,calc(env(safe-area-inset-bottom) + 58px))!important;
+    width:auto!important;
+    max-width:none!important;
+    grid-template-columns:repeat(6,minmax(30px,1fr))!important;
+    justify-content:stretch!important;
+  }
+  .composeWindow .composeMoreMenu{
+    position:fixed!important;
+    z-index:500!important;
+    left:auto!important;
+    right:8px!important;
+    bottom:max(62px,calc(env(safe-area-inset-bottom) + 58px))!important;
+    width:min(230px,calc(100vw - 16px))!important;
+  }
+}
+
+/* Tiny phones: fit toolbar without sacrificing emoji / more */
+@media(max-width:380px){
+  .composeWindow .gmailComposeFoot .send{
+    min-width:74px!important;
+    padding-left:10px!important;
+    padding-right:10px!important;
+  }
+  .composeWindow .gmailComposeFoot .composeToolGroup>button,
+  .composeWindow .gmailComposeFoot .composeEmojiWrap>button,
+  .composeWindow .gmailComposeFoot .composeMoreWrap>button{
+    width:26px!important;
+    height:26px!important;
+    min-width:26px!important;
+  }
+}
