@@ -51,7 +51,7 @@ export async function GET(req:NextRequest){
   let attachment=req.nextUrl.searchParams.get("attachment")==="1";
 
   let effectiveMailboxId=mailboxId,preloadedMailboxes:any[]=[],invalidMailboxFilter=false;
-  const needsMailboxLookup=!effectiveMailboxId&&!starred||!!search||!!parsed.ops.in?.length;
+  const needsMailboxLookup=!!effectiveMailboxId||!starred||!!search||!!parsed.ops.in?.length;
   if(needsMailboxLookup){
    const r=await stalwart(endpoint,auth.token,{method:"POST",body:JSON.stringify({
     using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],
@@ -72,6 +72,8 @@ export async function GET(req:NextRequest){
     else invalidMailboxFilter=true;
    }
   }else if(!effectiveMailboxId&&!starred){
+   effectiveMailboxId=preloadedMailboxes.find((x:any)=>x.role==="inbox")?.id||preloadedMailboxes[0]?.id||"";
+  }else if(effectiveMailboxId&&preloadedMailboxes.length&&!preloadedMailboxes.some((x:any)=>String(x.id)===String(effectiveMailboxId))){
    effectiveMailboxId=preloadedMailboxes.find((x:any)=>x.role==="inbox")?.id||preloadedMailboxes[0]?.id||"";
   }
 
