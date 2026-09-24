@@ -152,7 +152,7 @@ export async function POST(req:NextRequest){
   const list=md.methodResponses?.find((x:any)=>x[0]==="Mailbox/get")?.[1]?.list||[];
   const target=list.find((x:any)=>x.role===wanted);
   if(!target)return NextResponse.json({error:"Target mailbox not found"},{status:404});
-  const roles=new Map<string,string>(list.filter((x:any)=>x.role).map((x:any)=>[String(x.id),String(x.role)]));
+  const roles=new Map<string,string>(list.filter((x:any)=>x.role).map((x:any)=>[String(x.id),String(x.role)] as [string,string]));
   perMessage={};
   for(const id of messageIds){
    const next:MailboxMap={...(restoreMap[id]||{})};
