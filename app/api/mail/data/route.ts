@@ -50,7 +50,7 @@ export async function GET(req:NextRequest){
   const starred=req.nextUrl.searchParams.get("starred")==="1";
   let attachment=req.nextUrl.searchParams.get("attachment")==="1";
 
-  let effectiveMailboxId=mailboxId,preloadedMailboxes:any[]=[],invalidMailboxFilter=false;
+  let effectiveMailboxId=mailboxId,preloadedMailboxes:any[]=[],invalidMailboxFilter=false,mailboxState="",emailState="";
   const needsMailboxLookup=!!effectiveMailboxId||!starred||!!search||!!parsed.ops.in?.length;
   if(needsMailboxLookup){
    const r=await stalwart(endpoint,auth.token,{method:"POST",body:JSON.stringify({
@@ -60,7 +60,7 @@ export async function GET(req:NextRequest){
    if(!r.ok)throw new Error("Mailbox lookup failed");
    const md=await r.json();
    const mx=(md.methodResponses||[]).find((x:any)=>x[0]==="Mailbox/get");
-   preloadedMailboxes=mx?.[1]?.list||[];
+   preloadedMailboxes=mx?.[1]?.list||[];mailboxState=String(mx?.[1]?.state||"");
   }
   if(search){
    effectiveMailboxId="";
