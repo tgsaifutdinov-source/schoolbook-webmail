@@ -131,17 +131,20 @@ export async function POST(req:NextRequest){
  else if(action==="move"||action==="labelAdd"||action==="labelRemove"){
   const targetMailboxId=typeof body.targetMailboxId==="string"?body.targetMailboxId:"";
   if(!targetMailboxId)return NextResponse.json({error:"Missing target mailbox"},{status:400});
-  const md=await jmap(c,[["Mailbox/get",{accountId:c.accountId,ids:[targetMailboxId],properties:["id","role","name"]},"target"]]);
-  const target=md.methodResponses?.find((x:any)=>x[0]==="Mailbox/get")?.[1]?.list?.[0];
+  const md=await jmap(c,[["Mailbox/get",{accountId:c.accountId,properties:["id","role","name"]},"target"]]);
+  const mailboxList=md.methodResponses?.find((x:any)=>x[0]==="Mailbox/get")?.[1]?.list||[];
+  const target=mailboxList.find((x:any)=>String(x.id)===targetMailboxId);
   if(!target)return NextResponse.json({error:"Target mailbox not found"},{status:404});
   if((action==="labelAdd"||action==="labelRemove")&&target.role)return NextResponse.json({error:"Only custom folders can be used as labels"},{status:400});
   if(action==="labelAdd")update={["mailboxIds/"+targetMailboxId]:true};
   else if(action==="labelRemove")update={["mailboxIds/"+targetMailboxId]:null};
   else{
+   const systemIds=new Set<string>(mailboxList.filter((x:any)=>x.role).map((x:any)=>String(x.id)));
    perMessage={};
    for(const id of messageIds){
     const next:MailboxMap={...(restoreMap[id]||{})};
     if(mailboxScopeId&&mailboxScopeId!==targetMailboxId)delete next[mailboxScopeId];
+    else if(!mailboxScopeId)for(const key of Object.keys(next))if(systemIds.has(key)&&key!==targetMailboxId)delete next[key];
     next[targetMailboxId]=true;
     perMessage[id]={mailboxIds:next};
    }
