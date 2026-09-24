@@ -7981,3 +7981,141 @@ html[data-mail-density="compact"] .gmailList .rowStar{
     height:96px!important;
   }
 }
+
+
+/* Gmail visual system v13 — full-width reader */
+
+/* Reader should occupy the whole main surface like Gmail */
+.gmailReader{
+  width:100%!important;
+  max-width:none!important;
+}
+.gmailReader .letter,
+.gmailReader .gmailConversation{
+  width:100%!important;
+  max-width:none!important;
+  margin:0!important;
+  box-sizing:border-box!important;
+}
+
+/* Keep Gmail-like breathing room, but don't artificially center/narrow content */
+.gmailReader .gmailConversation{
+  padding:26px 34px 82px!important;
+}
+.gmailConversation .subjectLine{
+  width:100%!important;
+  max-width:none!important;
+  padding:0 8px 22px 58px!important;
+  box-sizing:border-box!important;
+}
+.conversationStack{
+  width:100%!important;
+  max-width:none!important;
+}
+.conversationMessage{
+  width:100%!important;
+  max-width:none!important;
+}
+.conversationHeader{
+  width:100%!important;
+  max-width:none!important;
+  box-sizing:border-box!important;
+}
+.conversationExpanded{
+  width:100%!important;
+  max-width:none!important;
+  padding:0 8px 28px 58px!important;
+  box-sizing:border-box!important;
+}
+.conversationExpanded .body{
+  width:100%!important;
+  max-width:none!important;
+  box-sizing:border-box!important;
+}
+.conversationExpanded .mailText{
+  width:100%!important;
+  max-width:none!important;
+}
+.conversationExpanded .htmlMail{
+  width:100%!important;
+  max-width:none!important;
+}
+.conversationExpanded .privacyBar{
+  width:100%!important;
+  max-width:none!important;
+  box-sizing:border-box!important;
+}
+
+/* Attachments and replies can use more of the available width too */
+.conversationExpanded .attachmentGallery{
+  max-width:980px!important;
+}
+.conversationExpanded .attachment{
+  max-width:760px!important;
+}
+.inlineReplyComposer{
+  max-width:920px!important;
+}
+.conversationReply{
+  max-width:none!important;
+}
+
+/* On wide desktops, mimic Gmail: broad canvas with modest side padding */
+@media(min-width:1200px){
+  .gmailReader .gmailConversation{
+    padding-left:42px!important;
+    padding-right:42px!important;
+  }
+  .gmailConversation .subjectLine{
+    padding-left:62px!important;
+    padding-right:12px!important;
+  }
+  .conversationExpanded{
+    padding-left:62px!important;
+    padding-right:12px!important;
+  }
+}
+
+/* Very wide screens still stay open rather than snapping to a centered card */
+@media(min-width:1700px){
+  .gmailReader .gmailConversation{
+    padding-left:52px!important;
+    padding-right:52px!important;
+  }
+  .gmailConversation .subjectLine{
+    padding-left:64px!important;
+  }
+  .conversationExpanded{
+    padding-left:64px!important;
+  }
+}
+
+/* Medium desktop keeps enough room for message metadata */
+@media(max-width:1199px) and (min-width:851px){
+  .gmailReader .gmailConversation{
+    padding:22px 24px 76px!important;
+  }
+  .gmailConversation .subjectLine{
+    padding:0 6px 20px 54px!important;
+  }
+  .conversationExpanded{
+    padding:0 6px 24px 54px!important;
+  }
+}
+
+/* Mobile already behaves as full width; preserve its tighter geometry */
+@media(max-width:850px){
+  .gmailReader .letter,
+  .gmailReader .gmailConversation{
+    width:100%!important;
+    max-width:none!important;
+    margin:0!important;
+    padding:14px 10px 78px!important;
+  }
+  .gmailConversation .subjectLine{
+    padding:0 3px 14px!important;
+  }
+  .conversationExpanded{
+    padding:0 3px 16px 42px!important;
+  }
+}
