@@ -11879,3 +11879,283 @@ body{
     font-size:8px!important;
   }
 }
+
+
+/* Gmail visual system v26 — reader security and risky attachments */
+
+/* Privacy controls stay readable with long explanatory text */
+.conversationExpanded .privacyBar{
+  min-height:38px!important;
+  height:auto!important;
+  padding:7px 9px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:10px!important;
+  border:1px solid #e8eaed!important;
+  border-radius:8px!important;
+  background:#f8f9fa!important;
+}
+.conversationExpanded .privacyBar span{
+  min-width:0!important;
+  color:#5f6368!important;
+  font-size:9px!important;
+  line-height:1.35!important;
+  overflow-wrap:anywhere!important;
+}
+.conversationExpanded .privacyBar button{
+  flex:0 0 auto!important;
+  height:28px!important;
+  padding:0 9px!important;
+  border-radius:14px!important;
+  color:#725700!important;
+  font-size:9px!important;
+  font-weight:650!important;
+}
+.conversationExpanded .privacyBar button:hover{
+  background:#fff3c4!important;
+}
+
+/* Download-all is now a button because risky archives may require confirmation */
+.attachmentSummary>.downloadAllAttachments{
+  flex:0 0 auto!important;
+  height:30px!important;
+  padding:0 10px!important;
+  border:1px solid #dadce0!important;
+  border-radius:15px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:6px!important;
+  background:#fff!important;
+  color:#3c4043!important;
+  font-size:9px!important;
+  font-weight:600!important;
+}
+.attachmentSummary>.downloadAllAttachments:hover{
+  background:#f8f9fa!important;
+}
+.attachmentSummary>.downloadAllAttachments svg{
+  width:13px!important;
+  height:13px!important;
+}
+
+/* Risky attachment cards */
+.conversationExpanded .attachment.attachmentRisk{
+  position:relative!important;
+  border-color:#eadcae!important;
+  background:#fffdf6!important;
+}
+.conversationExpanded .attachment.attachmentRisk.high{
+  border-color:#ebc3bf!important;
+  background:#fffafa!important;
+}
+.conversationExpanded .attachment.attachmentRisk .fileIcon{
+  background:#fff3c4!important;
+  color:#725700!important;
+}
+.conversationExpanded .attachment.attachmentRisk.high .fileIcon{
+  background:#fce8e6!important;
+  color:#b3261e!important;
+}
+.conversationExpanded .attachment>div:nth-child(2){
+  min-width:0!important;
+}
+.conversationExpanded .attachment>div:nth-child(2)>b{
+  min-width:0!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:6px!important;
+  overflow:hidden!important;
+}
+.conversationExpanded .attachment>div:nth-child(2)>b>em{
+  flex:0 0 auto!important;
+  height:18px!important;
+  padding:0 6px!important;
+  border-radius:9px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:3px!important;
+  background:#fff0b7!important;
+  color:#725700!important;
+  font-size:7px!important;
+  font-style:normal!important;
+  font-weight:750!important;
+  text-transform:uppercase!important;
+  letter-spacing:.02em!important;
+}
+.conversationExpanded .attachment.attachmentRisk.high>div:nth-child(2)>b>em{
+  background:#fce8e6!important;
+  color:#b3261e!important;
+}
+.conversationExpanded .attachment>div:nth-child(2)>b>em svg{
+  width:10px!important;
+  height:10px!important;
+}
+.conversationExpanded .attachment.attachmentRisk small{
+  white-space:normal!important;
+  line-height:1.3!important;
+}
+.conversationExpanded .attachment .attachmentDownload{
+  flex:0 0 auto!important;
+  height:30px!important;
+  padding:0 10px!important;
+  border:1px solid #dadce0!important;
+  border-radius:15px!important;
+  background:#fff!important;
+  color:#3c4043!important;
+  font-size:9px!important;
+  font-weight:600!important;
+}
+.conversationExpanded .attachment .attachmentDownload:hover{
+  background:#f1f3f4!important;
+}
+.conversationExpanded .attachment.attachmentRisk.high .attachmentDownload{
+  border-color:#e8c2bd!important;
+  color:#9b2019!important;
+}
+
+/* Explicit attachment warning */
+.attachmentWarningDialog{
+  position:fixed!important;
+  z-index:520!important;
+  left:50%!important;
+  top:50%!important;
+  transform:translate(-50%,-50%)!important;
+  width:min(430px,calc(100vw - 28px))!important;
+  max-height:calc(100dvh - 28px)!important;
+  padding:22px!important;
+  overflow:auto!important;
+  border-radius:14px!important;
+  background:#fff!important;
+  box-shadow:0 16px 48px rgba(60,64,67,.3),0 3px 10px rgba(60,64,67,.16)!important;
+  color:#202124!important;
+}
+.attachmentWarningIcon{
+  width:42px!important;
+  height:42px!important;
+  margin-bottom:12px!important;
+  border-radius:50%!important;
+  display:grid!important;
+  place-items:center!important;
+  background:#fff3c4!important;
+  color:#725700!important;
+}
+.attachmentWarningDialog.high .attachmentWarningIcon{
+  background:#fce8e6!important;
+  color:#b3261e!important;
+}
+.attachmentWarningIcon svg{
+  width:21px!important;
+  height:21px!important;
+}
+.attachmentWarningDialog h3{
+  margin:0 0 10px!important;
+  color:#202124!important;
+  font-size:16px!important;
+  font-weight:650!important;
+}
+.attachmentWarningDialog p{
+  margin:7px 0!important;
+  color:#3c4043!important;
+  font-size:11px!important;
+  line-height:1.45!important;
+  overflow-wrap:anywhere!important;
+}
+.attachmentWarningDialog p>b{
+  font-weight:650!important;
+}
+.attachmentWarningDialog>small{
+  display:block!important;
+  margin-top:12px!important;
+  padding:10px!important;
+  border-radius:8px!important;
+  background:#f8f9fa!important;
+  color:#5f6368!important;
+  font-size:9px!important;
+  line-height:1.45!important;
+}
+.attachmentWarningDialog>div:last-child{
+  margin-top:18px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  gap:7px!important;
+}
+.attachmentWarningDialog>div:last-child button{
+  height:36px!important;
+  padding:0 13px!important;
+  border-radius:18px!important;
+  color:#5f6368!important;
+  font-size:9px!important;
+  font-weight:650!important;
+}
+.attachmentWarningDialog>div:last-child button:hover{
+  background:#f1f3f4!important;
+}
+.attachmentWarningDialog .attachmentWarningDownload{
+  display:flex!important;
+  align-items:center!important;
+  gap:6px!important;
+  background:#fff3c4!important;
+  color:#5c4700!important;
+}
+.attachmentWarningDialog.high .attachmentWarningDownload{
+  background:#fce8e6!important;
+  color:#9b2019!important;
+}
+.attachmentWarningDialog .attachmentWarningDownload svg{
+  width:13px!important;
+  height:13px!important;
+}
+
+@media(max-width:850px){
+  .conversationExpanded .privacyBar{
+    align-items:flex-start!important;
+    flex-direction:column!important;
+    gap:5px!important;
+  }
+  .conversationExpanded .privacyBar button{
+    align-self:flex-start!important;
+  }
+  .attachmentSummary>.downloadAllAttachments{
+    width:32px!important;
+    padding:0!important;
+    justify-content:center!important;
+  }
+  .attachmentSummary>.downloadAllAttachments span{
+    display:none!important;
+  }
+  .conversationExpanded .attachment{
+    align-items:flex-start!important;
+  }
+  .conversationExpanded .attachment>div:nth-child(2)>b{
+    align-items:flex-start!important;
+    flex-direction:column!important;
+    gap:3px!important;
+  }
+  .attachmentWarningDialog{
+    top:auto!important;
+    bottom:0!important;
+    left:0!important;
+    transform:none!important;
+    width:100%!important;
+    max-width:none!important;
+    padding:20px 18px max(18px,env(safe-area-inset-bottom))!important;
+    border-radius:18px 18px 0 0!important;
+  }
+  .attachmentWarningDialog>div:last-child{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+  }
+  .attachmentWarningDialog>div:last-child button{
+    width:100%!important;
+    justify-content:center!important;
+  }
+}
+
+@media print{
+  .attachmentWarningDialog,
+  .dialogScrim{
+    display:none!important;
+  }
+}
