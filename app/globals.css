@@ -14078,3 +14078,584 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{
     transition:none!important;
   }
 }
+
+
+/* Gmail visual system v33 — visual stabilization and readable type
+   Final visual QA layer. This block intentionally overrides older visual
+   generations so typography, contrast and interaction geometry stay stable. */
+:root{
+  --sb33-text:#202124;
+  --sb33-text2:#4f5864;
+  --sb33-text3:#6f7782;
+  --sb33-muted:#87909b;
+  --sb33-line:#e3e7ec;
+  --sb33-line2:#d3d9e0;
+  --sb33-soft:#f6f8fa;
+  --sb33-hover:#eef1f4;
+  --sb33-yellow:#f4c542;
+  --sb33-yellow-soft:#fff4c7;
+}
+
+/* Base readability */
+.gmailTopbar,
+.mailSidebar,
+.gmailList,
+.gmailReader,
+.composeWindow,
+.settingsDialog,
+.accountMenu,
+.searchOptions,
+.contactPanel,
+.contactCard{
+  color:var(--sb33-text)!important;
+}
+.gmailTopbar button,
+.mailSidebar button,
+.gmailMailboxBar button,
+.gmailReader button,
+.composeWindow button,
+.settingsDialog button,
+.accountMenu button,
+.searchOptions button{
+  font-size:12px!important;
+}
+
+/* Topbar */
+.gmailTopbar .search.mailSearchSurface input{font-size:14px!important}
+.gmailTopbar .mailWord{color:#68727e!important;font-size:13px!important;opacity:1!important}
+.gmailTopbar .topIcon,
+.gmailTopbar .mainMenuButton,
+.gmailTopbar .accountButton{color:#58636f!important;opacity:1!important}
+.accountIdentity b{color:#202124!important;font-size:13px!important}
+.accountIdentity small{color:#707a85!important;font-size:11px!important}
+.accountMenu>button{min-height:40px!important;font-size:12.5px!important}
+
+/* Sidebar typography */
+.mailSidebar .compose{font-size:13.5px!important;font-weight:650!important}
+.mailSidebar nav>button,
+.mailSidebar .folderMain,
+.savedSearchMain,
+.mailSidebar .settings{font-size:13px!important;line-height:1.2!important}
+.mailSidebar .sectionTitle,
+.savedSearchSectionTitle{color:#707a85!important;font-size:11.5px!important;font-weight:650!important}
+.mailSidebar nav>button em,
+.mailSidebar .folderMain em{font-size:10.5px!important}
+
+/* Gmail behavior: collapsed rail temporarily expands over content on hover/focus. */
+@media(min-width:851px){
+  .workspace.sidebarCollapsed{
+    grid-template-columns:70px minmax(0,1fr)!important;
+    overflow:visible!important;
+  }
+  .workspace.sidebarCollapsed .mailSidebar{
+    position:relative!important;
+    z-index:35!important;
+    width:70px!important;
+    min-width:70px!important;
+    padding:7px 7px 12px!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+    background:#f6f8fc!important;
+    border-radius:0 14px 14px 0!important;
+    box-shadow:none!important;
+    transition:width .16s ease,box-shadow .16s ease,background .16s ease!important;
+  }
+  .workspace.sidebarCollapsed .mailSidebar:hover,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within{
+    width:250px!important;
+    min-width:250px!important;
+    padding:7px 10px 12px 0!important;
+    align-items:stretch!important;
+    background:#f6f8fc!important;
+    box-shadow:8px 0 24px rgba(60,64,67,.16)!important;
+  }
+
+  /* Rail state */
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) .compose{
+    width:48px!important;
+    height:48px!important;
+    min-height:48px!important;
+    margin:2px auto 14px!important;
+    padding:0!important;
+    justify-content:center!important;
+    border-radius:16px!important;
+  }
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) .compose span,
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) nav>button span,
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) nav>button em,
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) .folderMain span,
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) .folderMain em,
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) .savedSearchMain span{
+    display:none!important;
+  }
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) nav,
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) .customFolders,
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) .savedSearchSidebar{
+    width:100%!important;
+    align-items:center!important;
+  }
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) nav>button,
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) .customFolderRow,
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) .folderMain,
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) .savedSearchSidebarRow,
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) .savedSearchMain{
+    width:42px!important;
+    height:42px!important;
+    min-height:42px!important;
+    margin:0 auto!important;
+    padding:0!important;
+    border-radius:50%!important;
+    justify-content:center!important;
+  }
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) .sectionTitle{
+    min-height:8px!important;
+    height:8px!important;
+    padding:0!important;
+  }
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) .sectionTitle>*,
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) .folderContextWrap,
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) .savedSearchRemove,
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) .sidebarMoreChevron{
+    display:none!important;
+  }
+
+  /* Expanded hover state returns the normal Gmail sidebar. */
+  .workspace.sidebarCollapsed .mailSidebar:hover .compose,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within .compose{
+    width:148px!important;
+    height:52px!important;
+    min-height:52px!important;
+    margin:2px 0 14px 8px!important;
+    padding:0 18px!important;
+    justify-content:flex-start!important;
+    border-radius:16px!important;
+    font-size:13.5px!important;
+  }
+  .workspace.sidebarCollapsed .mailSidebar:hover .compose span,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within .compose span,
+  .workspace.sidebarCollapsed .mailSidebar:hover nav>button span,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within nav>button span,
+  .workspace.sidebarCollapsed .mailSidebar:hover nav>button em,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within nav>button em,
+  .workspace.sidebarCollapsed .mailSidebar:hover .folderMain span,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within .folderMain span,
+  .workspace.sidebarCollapsed .mailSidebar:hover .folderMain em,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within .folderMain em,
+  .workspace.sidebarCollapsed .mailSidebar:hover .savedSearchMain span,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within .savedSearchMain span{
+    display:inline!important;
+    font-size:inherit!important;
+  }
+  .workspace.sidebarCollapsed .mailSidebar:hover nav,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within nav,
+  .workspace.sidebarCollapsed .mailSidebar:hover .customFolders,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within .customFolders,
+  .workspace.sidebarCollapsed .mailSidebar:hover .savedSearchSidebar,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within .savedSearchSidebar{
+    width:100%!important;
+    align-items:stretch!important;
+  }
+  .workspace.sidebarCollapsed .mailSidebar:hover nav>button,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within nav>button,
+  .workspace.sidebarCollapsed .mailSidebar:hover .folderMain,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within .folderMain,
+  .workspace.sidebarCollapsed .mailSidebar:hover .savedSearchMain,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within .savedSearchMain{
+    width:100%!important;
+    height:34px!important;
+    min-height:34px!important;
+    margin:0!important;
+    padding:0 14px 0 18px!important;
+    border-radius:0 18px 18px 0!important;
+    justify-content:flex-start!important;
+    gap:14px!important;
+    font-size:13px!important;
+  }
+  .workspace.sidebarCollapsed .mailSidebar:hover .customFolderRow,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within .customFolderRow,
+  .workspace.sidebarCollapsed .mailSidebar:hover .savedSearchSidebarRow,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within .savedSearchSidebarRow{
+    width:100%!important;
+    height:34px!important;
+    min-height:34px!important;
+    margin:0!important;
+    border-radius:0 18px 18px 0!important;
+  }
+  .workspace.sidebarCollapsed .mailSidebar:hover .sectionTitle,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within .sectionTitle{
+    min-height:38px!important;
+    height:auto!important;
+    padding:14px 12px 5px 18px!important;
+  }
+  .workspace.sidebarCollapsed .mailSidebar:hover .sectionTitle>*,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within .sectionTitle>*{
+    display:flex!important;
+  }
+  .workspace.sidebarCollapsed .mailSidebar:hover .folderContextWrap,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within .folderContextWrap{
+    display:block!important;
+  }
+  .workspace.sidebarCollapsed .mailSidebar:hover .sidebarMoreChevron,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within .sidebarMoreChevron{
+    display:block!important;
+  }
+}
+
+/* Mailbox toolbar */
+.gmailMailboxTitle h1,
+.gmailMailboxContext h1{color:#202124!important;font-size:18px!important;font-weight:550!important}
+.gmailMailboxContext>span{color:#6c7682!important;font-size:11.5px!important}
+.gmailFilterChips button{min-height:31px!important;color:#505a66!important;font-size:11.5px!important;font-weight:550!important}
+.mailbarBulk>span,
+.mailbarPaging>span{color:#626c77!important;font-size:11.5px!important}
+.selectTypeMenu>button,
+.bulkMoreMenu>button,
+.moveMenu>button,
+.readerMoreMenu>button{font-size:12px!important}
+
+/* Message list */
+.gmailList .mailParty{color:#353c45!important;font-size:13px!important}
+.gmailList .mailSubject{color:#343a42!important;font-size:13px!important}
+.gmailList .mailSnippet{color:#727c87!important;font-size:12px!important}
+.gmailList .mailRowMeta time{color:#707984!important;font-size:11px!important}
+.gmailList .mailRow.unread .mailParty,
+.gmailList .mailRow.unread .mailSubject,
+.gmailList .mailRow.unread .mailRowMeta time{color:#202124!important;font-weight:700!important}
+.gmailList .threadCount{font-size:10.5px!important}
+.mailLabels>span{font-size:10px!important}
+html[data-mail-density="compact"] .gmailList .mailParty,
+html[data-mail-density="compact"] .gmailList .mailSubject{font-size:12px!important}
+html[data-mail-density="compact"] .gmailList .mailSnippet{font-size:11px!important}
+html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!important}
+
+/* All floating menus */
+.rowContextMenu>button,
+.rowContextMoveList>button,
+.readerMoreMenu>button,
+.bulkMoreMenu>button,
+.selectTypeMenu>button,
+.moveMenu>button,
+.folderContextMenu>button,
+.accountMenu>button,
+.composeMoreMenu>button,
+.labelPicker button{
+  min-height:38px!important;
+  color:#343b44!important;
+  font-size:12px!important;
+  line-height:1.3!important;
+}
+.messageDetails{color:#4f5965!important;font-size:11.5px!important}
+.messageDetails span{color:#707a85!important;font-size:11px!important}
+.messageDetails b{color:#343b44!important;font-size:11.5px!important}
+
+/* Reader */
+.gmailConversation .subjectLine h2{color:#202124!important;font-size:24px!important;font-weight:500!important}
+.conversationCount,
+.conversationLimit{color:#626c77!important;font-size:10.5px!important}
+.threadToggleAll{color:#59636f!important;font-size:11px!important}
+.conversationWho b,
+.senderNameButton{color:#202124!important;font-size:13px!important}
+.conversationWho>div>span{color:#6f7883!important;font-size:11.5px!important}
+.conversationWho>small,
+.conversationWho .recipientToggle,
+.conversationMeta time{color:#707984!important;font-size:11px!important}
+.conversationExpanded .mailText{color:#202124!important;font-size:15px!important;line-height:1.68!important}
+.privacyBar span,
+.privacyBar button{font-size:11px!important}
+.attachmentSummary b,
+.attachment b{font-size:12px!important}
+.attachmentSummary span,
+.attachment small{font-size:11px!important}
+.attachmentDownload,
+.downloadAllAttachments,
+.conversationReply button,
+.threadInlineActions button{font-size:11.5px!important}
+
+/* Inline reply: compact embedded editor, not a large nested window */
+.inlineReplyComposer{
+  width:100%!important;
+  max-width:880px!important;
+  margin:16px 0 2px!important;
+  overflow:hidden!important;
+  border:1px solid #d9dee4!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+.inlineReplyHead{
+  min-height:44px!important;
+  padding:7px 9px 7px 12px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:9px!important;
+  border-bottom:1px solid #edf0f3!important;
+  background:#fff!important;
+}
+.inlineReplyHead>span{
+  width:30px!important;
+  height:30px!important;
+  flex:0 0 30px!important;
+  display:grid!important;
+  place-items:center!important;
+  border-radius:50%!important;
+  background:#f3f5f7!important;
+  color:#59636f!important;
+}
+.inlineReplyHead>span svg{width:15px!important;height:15px!important}
+.inlineReplyHead>div{min-width:0!important;flex:1!important}
+.inlineReplyHead b{color:#202124!important;font-size:12.5px!important;font-weight:650!important}
+.inlineReplyHead small{color:#707984!important;font-size:11px!important;line-height:1.35!important}
+.inlineReplyHead>button{
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+  border-radius:50%!important;
+  color:#68727e!important;
+}
+.inlineReplyHead>button:hover{background:#eef1f4!important;color:#202124!important}
+.inlineReplyIdentity{
+  max-width:210px!important;
+  height:32px!important;
+  color:#4f5965!important;
+  font-size:11px!important;
+}
+.inlineReplyEditor{
+  min-height:96px!important;
+  max-height:300px!important;
+  padding:12px 14px!important;
+  overflow:auto!important;
+  background:#fff!important;
+  color:#202124!important;
+  font-size:14px!important;
+  line-height:1.62!important;
+}
+.inlineReplyEditor:empty:before{color:#929aa4!important}
+.inlineReplyFormatBar{
+  min-height:38px!important;
+  padding:3px 9px!important;
+}
+.inlineReplyFormatBar button{font-size:11px!important}
+.inlineReplyComposer .composeQuoteBlock{
+  margin:0 12px 7px!important;
+}
+.inlineReplyComposer .composeQuoteBlock pre{
+  max-height:150px!important;
+  font-size:11px!important;
+  line-height:1.5!important;
+}
+.inlineReplyFiles b{font-size:11px!important}
+.inlineReplyFiles small{font-size:10px!important}
+.inlineReplyFoot{
+  min-height:48px!important;
+  height:48px!important;
+  padding:0 9px 0 12px!important;
+  display:grid!important;
+  grid-template-columns:auto auto minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:7px!important;
+  border-top:1px solid #edf0f3!important;
+  background:#fff!important;
+}
+.inlineReplyFoot .send{
+  height:34px!important;
+  padding:0 16px!important;
+  border-radius:17px!important;
+  font-size:12px!important;
+}
+.inlineReplyTools>button{font-size:11px!important}
+.inlineReplyFoot>small{color:#747e89!important;font-size:10.5px!important}
+
+/* Full composer: restore contrast and keep controls readable */
+.composeWindow .composeHead{
+  min-height:44px!important;
+  height:44px!important;
+  padding:0 8px 0 14px!important;
+  border-bottom:1px solid #dfe5eb!important;
+  background:#eaf0f7!important;
+  color:#26313c!important;
+  opacity:1!important;
+}
+.composeWindow .composeHeadMain,
+.composeWindow .composeHeadTitleWrap{color:#26313c!important;opacity:1!important}
+.composeWindow .composeHeadTitleWrap b,
+.composeWindow #composeTitle{
+  color:#26313c!important;
+  font-size:13px!important;
+  font-weight:700!important;
+  line-height:1.2!important;
+  opacity:1!important;
+}
+.composeWindow .composeDraftState{color:#66717d!important;font-size:10.5px!important;opacity:1!important}
+.composeWindow .composeHeadControls{opacity:1!important}
+.composeWindow .composeHeadBtn{
+  width:31px!important;
+  height:31px!important;
+  min-width:31px!important;
+  color:#55616d!important;
+  opacity:1!important;
+  visibility:visible!important;
+}
+.composeWindow .composeHeadBtn svg{width:15px!important;height:15px!important;stroke:currentColor!important;opacity:1!important}
+.composeWindow .composeHeadBtn:hover{background:#dce5ee!important;color:#202124!important}
+.composeWindow .composeCloseBtn:hover{background:#eadede!important;color:#a3322b!important}
+.composeWindow.minimized .composeHead{background:#3f4650!important;border-bottom:0!important}
+.composeWindow.minimized .composeHeadTitleWrap b,
+.composeWindow.minimized #composeTitle{color:#fff!important}
+.composeWindow.minimized .composeHeadBtn{color:#eef0f2!important}
+.composeWindow .composeIdentity,
+.composeWindow .recipientChipField{min-height:43px!important}
+.composeWindow .composeIdentity>span,
+.composeWindow .recipientLabel,
+.composeWindow .recipientChipField>span{color:#68727e!important;font-size:11.5px!important}
+.composeWindow .composeIdentity select,
+.composeWindow .recipientChipInput{color:#202124!important;font-size:12.5px!important}
+.composeWindow .recipientChip{font-size:11.5px!important}
+.composeWindow .recipientExtras button{font-size:11px!important}
+.composeWindow .composeSubject input{color:#202124!important;font-size:13px!important}
+.composeWindow .composeEditor{color:#202124!important;font-size:14px!important;line-height:1.65!important}
+.composeWindow .composeEditor:empty:before{color:#9099a4!important;font-size:14px!important}
+.composeWindow .composeFilesHead b{color:#4f5965!important;font-size:11px!important}
+.composeWindow .composeFilesHead small,
+.composeWindow .composeFiles>span>small{color:#78828d!important;font-size:10px!important}
+.composeWindow .composeFiles .fileName{font-size:11.5px!important}
+.composeWindow .composeStatus,
+.composeWindow .sendError{font-size:11px!important}
+.composeWindow .sendConfirm{font-size:11.5px!important}
+.composeWindow .sendConfirm button{font-size:11px!important}
+.composeWindow .gmailComposeFoot .send{font-size:12.5px!important}
+.composeWindow .composeSaveState{color:#747e89!important;font-size:10.5px!important}
+
+/* Search advanced */
+.advancedSearchHead b{font-size:14px!important}
+.advancedSearchHead span,
+.advancedSearchGrid label>span,
+.searchSyntax span,
+.searchOptionsFoot button,
+.saveSearchRow input,
+.saveSearchRow button{font-size:11px!important}
+.advancedSearchGrid input,
+.advancedSearchGrid select{font-size:12px!important}
+
+/* Settings */
+.settingsHead h3,
+.settingsHead b{color:#202124!important;font-size:18px!important}
+.settingsHead p,
+.settingsHead span{color:#6e7883!important;font-size:11.5px!important}
+.settingsSection h4{color:#343b44!important;font-size:13px!important;font-weight:700!important}
+.settingsSection p,
+.settingsSection>span,
+.settingsSection label,
+.signatureToggleRow span,
+.identitySaveRow>span{color:#68737f!important;font-size:11.5px!important;line-height:1.5!important}
+.signatureToggleRow b,
+.settingsSection label b,
+.identityCard b{color:#343b44!important;font-size:12px!important}
+.settingsDialog input,
+.settingsDialog textarea,
+.settingsDialog select,
+.identitySettingRow select,
+.identitySignatureEditor textarea{font-size:12px!important}
+.settingsAction,
+.settingsFoot button{font-size:12px!important}
+.identitySettingRow>span,
+.identityCard small{font-size:11px!important}
+.identityCard em{font-size:10px!important}
+
+/* Dialogs / feedback */
+.folderDialog h3,
+.dangerDialog h3{font-size:18px!important}
+.folderDialog p,
+.dangerDialog p{color:#606a76!important;font-size:12.5px!important}
+.folderDialog input{height:42px!important;font-size:13px!important}
+.folderDialogActions button,
+.dangerDialog button{min-height:36px!important;font-size:12px!important}
+.toast,
+.undoToast{font-size:12px!important}
+.undoToast button{font-size:11.5px!important}
+.empty b{font-size:15px!important}
+.empty span,
+.inlineError,
+.offlineBanner,
+.draftRecoveryBar{font-size:12px!important}
+
+/* Contacts */
+.contactPanelHead h3{font-size:17px!important}
+.contactPanelHead p{font-size:11px!important}
+.contactPanelSearch input{font-size:13px!important}
+.contactPanelModes button{font-size:11.5px!important}
+.contactPanelMeta b{font-size:12.5px!important}
+.contactPanelMeta small,
+.contactPanelMeta em{font-size:10.5px!important}
+.contactCard h3{font-size:16px!important}
+.contactCard p,
+.contactCard button{font-size:11.5px!important}
+
+/* Mobile: keep complete labels and readable type instead of abbreviating. */
+@media(max-width:850px){
+  .gmailTopbar .search.mailSearchSurface input{font-size:13px!important}
+  .gmailMailboxContext h1{font-size:14px!important}
+  .gmailFilterChips button{font-size:10.5px!important}
+  .gmailList .mailParty{font-size:12px!important}
+  .gmailList .mailSubject{font-size:11.5px!important}
+  .gmailList .mailSnippet{font-size:10.5px!important}
+  .gmailList .mailRowMeta time{font-size:10px!important}
+  .gmailConversation .subjectLine h2{font-size:20px!important}
+  .conversationWho b,
+  .senderNameButton{font-size:12.5px!important}
+  .conversationWho>small,
+  .conversationWho .recipientToggle,
+  .conversationMeta time{font-size:10.5px!important}
+  .conversationExpanded .mailText{font-size:14px!important}
+  .gmailConversation>.mobileReplyBar{
+    gap:5px!important;
+    padding-left:8px!important;
+    padding-right:8px!important;
+  }
+  .gmailConversation>.mobileReplyBar button{
+    min-width:0!important;
+    height:40px!important;
+    padding:0 7px!important;
+    font-size:10.5px!important;
+    white-space:nowrap!important;
+  }
+  .gmailConversation>.mobileReplyBar button span{
+    overflow:visible!important;
+    text-overflow:clip!important;
+  }
+  .inlineReplyComposer{
+    max-width:none!important;
+    margin:12px 0 2px!important;
+  }
+  .conversationExpanded .inlineReplyComposer{
+    margin-left:-42px!important;
+  }
+  .inlineReplyEditor{
+    min-height:88px!important;
+    max-height:260px!important;
+    padding:11px 12px!important;
+    font-size:13.5px!important;
+  }
+  .inlineReplyHead b{font-size:12px!important}
+  .inlineReplyHead small{font-size:10.5px!important}
+  .inlineReplyFoot{
+    min-height:50px!important;
+    height:auto!important;
+    grid-template-columns:auto minmax(0,1fr)!important;
+    padding-top:4px!important;
+    padding-bottom:4px!important;
+  }
+  .inlineReplyFoot>small{
+    grid-column:1/-1!important;
+    justify-self:start!important;
+    padding:0 2px 2px!important;
+  }
+  .composeWindow .composeHeadTitleWrap b,
+  .composeWindow #composeTitle{font-size:13px!important}
+  .composeWindow .composeEditor{font-size:14px!important}
+  .settingsSection p,
+  .settingsSection label{font-size:12px!important}
+}
+@media(max-width:430px){
+  .gmailFilterChips button{font-size:10px!important}
+  .gmailConversation>.mobileReplyBar button{font-size:10px!important;padding:0 5px!important}
+}
