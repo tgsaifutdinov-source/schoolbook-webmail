@@ -1,7 +1,7 @@
 import {getMailSession} from "../../../../lib/mail-session";
 import {NextResponse} from "next/server";
 
-type Contact={email:string;name?:string;score:number;lastSeen:string};
+type Contact={email:string;name?:string;score:number;lastSeen:string;sentCount:number;receivedCount:number};
 
 export async function GET(){
  const auth=await getMailSession();
@@ -46,19 +46,19 @@ export async function GET(){
   const d=await r.json();
   const me=String(session.username||auth.username||"").toLowerCase();
   const map=new Map<string,Contact>();
-  const add=(a:any,weight:number,date:string)=>{
+  const add=(a:any,weight:number,date:string,direction:"sent"|"received")=>{
    const email=String(a?.email||"").trim();
    if(!email||email.toLowerCase()===me)return;
    const key=email.toLowerCase();
    const old=map.get(key);
    const name=String(a?.name||"").trim()||old?.name;
    const lastSeen=old?.lastSeen&&old.lastSeen>date?old.lastSeen:date;
-   map.set(key,{email,name,score:(old?.score||0)+weight,lastSeen:lastSeen||old?.lastSeen||""});
+   map.set(key,{email,name,score:(old?.score||0)+weight,lastSeen:lastSeen||old?.lastSeen||"",sentCount:(old?.sentCount||0)+(direction==="sent"?1:0),receivedCount:(old?.receivedCount||0)+(direction==="received"?1:0)});
   };
   const sentList=d.methodResponses?.find((x:any)=>x[0]==="Email/get"&&x[2]==="sentE")?.[1]?.list||[];
-  for(const m of sentList)for(const a of [...(m.to||[]),...(m.cc||[]),...(m.bcc||[])])add(a,3,String(m.receivedAt||""));
+  for(const m of sentList)for(const a of [...(m.to||[]),...(m.cc||[]),...(m.bcc||[])])add(a,3,String(m.receivedAt||""),"sent");
   const inboxList=d.methodResponses?.find((x:any)=>x[0]==="Email/get"&&x[2]==="inE")?.[1]?.list||[];
-  for(const m of inboxList)for(const a of m.from||[])add(a,1,String(m.receivedAt||""));
+  for(const m of inboxList)for(const a of m.from||[])add(a,1,String(m.receivedAt||""),"received");
   const contacts=[...map.values()].sort((a,b)=>b.score-a.score||b.lastSeen.localeCompare(a.lastSeen)||a.email.localeCompare(b.email)).slice(0,100);
   return NextResponse.json({contacts});
  }catch(error){
