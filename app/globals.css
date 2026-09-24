@@ -13085,3 +13085,50 @@ body{
  .threadInlineActions{flex-wrap:wrap!important}
  .threadInlineActions button{flex:1 1 auto!important;justify-content:center!important}
 }
+
+
+/* Multiple JMAP identities and per-address signatures */
+.composeIdentity{min-height:42px!important;background:#fbfcfd;color:#6f7785!important}
+.composeIdentity>span{width:55px;flex:0 0 auto}
+.composeIdentity select{min-width:0;flex:1;height:34px;border:0;background:transparent;color:#283142;outline:0;font-size:11px;font-weight:650;cursor:pointer}
+.composeIdentity select:focus{color:#111827}
+.identitySettings{display:flex;flex-direction:column;gap:10px}
+.identitySettingRow{display:grid;grid-template-columns:120px minmax(0,1fr);align-items:center;gap:12px}
+.identitySettingRow>span{font-size:10px;font-weight:700;color:#697386}
+.identitySettingRow select{width:100%;height:36px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:#273249;outline:0;font-size:10px}
+.identitySettingRow select:focus{border-color:#d8ae32;box-shadow:0 0 0 3px #ffc62b1f}
+.identitySignatureEditor{margin-top:4px;padding:11px;border:1px solid #e7eaf0;border-radius:11px;background:#fafbfc}
+.identityCard{display:flex;align-items:center;gap:9px;margin-bottom:10px}
+.identityAvatar{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;background:#fff0bd;color:#705400;font-size:11px;font-weight:800}
+.identityCard>div{min-width:0;display:flex;flex-direction:column;gap:1px}
+.identityCard b,.identityCard small,.identityCard em{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.identityCard b{font-size:10px;color:#273249}
+.identityCard small{font-size:9px;color:#778195}
+.identityCard em{font-size:8px;color:#8b95a7;font-style:normal}
+.identitySignatureEditor textarea{width:100%;min-height:108px!important;padding:10px!important;border:1px solid #e0e5ec!important;border-radius:8px!important;background:#fff!important;font-size:11px!important;line-height:1.5!important}
+.identitySaveRow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:10px}
+.identitySaveRow>span{font-size:9px;color:#7d8796}
+.identitySaveRow .settingsAction{margin:0!important}
+.identityLoading{min-height:40px;display:flex;align-items:center;gap:8px;padding:10px;border:1px dashed #dfe4ea;border-radius:9px;color:#7d8796;font-size:10px}
+.identityLoading svg{width:14px}
+.inlineReplyIdentity{max-width:190px;height:30px;padding:0 24px 0 8px;border:1px solid #e0e4e9;border-radius:7px;background:#fff;color:#526072;font-size:9px;outline:0}
+.inlineReplyIdentity:focus{border-color:#d6ae38}
+@media(min-width:1200px){
+ .composeIdentity select{font-size:12px}
+ .identitySettingRow{grid-template-columns:140px minmax(0,1fr)}
+ .identitySettingRow>span,.identitySettingRow select{font-size:11px}
+ .identityCard b{font-size:11px}.identityCard small{font-size:10px}.identityCard em{font-size:9px}
+ .identitySignatureEditor textarea{font-size:12px!important}
+}
+@media(max-width:850px){
+ .identitySettingRow{grid-template-columns:1fr;gap:5px}
+ .identitySettingRow select{height:40px;font-size:11px}
+ .composeIdentity{min-height:46px!important}
+ .composeIdentity select{font-size:11px}
+ .inlineReplyIdentity{max-width:135px}
+}
+@media(max-width:560px){
+ .inlineReplyIdentity{width:100%;max-width:none;order:3}
+ .inlineReplyHead{flex-wrap:wrap}
+ .inlineReplyHead>div{min-width:0;flex:1}
+}
