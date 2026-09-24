@@ -13780,3 +13780,301 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{
     transition:none!important;
   }
 }
+
+
+/* Gmail visual system v32 — soft focus and auth-aligned chrome */
+:root{
+  --sb-focus-border:#b8c0ca;
+  --sb-focus-shadow:0 0 0 3px rgba(74,85,99,.08);
+  --sb-panel-line:#e5e8ec;
+  --sb-panel-shadow:0 12px 30px rgba(60,64,67,.14),0 2px 7px rgba(60,64,67,.06);
+}
+
+/* Search is one surface, not an input framed inside another window */
+.gmailTopbar .searchArea{
+  min-width:0!important;
+}
+.gmailTopbar .search.mailSearchSurface{
+  min-width:0!important;
+  height:46px!important;
+  padding:0 6px 0 12px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:7px!important;
+  overflow:visible!important;
+  border:1px solid transparent!important;
+  border-radius:23px!important;
+  background:#eef3f8!important;
+  box-shadow:none!important;
+  transition:background .12s ease,border-color .12s ease,box-shadow .12s ease!important;
+}
+.gmailTopbar .search.mailSearchSurface:hover{
+  background:#e9eff5!important;
+}
+.gmailTopbar .search.mailSearchSurface:focus-within{
+  border-color:#d6dce3!important;
+  background:#fff!important;
+  box-shadow:0 1px 2px rgba(60,64,67,.08),0 3px 10px rgba(60,64,67,.08)!important;
+}
+.gmailTopbar .mailSearchLeadingIcon{
+  width:18px!important;
+  height:18px!important;
+  flex:0 0 18px!important;
+  margin:0 2px 0 0!important;
+  color:#68717d!important;
+}
+.gmailTopbar .search.mailSearchSurface input{
+  min-width:0!important;
+  height:44px!important;
+  flex:1 1 auto!important;
+  padding:0 4px!important;
+  border:0!important;
+  outline:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:#202124!important;
+  font-size:14px!important;
+  font-weight:450!important;
+}
+.gmailTopbar .search.mailSearchSurface input::placeholder{
+  color:#697482!important;
+  opacity:1!important;
+}
+.gmailTopbar .search.mailSearchSurface>button{
+  width:34px!important;
+  height:34px!important;
+  min-width:34px!important;
+  flex:0 0 34px!important;
+  padding:0!important;
+  display:grid!important;
+  place-items:center!important;
+  border:0!important;
+  border-radius:50%!important;
+  background:transparent!important;
+  color:#68717d!important;
+  box-shadow:none!important;
+}
+.gmailTopbar .search.mailSearchSurface>button:hover{
+  background:#dde4eb!important;
+  color:#30343a!important;
+}
+.gmailTopbar .search.mailSearchSurface>button:focus-visible{
+  outline:2px solid #b8c0ca!important;
+  outline-offset:1px!important;
+  box-shadow:none!important;
+}
+.gmailTopbar .search.mailSearchSurface>button svg{
+  width:17px!important;
+  height:17px!important;
+}
+.gmailTopbar .search.mailSearchSurface .mailSearchClear svg{
+  width:15px!important;
+  height:15px!important;
+}
+.gmailTopbar .search.mailSearchSurface .searchOptionsBtn.active{
+  background:#e2e7ec!important;
+  color:#333940!important;
+}
+.gmailTopbar .search.mailSearchSurface .searchOptionsBtn.active:after{
+  right:5px!important;
+  bottom:4px!important;
+  width:5px!important;
+  height:5px!important;
+  border:1px solid #e2e7ec!important;
+  background:#d6a300!important;
+}
+
+/* Advanced search opens as a calm floating panel */
+.gmailTopbar .searchOptions.advancedSearchPanel{
+  margin-top:8px!important;
+  overflow:hidden!important;
+  border:1px solid var(--sb-panel-line)!important;
+  border-radius:14px!important;
+  background:#fff!important;
+  box-shadow:var(--sb-panel-shadow)!important;
+}
+.advancedSearchGrid input:focus,
+.advancedSearchGrid select:focus,
+.saveSearchRow input:focus{
+  outline:0!important;
+  border-color:var(--sb-focus-border)!important;
+  box-shadow:var(--sb-focus-shadow)!important;
+}
+.advancedSearchFlags button.active{
+  border-color:#ded5b0!important;
+  background:#fff7d7!important;
+  color:#574400!important;
+}
+
+/* Stop using bright yellow focus rectangles around application controls */
+.gmailTopbar button:focus-visible,
+.mailSidebar button:focus-visible,
+.gmailMailboxBar button:focus-visible,
+.gmailFilterChips button:focus-visible,
+.gmailReader button:focus-visible,
+.composeWindow button:focus-visible,
+.composeWindow select:focus-visible,
+.composeWindow input:focus-visible,
+.rowContextMenu button:focus-visible,
+.labelPicker button:focus-visible,
+.settingsDialog button:focus-visible,
+.settingsDialog input:focus-visible,
+.settingsDialog textarea:focus-visible,
+.folderDialog button:focus-visible,
+.folderDialog input:focus-visible,
+.dangerDialog button:focus-visible,
+.shortcutDialog button:focus-visible,
+.accountMenu button:focus-visible{
+  outline:2px solid #b8c0ca!important;
+  outline-offset:1px!important;
+  box-shadow:none!important;
+}
+.gmailList .messages .mailRow:focus-visible,
+.conversationMessage.collapsed:focus-visible,
+.recipientSuggestion:focus-visible{
+  outline:1px solid #b9c1ca!important;
+  outline-offset:-1px!important;
+}
+.gmailList .messages .mailRow.keyboardActive:not(.checked):before{
+  background:#9ca7b4!important;
+}
+
+/* Form controls use a neutral soft focus. Yellow stays for brand actions. */
+.settingsDialog input:focus,
+.settingsDialog textarea:focus,
+.settingsDialog select:focus,
+.folderDialog input:focus,
+.identitySettingRow select:focus,
+.identitySignatureEditor textarea:focus,
+.inlineReplyIdentity:focus,
+.composeWindow .recipientChipInput:focus,
+.composeWindow .composeSubject input:focus{
+  outline:0!important;
+  border-color:var(--sb-focus-border)!important;
+  box-shadow:var(--sb-focus-shadow)!important;
+}
+
+/* Floating windows share one quiet surface language */
+.settingsDialog,
+.folderDialog,
+.dangerDialog,
+.shortcutDialog,
+.attachmentWarningDialog,
+.contactPanel,
+.contactCard,
+.rowContextMenu,
+.readerMoreMenu,
+.bulkMoreMenu,
+.selectTypeMenu,
+.moveMenu,
+.labelPicker,
+.folderContextMenu,
+.accountMenu,
+.composeMoreMenu,
+.composeEmojiMenu,
+.messageDetails{
+  border-color:var(--sb-panel-line)!important;
+  box-shadow:var(--sb-panel-shadow)!important;
+}
+.settingsDialog,
+.folderDialog,
+.dangerDialog,
+.shortcutDialog,
+.attachmentWarningDialog,
+.contactCard{
+  border-radius:16px!important;
+}
+.rowContextMenu,
+.readerMoreMenu,
+.bulkMoreMenu,
+.selectTypeMenu,
+.moveMenu,
+.labelPicker,
+.folderContextMenu,
+.accountMenu,
+.composeMoreMenu,
+.composeEmojiMenu,
+.messageDetails{
+  border-radius:10px!important;
+}
+
+/* Compose should feel like a floating mail window, not a selected object */
+.composeWindow{
+  border:1px solid #dfe4ea!important;
+  outline:0!important;
+  box-shadow:0 14px 42px rgba(60,64,67,.24),0 3px 9px rgba(60,64,67,.10)!important;
+}
+.composeWindow.maximized{
+  border-color:#e7eaee!important;
+  box-shadow:0 8px 28px rgba(60,64,67,.14)!important;
+}
+.composeWindow:focus-within{
+  outline:0!important;
+}
+.composeWindow .composeIdentity select:focus{
+  outline:0!important;
+  box-shadow:none!important;
+  color:#202124!important;
+}
+
+/* Selected UI stays branded, but never becomes a thick outlined box */
+.gmailFilterChips button.active,
+.mailSidebar nav>button.active,
+.mailSidebar .customFolderRow.active,
+.toolbarCheck.active{
+  box-shadow:none!important;
+}
+.gmailFilterChips button.active{
+  border-color:#e8d89b!important;
+  background:#fff6d5!important;
+}
+.mailSidebar nav>button.active,
+.mailSidebar .customFolderRow.active{
+  background:#fff4c7!important;
+}
+.gmailList .mailRow.checked{
+  box-shadow:none!important;
+}
+.gmailList .mailRow.selected:not(.checked){
+  box-shadow:inset 3px 0 0 #c4a33f!important;
+}
+
+/* Mobile search keeps the same visual language */
+@media(max-width:850px){
+  .gmailTopbar .search.mailSearchSurface{
+    height:42px!important;
+    min-height:42px!important;
+    padding-left:10px!important;
+    padding-right:4px!important;
+    border-radius:21px!important;
+  }
+  .gmailTopbar .search.mailSearchSurface input{
+    height:40px!important;
+    font-size:12px!important;
+  }
+  .gmailTopbar .search.mailSearchSurface>button{
+    width:32px!important;
+    height:32px!important;
+    min-width:32px!important;
+    flex-basis:32px!important;
+  }
+  .gmailTopbar .mailSearchLeadingIcon{
+    width:17px!important;
+    height:17px!important;
+    flex-basis:17px!important;
+  }
+  .gmailTopbar .searchOptions.advancedSearchPanel{
+    margin-top:5px!important;
+    border-radius:12px!important;
+  }
+  .composeWindow{
+    border:0!important;
+    box-shadow:none!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .gmailTopbar .search.mailSearchSurface{
+    transition:none!important;
+  }
+}
