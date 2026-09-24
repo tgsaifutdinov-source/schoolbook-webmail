@@ -9683,3 +9683,192 @@ body{
     break-inside:avoid!important;
   }
 }
+
+
+/* Gmail visual system v17 — navigation and state polish */
+
+/* Keyboard cursor is visible without overpowering selection */
+.gmailList .messages .mailRow{
+  scroll-margin-block:6px!important;
+}
+.gmailList .messages .mailRow.keyboardActive:not(.checked){
+  position:relative!important;
+}
+.gmailList .messages .mailRow.keyboardActive:not(.checked):before{
+  content:""!important;
+  position:absolute!important;
+  left:0!important;
+  top:4px!important;
+  bottom:4px!important;
+  width:3px!important;
+  border-radius:0 3px 3px 0!important;
+  background:#e5ad00!important;
+  pointer-events:none!important;
+}
+.gmailList .messages .mailRow:focus{
+  outline:none!important;
+}
+.gmailList .messages .mailRow:focus-visible{
+  outline:2px solid rgba(244,180,0,.46)!important;
+  outline-offset:-2px!important;
+}
+.gmailList .messages .mailRow[aria-current="true"]{
+  box-shadow:inset 3px 0 0 rgba(95,99,104,.28)!important;
+}
+.gmailList .messages .mailRow.checked[aria-current="true"]{
+  box-shadow:inset 3px 0 0 #d4a200!important;
+}
+
+/* Keep row actions stable while keyboard focus moves through the list */
+.gmailList .mailRow:focus-visible .rowActions{
+  opacity:1!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+}
+.gmailList .mailRow:focus-visible .mailRowMeta{
+  opacity:0!important;
+}
+
+/* Popup layering and interaction */
+.searchOptions,
+.accountMenu,
+.selectTypeMenu,
+.bulkMoreMenu,
+.moveMenu,
+.readerMoreMenu,
+.composeEmojiMenu,
+.composeMoreMenu,
+.messageDetails{
+  z-index:80!important;
+  overscroll-behavior:contain!important;
+}
+.searchOptions button,
+.accountMenu button,
+.selectTypeMenu button,
+.bulkMoreMenu button,
+.moveMenu button,
+.readerMoreMenu button,
+.composeMoreMenu button{
+  user-select:none!important;
+}
+.searchOptions button:focus-visible,
+.accountMenu button:focus-visible,
+.selectTypeMenu button:focus-visible,
+.bulkMoreMenu button:focus-visible,
+.moveMenu button:focus-visible,
+.readerMoreMenu button:focus-visible,
+.composeMoreMenu button:focus-visible{
+  outline:2px solid rgba(244,180,0,.40)!important;
+  outline-offset:-2px!important;
+}
+
+/* Reader loading should not collapse while switching rapidly */
+.readerSkeleton{
+  min-height:260px!important;
+  padding:18px 0!important;
+}
+.readerSkeleton span{
+  display:block!important;
+  max-width:760px!important;
+}
+.readerSkeleton span:nth-child(1){
+  width:44%!important;
+}
+.readerSkeleton span:nth-child(2){
+  width:78%!important;
+}
+.readerSkeleton span:nth-child(3){
+  width:67%!important;
+}
+.readerSkeleton span:nth-child(4){
+  width:52%!important;
+}
+
+/* Reader navigation buttons remain visually stable during cached transitions */
+.gmailReader .readerNav button:disabled{
+  opacity:.38!important;
+}
+.gmailReader .readerNav button:not(:disabled){
+  opacity:1!important;
+}
+.gmailReader .toolbar{
+  contain:layout style!important;
+}
+
+/* Thread rows are keyboard friendly */
+.conversationMessage.collapsed:focus{
+  outline:none!important;
+}
+.conversationMessage.collapsed:focus-visible{
+  outline:2px solid rgba(244,180,0,.42)!important;
+  outline-offset:-2px!important;
+  background:#f8f9fa!important;
+}
+
+/* Recipient/contact keyboard navigation */
+.recipientSuggestion[aria-selected="true"]{
+  background:#eaf1fb!important;
+}
+.recipientSuggestion[aria-selected="true"] .contactName{
+  color:#202124!important;
+}
+.recipientSuggestion:focus-visible{
+  outline:2px solid rgba(244,180,0,.42)!important;
+  outline-offset:-2px!important;
+}
+
+/* Compose popovers remain over the editor and footer */
+.composeWindow .composeEmojiMenu,
+.composeWindow .composeMoreMenu,
+.composeWindow .recipientSuggestions{
+  z-index:220!important;
+}
+
+/* Avoid accidental text selection while rapidly navigating rows */
+.gmailList .mailRow>.mailParty,
+.gmailList .mailRow>.mailConversation,
+.gmailList .mailRow>.mailRowMeta{
+  user-select:none!important;
+}
+
+/* Offline/refresh feedback should not shift application layout */
+.offlineBanner,
+.toast,
+.undoToast{
+  position:fixed!important;
+}
+
+/* Respect reduced motion for skeleton/popup state changes */
+@media(prefers-reduced-motion:reduce){
+  .readerSkeleton span,
+  .listProgress:after{
+    animation:none!important;
+  }
+}
+
+/* Touch: keep metadata visible because hover actions do not exist */
+@media(hover:none){
+  .gmailList .mailRow:focus-visible .mailRowMeta{
+    opacity:1!important;
+  }
+  .gmailList .mailRow:focus-visible .rowActions{
+    display:none!important;
+  }
+}
+
+/* Mobile focus should be quieter */
+@media(max-width:850px){
+  .gmailList .messages .mailRow.keyboardActive:not(.checked):before{
+    top:6px!important;
+    bottom:6px!important;
+    width:2px!important;
+  }
+  .gmailList .messages .mailRow:focus-visible{
+    outline-offset:-1px!important;
+  }
+  .readerSkeleton{
+    min-height:210px!important;
+    padding-left:8px!important;
+    padding-right:8px!important;
+  }
+}
