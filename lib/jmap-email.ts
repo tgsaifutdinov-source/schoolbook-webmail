@@ -1,5 +1,5 @@
 type Address={name?:string;email:string};
-type Identity={name?:string;email:string};
+type Identity={id?:string;name?:string;email:string;replyTo?:Address[]|null;bcc?:Address[]|null};
 type Attachment={blobId:string;type?:string;name?:string;size?:number};
 
 function sanitizeComposerHtml(value:string){
@@ -51,9 +51,10 @@ export function buildJmapEmail(input:{
  inReplyTo?:string[];
  references?:string[];
  includeFrom?:boolean;
+ applyIdentityDefaults?:boolean;
 }){
- const seen=new Set<string>();const unique=(items:Address[])=>items.filter(a=>{const key=a.email.toLowerCase();if(seen.has(key))return false;seen.add(key);return true});
- const to=unique(addresses(input.to||"")),cc=unique(addresses(input.cc||"")),bcc=unique(addresses(input.bcc||""));
+ const seen=new Set<string>();const unique=(items:Address[])=>items.filter(a=>{const email=String(a?.email||"").trim(),key=email.toLowerCase();if(!email||seen.has(key))return false;seen.add(key);a.email=email;return true});
+ const to=unique(addresses(input.to||"")),cc=unique(addresses(input.cc||"")),bcc=unique([...addresses(input.bcc||""),...(input.applyIdentityDefaults&&Array.isArray(input.identity.bcc)?input.identity.bcc:[])]);
  const attachments=(input.attachments||[]).filter(a=>a&&typeof a.blobId==="string"&&a.blobId).slice(0,100);
  const inReplyTo=messageIds(input.inReplyTo),references=messageIds(input.references);
  const html=sanitizeComposerHtml(input.html||"").trim();
@@ -77,6 +78,7 @@ export function buildJmapEmail(input:{
   }
  };
  if(input.includeFrom)email.from=from;
+ if(input.applyIdentityDefaults&&Array.isArray(input.identity.replyTo)&&input.identity.replyTo.length)email.replyTo=input.identity.replyTo.map(a=>({...(a.name?{name:String(a.name)}:{}),email:String(a.email||"").trim()})).filter(a=>a.email);
  if(inReplyTo.length)email.inReplyTo=inReplyTo;
  if(references.length)email.references=references;
  if(to.length)email.to=to;
