@@ -9872,3 +9872,246 @@ body{
     padding-right:8px!important;
   }
 }
+
+
+/* Gmail visual system v18 — search selection and paging */
+
+/* Search clear/filter state */
+.gmailTopbar .searchOptionsFoot button:disabled{
+  opacity:.42!important;
+  cursor:default!important;
+}
+.gmailTopbar .searchOptionsFoot button:disabled:hover{
+  background:transparent!important;
+}
+.gmailTopbar .searchOptionsBtn.active{
+  position:relative!important;
+}
+.gmailTopbar .searchOptionsBtn.active:after{
+  content:""!important;
+  position:absolute!important;
+  right:5px!important;
+  bottom:5px!important;
+  width:6px!important;
+  height:6px!important;
+  border:2px solid #edf3fb!important;
+  border-radius:50%!important;
+  background:#e5ad00!important;
+}
+
+/* Active filters become a real horizontal filter rail */
+.activeSearchFilters{
+  min-height:38px!important;
+  padding:5px 10px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:5px!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  border-bottom:1px solid #edf0f2!important;
+  background:#fff!important;
+  scrollbar-width:none!important;
+}
+.activeSearchFilters::-webkit-scrollbar{
+  display:none!important;
+}
+.activeSearchFilters button{
+  flex:0 0 auto!important;
+  min-width:0!important;
+  height:28px!important;
+  padding:0 8px 0 10px!important;
+  border:1px solid #dadce0!important;
+  border-radius:14px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:5px!important;
+  background:#fff!important;
+  color:#3c4043!important;
+  font-size:9px!important;
+  font-weight:500!important;
+  white-space:nowrap!important;
+}
+.activeSearchFilters button:hover{
+  border-color:#c5c9ce!important;
+  background:#f8f9fa!important;
+}
+.activeSearchFilters button svg{
+  width:12px!important;
+  height:12px!important;
+  color:#70757a!important;
+}
+.activeSearchFilters .clearAllFilters{
+  padding-left:10px!important;
+  padding-right:10px!important;
+  border-color:transparent!important;
+  background:transparent!important;
+  color:#8a6800!important;
+  font-weight:600!important;
+}
+.activeSearchFilters .clearAllFilters:hover{
+  background:#fff3c4!important;
+  color:#5e4700!important;
+}
+
+/* Select-all-results banner */
+.selectAllResults{
+  min-height:36px!important;
+  padding:6px 12px!important;
+  border:0!important;
+  border-bottom:1px solid #f1e1a8!important;
+  background:#fff8df!important;
+  color:#5f4b00!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:8px!important;
+  font-size:10px!important;
+}
+.selectAllResults.active{
+  background:#fff3c4!important;
+}
+.selectAllResults span{
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+.selectAllResults button{
+  flex:0 0 auto!important;
+  height:26px!important;
+  padding:0 9px!important;
+  border-radius:13px!important;
+  color:#6f5400!important;
+  font-size:9px!important;
+  font-weight:700!important;
+}
+.selectAllResults button:hover:not(:disabled){
+  background:#ffe899!important;
+}
+.selectAllResults button:disabled{
+  opacity:.5!important;
+}
+
+/* Selection toolbar is width-stable at 1, 50 or 500 selected rows */
+.mailbarBulk{
+  min-width:0!important;
+  flex:1 1 auto!important;
+  overflow:hidden!important;
+}
+.mailbarBulk>span{
+  flex:0 1 96px!important;
+  width:auto!important;
+  max-width:96px!important;
+}
+.mailbarBulk>button,
+.mailbarBulk>.readerMove,
+.mailbarBulk>.bulkMoreWrap{
+  flex:0 0 auto!important;
+}
+.mailbarMain{
+  min-width:0!important;
+  flex:1 1 auto!important;
+}
+.mailbarPaging{
+  flex:0 0 auto!important;
+  margin-left:auto!important;
+}
+
+/* Checkbox has clear none / some / all states */
+.toolbarCheck{
+  position:relative!important;
+}
+.toolbarCheck.active{
+  background:#f1f3f4!important;
+}
+.toolbarCheck .checkSome{
+  background:#fff!important;
+  border-color:#6f7378!important;
+}
+.toolbarCheck .checkSome:after{
+  content:""!important;
+  position:absolute!important;
+  width:8px!important;
+  height:2px!important;
+  border-radius:1px!important;
+  background:#5f6368!important;
+}
+.toolbarCheck .checkOn{
+  border-color:#c89500!important;
+  background:var(--gmail-yellow)!important;
+}
+.toolbarCheck .checkOn:after{
+  border-color:#4b3900!important;
+}
+
+/* Paging */
+.mailbarPaging>span{
+  max-width:150px!important;
+  color:#70757a!important;
+  font-size:10px!important;
+}
+.mailbarPaging button:disabled{
+  opacity:.36!important;
+}
+.mailbarPaging button:not(:disabled):hover{
+  background:#f1f3f4!important;
+}
+
+/* Filters and paging do not make the list jump during loading */
+.gmailList[aria-busy="true"] .gmailMailboxBar,
+.gmailList[aria-busy="true"] .gmailMailboxTitle{
+  contain:layout style!important;
+}
+.gmailList .listProgress{
+  position:absolute!important;
+  top:0!important;
+  left:0!important;
+  right:0!important;
+  z-index:30!important;
+}
+
+/* Medium desktop */
+@media(max-width:1100px) and (min-width:851px){
+  .mailbarBulk>span{
+    flex-basis:68px!important;
+    max-width:68px!important;
+  }
+  .mailbarPaging>span{
+    max-width:94px!important;
+  }
+}
+
+/* Mobile */
+@media(max-width:850px){
+  .activeSearchFilters{
+    min-height:36px!important;
+    padding-left:7px!important;
+    padding-right:7px!important;
+  }
+  .activeSearchFilters button{
+    height:26px!important;
+    border-radius:13px!important;
+  }
+  .selectAllResults{
+    min-height:38px!important;
+    padding-left:8px!important;
+    padding-right:8px!important;
+    justify-content:space-between!important;
+  }
+  .selectAllResults span{
+    font-size:9px!important;
+  }
+  .selectAllResults button{
+    height:28px!important;
+  }
+  .mailbarBulk{
+    overflow-x:auto!important;
+    scrollbar-width:none!important;
+  }
+  .mailbarBulk::-webkit-scrollbar{
+    display:none!important;
+  }
+  .mailbarBulk>span{
+    display:none!important;
+  }
+}
