@@ -9,17 +9,19 @@ async function ctx(){
  const s=await sr.json();const accountId=s.primaryAccounts?.["urn:ietf:params:jmap:mail"]||Object.keys(s.accounts||{})[0];const u=new URL(s.apiUrl);
  const endpoint="http://host.docker.internal:18080"+u.pathname+u.search;
  const mr=await fetch(endpoint,{method:"POST",headers,body:JSON.stringify({using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail","urn:ietf:params:jmap:submission"],methodCalls:[["Identity/get",{accountId},"i"],["Mailbox/get",{accountId,properties:["id","role"]},"m"]]}),cache:"no-store"});
- const md=await mr.json();return {headers,accountId,endpoint,identity:md.methodResponses?.find((x:any)=>x[0]==="Identity/get")?.[1]?.list?.[0],drafts:md.methodResponses?.find((x:any)=>x[0]==="Mailbox/get")?.[1]?.list?.find((x:any)=>x.role==="drafts")?.id};
+ const md=await mr.json();return {headers,accountId,endpoint,identities:md.methodResponses?.find((x:any)=>x[0]==="Identity/get")?.[1]?.list||[],drafts:md.methodResponses?.find((x:any)=>x[0]==="Mailbox/get")?.[1]?.list?.find((x:any)=>x.role==="drafts")?.id};
 }
 const addresses=(v:string)=>String(v||"").split(/[;,\n]+/).map(x=>x.trim()).filter(Boolean).map(email=>({email}));const valid=(email:string)=>/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(email);
 export async function POST(req:NextRequest){
  const blocked=sameOriginGuard(req);if(blocked)return blocked;
  const c=await ctx();if(!c)return NextResponse.json({error:"Unauthorized"},{status:401});
- const body=await req.json().catch(()=>({}));const id=String(body.id||""),to=String(body.to||""),cc=String(body.cc||""),bcc=String(body.bcc||""),subject=String(body.subject||""),text=String(body.text||""),html=String(body.html||""),attachments=Array.isArray(body.attachments)?body.attachments.slice(0,100):[],inReplyTo=Array.isArray(body.inReplyTo)?body.inReplyTo.map((x:any)=>String(x||"")):[],references=Array.isArray(body.references)?body.references.map((x:any)=>String(x||"")):[];
+ const body=await req.json().catch(()=>({}));const id=String(body.id||""),identityId=String(body.identityId||"").trim(),to=String(body.to||""),cc=String(body.cc||""),bcc=String(body.bcc||""),subject=String(body.subject||""),text=String(body.text||""),html=String(body.html||""),attachments=Array.isArray(body.attachments)?body.attachments.slice(0,100):[],inReplyTo=Array.isArray(body.inReplyTo)?body.inReplyTo.map((x:any)=>String(x||"")):[],references=Array.isArray(body.references)?body.references.map((x:any)=>String(x||"")):[];
  if(subject.length>998||text.length>5_000_000||html.length>5_000_000)return NextResponse.json({error:"Черновик слишком большой"},{status:413});
- if(!c.identity||!c.drafts)return NextResponse.json({error:"Не найдена папка Черновики"},{status:400});
+ const identity=identityId?c.identities.find((x:any)=>String(x.id)===identityId):c.identities[0];
+ if(!identity)return NextResponse.json({error:identityId?"Выбранный отправитель больше недоступен":"Не найдена почтовая идентичность"},{status:400});
+ if(!c.drafts)return NextResponse.json({error:"Не найдена папка Черновики"},{status:400});
  const allRecipients=[...addresses(to),...addresses(cc),...addresses(bcc)];if(allRecipients.some((x:any)=>!valid(x.email)))return NextResponse.json({error:"Проверьте адреса получателей"},{status:400});if(allRecipients.length>200)return NextResponse.json({error:"Слишком много получателей в одном письме"},{status:400});
- const email=buildJmapEmail({drafts:c.drafts,identity:c.identity,to,cc,bcc,subject,text,html,attachments,inReplyTo,references,includeFrom:false});
+ const email=buildJmapEmail({drafts:c.drafts,identity,to,cc,bcc,subject,text,html,attachments,inReplyTo,references,includeFrom:false,applyIdentityDefaults:false});
  // Email bodyStructure/bodyValues are immutable in JMAP. Saving an existing draft
  // therefore creates a replacement message and removes the previous draft.
  const args:any={accountId:c.accountId,create:{draft:email}};if(id)args.destroy=[id];
@@ -31,7 +33,7 @@ export async function POST(req:NextRequest){
  if(!newId){console.error("JMAP draft Email/set returned no id",JSON.stringify(result));return NextResponse.json({error:"Не удалось получить id сохранённого черновика"},{status:502})}
  const destroyErr=id?x?.[1]?.notDestroyed?.[id]:null;
  if(destroyErr)console.warn("JMAP old draft cleanup failed",JSON.stringify(destroyErr));
- return NextResponse.json({ok:true,id:newId,replacedId:id||null,cleanupWarning:!!destroyErr});
+ return NextResponse.json({ok:true,id:newId,identityId:identity.id,replacedId:id||null,cleanupWarning:!!destroyErr});
 }
 export async function DELETE(req:NextRequest){
  const blocked=sameOriginGuard(req);if(blocked)return blocked;
