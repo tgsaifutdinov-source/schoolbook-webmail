@@ -11404,3 +11404,157 @@ body{
     max-height:calc(100dvh - 170px)!important;
   }
 }
+
+
+/* Gmail visual system v23 — saved searches and deep links */
+
+.savedSearchSectionTitle{
+  margin-top:8px!important;
+}
+.savedSearchSidebar{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:1px!important;
+  padding-bottom:8px!important;
+}
+.savedSearchSidebarRow{
+  position:relative!important;
+  min-width:0!important;
+  height:32px!important;
+  display:flex!important;
+  align-items:center!important;
+  border-radius:0 16px 16px 0!important;
+}
+.savedSearchSidebarRow:hover,
+.savedSearchSidebarRow:focus-within{
+  background:#eaf1fb!important;
+}
+.savedSearchMain{
+  min-width:0!important;
+  width:100%!important;
+  height:32px!important;
+  padding:0 38px 0 22px!important;
+  display:grid!important;
+  grid-template-columns:18px minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:10px!important;
+  border-radius:0 16px 16px 0!important;
+  color:#3c4043!important;
+  font-size:11px!important;
+  text-align:left!important;
+}
+.savedSearchMain svg{
+  width:16px!important;
+  height:16px!important;
+  color:#5f6368!important;
+}
+.savedSearchMain span{
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+.savedSearchRemove{
+  position:absolute!important;
+  right:5px!important;
+  top:2px!important;
+  width:28px!important;
+  height:28px!important;
+  min-width:28px!important;
+  padding:0!important;
+  border-radius:50%!important;
+  display:grid!important;
+  place-items:center!important;
+  color:#80868b!important;
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+.savedSearchRemove svg{
+  width:13px!important;
+  height:13px!important;
+}
+.savedSearchSidebarRow:hover .savedSearchRemove,
+.savedSearchSidebarRow:focus-within .savedSearchRemove{
+  opacity:1!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+}
+.savedSearchRemove:hover{
+  background:#fce8e6!important;
+  color:#b3261e!important;
+}
+
+/* Search result mode in sidebar gets a subtle active hint */
+.mailSidebar:has(+ .mobileScrim) .savedSearchSidebarRow{
+  transition:background .08s ease!important;
+}
+
+/* Deep-linked reader should render without a layout flash */
+.gmailReader.open{
+  contain:layout style!important;
+}
+.gmailReader .letter,
+.gmailReader .gmailConversation{
+  min-height:0!important;
+}
+
+/* Browser-history navigation should not animate the whole shell */
+.workspace,
+.gmailList,
+.gmailReader{
+  scroll-behavior:auto!important;
+}
+
+/* Collapsed sidebar keeps saved searches as icon-only entries */
+.sidebarCollapsed .savedSearchSectionTitle{
+  display:none!important;
+}
+.sidebarCollapsed .savedSearchSidebar{
+  padding-top:4px!important;
+}
+.sidebarCollapsed .savedSearchSidebarRow{
+  width:48px!important;
+  margin:0 auto!important;
+  border-radius:16px!important;
+}
+.sidebarCollapsed .savedSearchMain{
+  width:48px!important;
+  padding:0!important;
+  grid-template-columns:1fr!important;
+  justify-items:center!important;
+  border-radius:16px!important;
+}
+.sidebarCollapsed .savedSearchMain span,
+.sidebarCollapsed .savedSearchRemove{
+  display:none!important;
+}
+
+/* Touch: remove button must be reachable without hover */
+@media(hover:none){
+  .savedSearchRemove{
+    opacity:1!important;
+    visibility:visible!important;
+    pointer-events:auto!important;
+  }
+}
+
+/* Mobile drawer */
+@media(max-width:850px){
+  .savedSearchSidebarRow{
+    height:36px!important;
+    border-radius:0 18px 18px 0!important;
+  }
+  .savedSearchMain{
+    height:36px!important;
+    padding-left:20px!important;
+    padding-right:44px!important;
+    font-size:11px!important;
+  }
+  .savedSearchRemove{
+    top:3px!important;
+    right:8px!important;
+    width:30px!important;
+    height:30px!important;
+  }
+}
