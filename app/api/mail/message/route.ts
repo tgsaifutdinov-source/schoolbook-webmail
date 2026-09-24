@@ -14,7 +14,7 @@ export async function GET(req:NextRequest){
  if(!accountId)return NextResponse.json({error:"Mail account not found"},{status:404});
  const u=new URL(session.apiUrl);
  const endpoint="http://host.docker.internal:18080"+u.pathname+u.search;
- const body={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/get",{accountId,ids:[id],properties:["id","threadId","mailboxIds","keywords","from","to","cc","bcc","replyTo","subject","receivedAt","preview","textBody","htmlBody","bodyValues","attachments","hasAttachment","size"],fetchTextBodyValues:true,fetchHTMLBodyValues:true,maxBodyValueBytes:2000000},"e"]]};
+ const body={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/get",{accountId,ids:[id],properties:["id","threadId","mailboxIds","keywords","messageId","inReplyTo","references","from","to","cc","bcc","replyTo","subject","receivedAt","preview","textBody","htmlBody","bodyValues","attachments","hasAttachment","size"],fetchTextBodyValues:true,fetchHTMLBodyValues:true,maxBodyValueBytes:2000000},"e"]]};
  const r=await fetch(endpoint,{method:"POST",headers,body:JSON.stringify(body),cache:"no-store"});
  if(!r.ok)return NextResponse.json({error:"JMAP request failed"},{status:r.status});
  const d=await r.json();
