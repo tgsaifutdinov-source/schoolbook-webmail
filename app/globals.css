@@ -11743,3 +11743,139 @@ body{
     min-width:26px!important;
   }
 }
+
+
+/* Gmail visual system v25 — resilient compose recovery */
+.draftRecoveryBar{
+  position:fixed!important;
+  z-index:360!important;
+  left:50%!important;
+  bottom:24px!important;
+  transform:translateX(-50%)!important;
+  width:min(620px,calc(100vw - 28px))!important;
+  min-height:54px!important;
+  padding:8px 9px 8px 13px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:14px!important;
+  border:1px solid #e4d59e!important;
+  border-radius:9px!important;
+  background:#fffdf4!important;
+  color:#3c4043!important;
+  box-shadow:0 8px 28px rgba(60,64,67,.22),0 2px 6px rgba(60,64,67,.12)!important;
+}
+.draftRecoveryBar>div:first-child{
+  min-width:0!important;
+  display:grid!important;
+  grid-template-columns:30px minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:8px!important;
+}
+.draftRecoveryBar>div:first-child>svg{
+  width:20px!important;
+  height:20px!important;
+  color:#9a7400!important;
+}
+.draftRecoveryBar>div:first-child>span{
+  min-width:0!important;
+}
+.draftRecoveryBar b,
+.draftRecoveryBar small{
+  display:block!important;
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+.draftRecoveryBar b{
+  color:#3c4043!important;
+  font-size:10px!important;
+  font-weight:650!important;
+}
+.draftRecoveryBar small{
+  margin-top:2px!important;
+  color:#80868b!important;
+  font-size:8px!important;
+}
+.draftRecoveryBar>div:last-child{
+  flex:0 0 auto!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:5px!important;
+}
+.draftRecoveryBar button{
+  height:32px!important;
+  padding:0 10px!important;
+  border-radius:16px!important;
+  color:#5f6368!important;
+  font-size:9px!important;
+  font-weight:600!important;
+}
+.draftRecoveryBar button:hover{
+  background:#f1f3f4!important;
+  color:#202124!important;
+}
+.draftRecoveryBar .restoreDraftButton{
+  background:var(--gmail-yellow)!important;
+  color:#332900!important;
+}
+.draftRecoveryBar .restoreDraftButton:hover{
+  background:var(--gmail-yellow-hover)!important;
+}
+
+/* Compose state makes server/local safety clearer without adding noise */
+.composeWindow .composeSaveState{
+  max-width:150px!important;
+}
+.composeWindow .composeSaveState:not(:empty){
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:4px!important;
+}
+.composeWindow .composeSaveState:not(:empty):before{
+  content:""!important;
+  width:6px!important;
+  height:6px!important;
+  flex:0 0 6px!important;
+  border-radius:50%!important;
+  background:#9aa0a6!important;
+}
+.composeWindow .composeSaveState{
+  transition:opacity .12s ease!important;
+}
+
+/* Offline draft safety */
+.offlineBanner+.draftRecoveryBar{
+  bottom:74px!important;
+}
+
+@media(max-width:850px){
+  .draftRecoveryBar{
+    left:8px!important;
+    right:8px!important;
+    bottom:max(70px,calc(env(safe-area-inset-bottom) + 62px))!important;
+    transform:none!important;
+    width:auto!important;
+    min-height:62px!important;
+    padding:8px!important;
+    gap:8px!important;
+    border-radius:10px!important;
+  }
+  .draftRecoveryBar>div:first-child{
+    grid-template-columns:26px minmax(0,1fr)!important;
+    gap:6px!important;
+  }
+  .draftRecoveryBar>div:first-child>svg{
+    width:18px!important;
+    height:18px!important;
+  }
+  .draftRecoveryBar>div:last-child{
+    gap:2px!important;
+  }
+  .draftRecoveryBar button{
+    height:30px!important;
+    padding:0 8px!important;
+    font-size:8px!important;
+  }
+}
