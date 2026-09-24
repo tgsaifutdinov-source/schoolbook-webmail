@@ -100,7 +100,7 @@ export default function Home(){
   if(typeof window==="undefined"||!urlSyncReadyRef.current)return;
   const next=workspaceUrl(overrides),current=window.location.pathname+window.location.search;
   if(next===current)return;
-  window.history[mode==="push"?"pushState":"replaceState"]({schoolbookMail:true},"",next);
+  if(mode==="push")window.history.pushState({schoolbookMail:true},"",next);else window.history.replaceState({schoolbookMail:true},"",next);
  }
  function clearAdvancedSearch(){setSearchText("");setSearchFrom("");setSearchTo("");setSearchCc("");setSearchSubject("");setSearchAfter("");setSearchBefore("");setSearchMailbox("");setSearchSize("");setSearchSizeMode("larger");setSearchHasAttachment(false);setSearchUnread(false);setSearchStarred(false)}
  function buildAdvancedSearch(){const parts:string[]=[];if(searchFrom.trim())parts.push("from:"+searchQuote(searchFrom));if(searchTo.trim())parts.push("to:"+searchQuote(searchTo));if(searchCc.trim())parts.push("cc:"+searchQuote(searchCc));if(searchSubject.trim())parts.push("subject:"+searchQuote(searchSubject));if(searchMailbox)parts.push("in:"+searchQuote(searchMailbox));if(searchAfter)parts.push("after:"+searchAfter);if(searchBefore)parts.push("before:"+searchBefore);if(searchSize.trim())parts.push(searchSizeMode+":"+searchSize.trim().replace(/\s+/g,""));if(searchHasAttachment)parts.push("has:attachment");if(searchUnread)parts.push("is:unread");if(searchStarred)parts.push("is:starred");if(searchText.trim())parts.push(searchText.trim());return parts.join(" ").trim()}
