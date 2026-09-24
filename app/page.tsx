@@ -200,11 +200,15 @@ export default function Home(){
   if(queryChangesEnabled&&q.changed)return false;
   const emailPatches:Array<MailItem>=Array.isArray(payload?.emailPatches)?payload.emailPatches:[],mailboxPatches:Array<Box>=Array.isArray(payload?.mailboxPatches)?payload.mailboxPatches:[];
   const patchMap=new Map(emailPatches.map(m=>[m.id,m])),destroyed=new Set<string>((emailChanges.destroyed||[]).map(String)),mailboxMap=new Map(mailboxPatches.map(m=>[m.id,m]));
-  setData(old=>{
+  const hasDataPatch=emailPatches.length>0||mailboxPatches.length>0||destroyed.size>0;
+  if(hasDataPatch||Number.isFinite(Number(q.total)))setData(old=>{
    if(!old)return old;
    const emails=old.emails.filter(m=>!destroyed.has(m.id)).map(m=>patchMap.has(m.id)?{...m,...patchMap.get(m.id)}:m);
    const mailboxes=old.mailboxes.map(m=>mailboxMap.has(m.id)?{...m,...mailboxMap.get(m.id)}:m);
-   return {...old,emails,mailboxes,total:Number.isFinite(Number(q.total))?Number(q.total):old.total,emailState:String(payload.emailState||old.emailState||""),mailboxState:String(payload.mailboxState||old.mailboxState||""),queryState:String(q.newQueryState||old.queryState||"")};
+   const nextTotal=Number.isFinite(Number(q.total))?Number(q.total):old.total;
+   const nextQueryState=String(q.newQueryState||old.queryState||"");
+   if(!hasDataPatch&&nextTotal===old.total&&nextQueryState===String(old.queryState||""))return old;
+   return {...old,emails,mailboxes,total:nextTotal,emailState:String(payload.emailState||old.emailState||""),mailboxState:String(payload.mailboxState||old.mailboxState||""),queryState:nextQueryState};
   });
   if(selected&&patchMap.has(selected.id))setSelected(old=>old?{...old,...patchMap.get(old.id)}:old);
   setFull((old:any)=>old&&patchMap.has(old.id)?{...old,...patchMap.get(old.id)}:old);
