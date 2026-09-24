@@ -3939,3 +3939,388 @@ html[data-mail-density="compact"] .messages article{min-height:66px;padding-top:
     margin-left:0!important;
   }
 }
+
+
+/* Gmail visual system v6 — message row geometry */
+.gmailList .messages{
+  background:#fff!important;
+}
+.gmailList .messages .mailRow{
+  height:40px!important;
+  min-height:40px!important;
+  grid-template-columns:32px 32px minmax(168px,208px) minmax(0,1fr) 96px!important;
+  gap:0 2px!important;
+  padding:0 10px 0 12px!important;
+  border:0!important;
+  border-bottom:1px solid #e6e9ed!important;
+  border-radius:0!important;
+  background:#f2f6fc!important;
+  box-shadow:none!important;
+  cursor:pointer!important;
+  transition:background .08s ease,box-shadow .08s ease!important;
+}
+.gmailList .messages .mailRow.unread{
+  background:#fff!important;
+}
+.gmailList .messages .mailRow:hover{
+  z-index:3!important;
+  background:#eaf1fb!important;
+  box-shadow:0 1px 2px rgba(60,64,67,.18),0 -1px 2px rgba(60,64,67,.08)!important;
+}
+.gmailList .messages .mailRow.checked{
+  background:#fff4c7!important;
+}
+.gmailList .messages .mailRow.checked:hover{
+  background:#ffefb5!important;
+}
+.gmailList .messages .mailRow.keyboardActive:not(.checked){
+  background:#fff9e7!important;
+  box-shadow:inset 3px 0 0 var(--gmail-yellow),0 1px 2px rgba(60,64,67,.14)!important;
+}
+
+/* Browser-independent Gmail-style checkbox */
+.gmailList .mailCheck{
+  appearance:none!important;
+  -webkit-appearance:none!important;
+  width:15px!important;
+  height:15px!important;
+  margin:0!important;
+  border:2px solid #73777d!important;
+  border-radius:2px!important;
+  background:#fff!important;
+  display:grid!important;
+  place-items:center!important;
+  justify-self:center!important;
+  cursor:pointer!important;
+  transition:border-color .08s ease,background .08s ease!important;
+}
+.gmailList .mailCheck:hover{
+  border-color:#4f5358!important;
+}
+.gmailList .mailCheck:checked{
+  border-color:#c89500!important;
+  background:var(--gmail-yellow)!important;
+}
+.gmailList .mailCheck:checked:after{
+  content:""!important;
+  width:4px!important;
+  height:7px!important;
+  margin-top:-2px!important;
+  border-right:2px solid #4b3900!important;
+  border-bottom:2px solid #4b3900!important;
+  transform:rotate(42deg)!important;
+}
+.gmailList .mailCheck:focus-visible{
+  outline:2px solid rgba(244,180,0,.32)!important;
+  outline-offset:2px!important;
+}
+
+/* Star column */
+.gmailList .rowStar{
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+  padding:0!important;
+  border-radius:50%!important;
+  display:grid!important;
+  place-items:center!important;
+  justify-self:center!important;
+  color:#9aa0a6!important;
+}
+.gmailList .rowStar:hover{
+  background:#dde5ef!important;
+  color:#5f6368!important;
+}
+.gmailList .rowStar svg{
+  width:17px!important;
+  height:17px!important;
+  stroke-width:1.8!important;
+}
+.gmailList .rowStar:has(svg[fill="currentColor"]){
+  color:#f4b400!important;
+}
+.gmailList .rowStar:has(svg[fill="currentColor"]):hover{
+  color:#e4a700!important;
+}
+
+/* Sender column */
+.gmailList .mailParty{
+  min-width:0!important;
+  padding:0 12px 0 2px!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  color:#3c4043!important;
+  font-size:12px!important;
+  font-weight:500!important;
+  line-height:40px!important;
+}
+.gmailList .mailRow.unread .mailParty{
+  color:#202124!important;
+  font-weight:700!important;
+}
+.gmailList .draftParty{
+  color:#d93025!important;
+  font-weight:600!important;
+}
+
+/* Subject and preview share one Gmail-like line */
+.gmailList .mailConversation{
+  min-width:0!important;
+  height:100%!important;
+  display:flex!important;
+  align-items:center!important;
+  overflow:hidden!important;
+  white-space:nowrap!important;
+  color:#3c4043!important;
+}
+.gmailList .mailSubject{
+  min-width:0!important;
+  max-width:58%!important;
+  flex:0 1 auto!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  color:#3c4043!important;
+  font-size:12px!important;
+  font-weight:500!important;
+  line-height:1.25!important;
+}
+.gmailList .mailRow.unread .mailSubject{
+  color:#202124!important;
+  font-weight:700!important;
+}
+.gmailList .mailSnippet{
+  min-width:36px!important;
+  flex:1 1 auto!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  color:#737982!important;
+  font-size:12px!important;
+  font-weight:400!important;
+  line-height:1.25!important;
+}
+.gmailList .mailRow.unread .mailSnippet{
+  color:#5f6368!important;
+}
+.gmailList .threadCount{
+  margin-left:5px!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  color:#70757a!important;
+  font-size:10px!important;
+  font-weight:500!important;
+  vertical-align:baseline!important;
+}
+
+/* Date and attachment column */
+.gmailList .mailRowMeta{
+  min-width:0!important;
+  height:100%!important;
+  gap:7px!important;
+  padding-left:6px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-end!important;
+  color:#5f6368!important;
+  transition:opacity .08s ease!important;
+}
+.gmailList .mailRowMeta time{
+  min-width:62px!important;
+  color:#5f6368!important;
+  font-size:10px!important;
+  font-weight:500!important;
+  line-height:1!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+}
+.gmailList .mailRow.unread .mailRowMeta time{
+  color:#202124!important;
+  font-weight:700!important;
+}
+.gmailList .rowAttachment{
+  width:13px!important;
+  height:13px!important;
+  flex:0 0 13px!important;
+  color:#70757a!important;
+  stroke-width:1.8!important;
+}
+
+/* Hover actions replace metadata in-place, without a pill background */
+.gmailList .rowActions{
+  right:8px!important;
+  top:50%!important;
+  transform:translateY(-50%)!important;
+  height:34px!important;
+  padding:0!important;
+  gap:1px!important;
+  border-radius:0!important;
+  background:#eaf1fb!important;
+  box-shadow:none!important;
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+  transition:opacity .08s ease!important;
+}
+.gmailList .mailRow.checked .rowActions{
+  background:#ffefb5!important;
+}
+.gmailList .rowActions button{
+  width:32px!important;
+  height:32px!important;
+  min-width:32px!important;
+  padding:0!important;
+  border-radius:50%!important;
+  display:grid!important;
+  place-items:center!important;
+  color:#5f6368!important;
+}
+.gmailList .rowActions button svg{
+  width:17px!important;
+  height:17px!important;
+  stroke-width:1.8!important;
+}
+.gmailList .rowActions button:hover{
+  background:#d9e3ef!important;
+  color:#202124!important;
+}
+.gmailList .rowActions button[title="В корзину"]:hover{
+  background:#fce8e6!important;
+  color:#b3261e!important;
+}
+.gmailList .mailRow.checked .rowActions button:hover{
+  background:#ffe89a!important;
+}
+.gmailList .mailRow:hover .rowActions,
+.gmailList .mailRow:focus-within .rowActions{
+  opacity:1!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+}
+.gmailList .mailRow:hover .mailRowMeta,
+.gmailList .mailRow:focus-within .mailRowMeta{
+  opacity:0!important;
+}
+
+/* Comfortable/compact density now affects only row height, not mobile cards */
+html[data-mail-density="compact"] .gmailList .messages .mailRow{
+  height:36px!important;
+  min-height:36px!important;
+}
+html[data-mail-density="compact"] .gmailList .mailParty{
+  line-height:36px!important;
+}
+html[data-mail-density="compact"] .gmailList .rowStar{
+  width:28px!important;
+  height:28px!important;
+}
+
+/* Large desktop: Gmail-like fixed sender zone */
+@media(min-width:1400px){
+  .gmailList .messages .mailRow{
+    grid-template-columns:34px 34px 220px minmax(0,1fr) 104px!important;
+    padding-left:14px!important;
+    padding-right:12px!important;
+  }
+  .gmailList .mailParty,
+  .gmailList .mailSubject,
+  .gmailList .mailSnippet{
+    font-size:13px!important;
+  }
+  .gmailList .mailRowMeta time{
+    font-size:11px!important;
+  }
+}
+@media(max-width:1150px) and (min-width:851px){
+  .gmailList .messages .mailRow{
+    grid-template-columns:30px 30px minmax(130px,160px) minmax(0,1fr) 86px!important;
+    padding-left:9px!important;
+    padding-right:8px!important;
+  }
+  .gmailList .mailParty{
+    padding-right:8px!important;
+  }
+  .gmailList .mailSubject{
+    max-width:52%!important;
+  }
+  .gmailList .mailRowMeta time{
+    min-width:54px!important;
+    font-size:9px!important;
+  }
+  .gmailList .rowActions{
+    right:6px!important;
+  }
+  .gmailList .rowActions button{
+    width:30px!important;
+    height:30px!important;
+    min-width:30px!important;
+  }
+}
+
+/* Mobile remains a two-line mail card, but cleaner and less bulky */
+@media(max-width:850px){
+  .gmailList .messages .mailRow,
+  html[data-mail-density="compact"] .gmailList .messages .mailRow{
+    min-height:64px!important;
+    height:auto!important;
+    padding:6px 8px!important;
+    grid-template-columns:24px 28px minmax(0,1fr) 58px!important;
+    grid-template-rows:24px 22px!important;
+    gap:0 3px!important;
+  }
+  .gmailList .mailCheck{
+    grid-column:1!important;
+    grid-row:1 / 3!important;
+    align-self:center!important;
+  }
+  .gmailList .rowStar{
+    grid-column:2!important;
+    grid-row:1 / 3!important;
+    align-self:center!important;
+  }
+  .gmailList .mailParty{
+    grid-column:3!important;
+    grid-row:1!important;
+    padding:0 6px 0 0!important;
+    font-size:12px!important;
+    line-height:24px!important;
+  }
+  html[data-mail-density="compact"] .gmailList .mailParty{
+    line-height:24px!important;
+  }
+  .gmailList .mailConversation{
+    grid-column:3 / 5!important;
+    grid-row:2!important;
+    height:22px!important;
+  }
+  .gmailList .mailSubject{
+    max-width:62%!important;
+    font-size:11px!important;
+  }
+  .gmailList .mailSnippet{
+    font-size:10px!important;
+  }
+  .gmailList .mailRowMeta{
+    grid-column:4!important;
+    grid-row:1!important;
+    height:24px!important;
+    padding-left:0!important;
+    gap:4px!important;
+  }
+  .gmailList .mailRowMeta time{
+    min-width:0!important;
+    font-size:9px!important;
+  }
+  .gmailList .rowAttachment{
+    display:none!important;
+  }
+  .gmailList .rowActions{
+    display:none!important;
+  }
+  .gmailList .mailRow:hover .mailRowMeta,
+  .gmailList .mailRow:focus-within .mailRowMeta{
+    opacity:1!important;
+  }
+}
