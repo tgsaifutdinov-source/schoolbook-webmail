@@ -16,7 +16,7 @@ export async function POST(req:NextRequest){
  const blocked=sameOriginGuard(req);if(blocked)return blocked;
  const token=(await getMailSession())?.token;
  if(!token)return NextResponse.json({error:"Unauthorized"},{status:401});
- const body=await req.json().catch(()=>({}));const to=String(body.to||""),cc=String(body.cc||""),bcc=String(body.bcc||""),subject=String(body.subject||""),text=String(body.text||""),html=String(body.html||""),attachments=Array.isArray(body.attachments)?body.attachments.slice(0,100):[],draftId=String(body.draftId||""),clientRequestId=String(body.clientRequestId||"").trim();
+ const body=await req.json().catch(()=>({}));const to=String(body.to||""),cc=String(body.cc||""),bcc=String(body.bcc||""),subject=String(body.subject||""),text=String(body.text||""),html=String(body.html||""),attachments=Array.isArray(body.attachments)?body.attachments.slice(0,100):[],inReplyTo=Array.isArray(body.inReplyTo)?body.inReplyTo.map((x:any)=>String(x||"")):[],references=Array.isArray(body.references)?body.references.map((x:any)=>String(x||"")):[],draftId=String(body.draftId||""),clientRequestId=String(body.clientRequestId||"").trim();
  if(clientRequestId&&!/^[A-Za-z0-9._:-]{8,160}$/.test(clientRequestId))return NextResponse.json({error:"Некорректный идентификатор отправки"},{status:400});
  if(subject.length>998||text.length>5_000_000||html.length>5_000_000)return NextResponse.json({error:"Письмо слишком большое"},{status:413});
  if(!to?.trim())return NextResponse.json({error:"Укажите получателя"},{status:400});
@@ -50,7 +50,7 @@ export async function POST(req:NextRequest){
 
  const addresses=(v:string)=>String(v||"").split(/[;,\n]+/).map((x:string)=>x.trim()).filter(Boolean).map((email:string)=>({email}));const valid=(email:string)=>/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(email);const recipients=addresses(to);
  const allRecipients=[...recipients,...addresses(cc),...addresses(bcc)];if(!recipients.length||allRecipients.some((x:any)=>!valid(x.email)))return NextResponse.json({error:"Проверьте адреса получателей"},{status:400});if(allRecipients.length>200)return NextResponse.json({error:"Слишком много получателей в одном письме"},{status:400});
- const email=buildJmapEmail({drafts,identity,to,cc,bcc,subject,text,html,attachments,includeFrom:true});
+ const email=buildJmapEmail({drafts,identity,to,cc,bcc,subject,text,html,attachments,inReplyTo,references,includeFrom:true});
  if(requestKey){
   const previous=sendRequests.get(requestKey);
   if(previous?.status==="sent"&&previous.response)return NextResponse.json({...previous.response,deduplicated:true});
