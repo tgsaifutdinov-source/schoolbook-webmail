@@ -8119,3 +8119,641 @@ html[data-mail-density="compact"] .gmailList .rowStar{
     padding:0 3px 16px 42px!important;
   }
 }
+
+
+/* Gmail visual system v14 — final shell and interaction polish */
+
+/* ===== Core rhythm / typography ===== */
+:root{
+  --gmail-focus:rgba(244,180,0,.42);
+  --gmail-hover:#f1f3f4;
+  --gmail-pressed:#e8eaed;
+  --gmail-danger:#b3261e;
+  --gmail-danger-bg:#fce8e6;
+  --gmail-shadow:0 8px 28px rgba(60,64,67,.22),0 2px 6px rgba(60,64,67,.12);
+}
+button,input,select,textarea,[contenteditable="true"]{
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+}
+button{
+  -webkit-tap-highlight-color:transparent!important;
+}
+button:focus{
+  outline:none!important;
+}
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[contenteditable="true"]:focus-visible{
+  outline:2px solid var(--gmail-focus)!important;
+  outline-offset:2px!important;
+}
+button:disabled{
+  cursor:default!important;
+}
+.gmailTopbar,
+.mailSidebar,
+.gmailList,
+.gmailReader,
+.composeWindow,
+.settingsDialog,
+.accountMenu,
+.searchOptions,
+.selectTypeMenu,
+.bulkMoreMenu,
+.moveMenu,
+.readerMoreMenu{
+  color:#202124!important;
+}
+
+/* ===== Unified icon button behavior ===== */
+.gmailTopbar button,
+.gmailMailboxBar>div>button,
+.gmailMailboxBar .mailbarMain>button,
+.gmailMailboxBar .mailbarPaging>button,
+.gmailReader .toolbar button,
+.composeHeadControls button,
+.conversationMeta button{
+  transition:background .08s ease,color .08s ease,box-shadow .08s ease!important;
+}
+.gmailTopbar button:active:not(:disabled),
+.gmailReader .toolbar button:active:not(:disabled),
+.gmailMailboxBar>div>button:active:not(:disabled),
+.gmailMailboxBar .mailbarMain>button:active:not(:disabled){
+  background:var(--gmail-pressed)!important;
+}
+
+/* ===== Topbar ===== */
+.gmailTopbar{
+  box-sizing:border-box!important;
+}
+.gmailTopbar .topbarLeft{
+  flex:0 0 256px!important;
+  width:256px!important;
+}
+.gmailTopbar .mainMenuButton{
+  width:40px!important;
+  height:40px!important;
+  min-width:40px!important;
+  border-radius:50%!important;
+}
+.gmailTopbar .brand{
+  min-width:0!important;
+  flex:1 1 auto!important;
+}
+.gmailTopbar .brandLogo{
+  width:142px!important;
+  max-width:142px!important;
+}
+.gmailTopbar .mailWord{
+  flex:0 0 auto!important;
+  white-space:nowrap!important;
+}
+.gmailTopbar .searchArea{
+  max-width:760px!important;
+}
+.gmailTopbar .search{
+  height:48px!important;
+  min-height:48px!important;
+  border:1px solid transparent!important;
+  border-radius:24px!important;
+  background:#eaf1fb!important;
+}
+.gmailTopbar .search:hover{
+  background:#e6eef9!important;
+}
+.gmailTopbar .search:focus-within{
+  border-color:#e1e5ea!important;
+  background:#fff!important;
+  box-shadow:0 1px 2px rgba(60,64,67,.18),0 1px 3px rgba(60,64,67,.12)!important;
+}
+.gmailTopbar .search input{
+  height:46px!important;
+  line-height:46px!important;
+  color:#202124!important;
+}
+.gmailTopbar .search input::placeholder{
+  color:#5f6368!important;
+  opacity:1!important;
+}
+.gmailTopbar .search button{
+  flex:0 0 auto!important;
+}
+.gmailTopbar .accountButton{
+  overflow:visible!important;
+}
+.gmailTopbar .accountButton .avatar{
+  border-radius:50%!important;
+  clip-path:circle(50%)!important;
+}
+
+/* ===== Sidebar ===== */
+.mailSidebar{
+  scrollbar-width:thin!important;
+  scrollbar-color:#dadce0 transparent!important;
+}
+.mailSidebar::-webkit-scrollbar{
+  width:8px!important;
+}
+.mailSidebar::-webkit-scrollbar-thumb{
+  border:2px solid transparent!important;
+  border-radius:8px!important;
+  background:#dadce0!important;
+  background-clip:padding-box!important;
+}
+.mailSidebar nav>button,
+.mailSidebar .folderMain{
+  position:relative!important;
+  min-width:0!important;
+  color:#3c4043!important;
+  transition:background .08s ease,color .08s ease!important;
+}
+.mailSidebar nav>button:hover,
+.mailSidebar .folderMain:hover,
+.mailSidebar .customFolderRow:hover{
+  background:#eaf1fb!important;
+}
+.mailSidebar nav>button.active,
+.mailSidebar .customFolderRow.active{
+  background:#fff0b7!important;
+  color:#3c2f00!important;
+}
+.mailSidebar nav>button.active:before,
+.mailSidebar .customFolderRow.active:before{
+  content:""!important;
+  position:absolute!important;
+  left:0!important;
+  top:7px!important;
+  bottom:7px!important;
+  width:3px!important;
+  border-radius:0 3px 3px 0!important;
+  background:#e5ad00!important;
+}
+.mailSidebar nav>button>span,
+.mailSidebar .folderMain>span{
+  flex:1 1 auto!important;
+  min-width:0!important;
+}
+.mailSidebar .folderTools{
+  z-index:2!important;
+  background:inherit!important;
+}
+.mailSidebar .folderTools button{
+  border-radius:50%!important;
+}
+.mailSidebar .folderTools button:hover{
+  background:#dce6f2!important;
+}
+
+/* ===== Toolbar: stop popup buttons inheriting circular toolbar rules ===== */
+.gmailMailboxBar{
+  overflow:visible!important;
+}
+.gmailMailboxBar .selectTypeMenu button,
+.gmailMailboxBar .bulkMoreMenu button,
+.gmailMailboxBar .moveMenu button{
+  width:100%!important;
+  min-width:0!important;
+  height:36px!important;
+  padding:0 14px!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:#3c4043!important;
+  font-size:11px!important;
+  font-weight:400!important;
+}
+.gmailMailboxBar .selectTypeMenu button:hover,
+.gmailMailboxBar .bulkMoreMenu button:hover,
+.gmailMailboxBar .moveMenu button:hover{
+  background:#f1f3f4!important;
+}
+.gmailMailboxBar .bulkMoreMenu button{
+  display:grid!important;
+  grid-template-columns:24px minmax(0,1fr)!important;
+  align-items:center!important;
+  justify-items:start!important;
+  column-gap:9px!important;
+}
+.gmailMailboxBar .bulkMoreMenu button svg{
+  grid-column:1!important;
+  width:16px!important;
+  height:16px!important;
+  justify-self:center!important;
+  color:#5f6368!important;
+}
+.gmailMailboxBar .bulkMoreMenu button span{
+  grid-column:2!important;
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+.gmailMailboxBar .moveMenu button,
+.gmailMailboxBar .selectTypeMenu button{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  text-align:left!important;
+}
+.selectTypeMenu,
+.bulkMoreMenu,
+.moveMenu,
+.readerMoreMenu{
+  overflow:hidden!important;
+  border:0!important;
+  border-radius:8px!important;
+  box-shadow:var(--gmail-shadow)!important;
+}
+
+/* ===== Mailbox filter strip ===== */
+.gmailMailboxTitle{
+  align-items:stretch!important;
+}
+.gmailMailboxContext{
+  align-items:center!important;
+}
+.gmailFilterChips{
+  scroll-snap-type:x proximity!important;
+}
+.gmailFilterChips button{
+  position:relative!important;
+  scroll-snap-align:start!important;
+  color:#5f6368!important;
+  font-weight:500!important;
+}
+.gmailFilterChips button:hover{
+  background:#f8f9fa!important;
+  color:#202124!important;
+}
+.gmailFilterChips button.active{
+  color:#202124!important;
+  font-weight:600!important;
+}
+
+/* ===== Message list ===== */
+.gmailList .messages{
+  scrollbar-width:thin!important;
+  scrollbar-color:#dadce0 transparent!important;
+}
+.gmailList .messages::-webkit-scrollbar{
+  width:10px!important;
+}
+.gmailList .messages::-webkit-scrollbar-thumb{
+  border:3px solid transparent!important;
+  border-radius:10px!important;
+  background:#dadce0!important;
+  background-clip:padding-box!important;
+}
+.gmailList .messages .mailRow{
+  position:relative!important;
+  isolation:isolate!important;
+}
+.gmailList .messages .mailRow:hover{
+  z-index:2!important;
+}
+.gmailList .messages .mailRow:focus-visible{
+  outline:2px solid var(--gmail-focus)!important;
+  outline-offset:-2px!important;
+}
+.gmailList .mailParty,
+.gmailList .mailSubject,
+.gmailList .mailSnippet{
+  line-height:1.25!important;
+}
+.gmailList .mailConversation{
+  gap:0!important;
+}
+.gmailList .mailSubject:after{
+  content:" - "!important;
+  color:#9aa0a6!important;
+  font-weight:400!important;
+}
+.gmailList .mailSubject:empty:after{
+  content:""!important;
+}
+.gmailList .rowActions{
+  padding-left:4px!important;
+  background:inherit!important;
+}
+.gmailList .rowActions button{
+  border-radius:50%!important;
+}
+.gmailList .rowActions button:hover{
+  background:#dfe7f0!important;
+}
+
+/* ===== Reader toolbar ===== */
+.gmailReader .toolbar{
+  overflow:visible!important;
+}
+.gmailReader .toolbar>div{
+  min-width:0!important;
+}
+.gmailReader .toolbar>div:first-child{
+  flex:1 1 auto!important;
+}
+.gmailReader .toolbar>div:last-child{
+  flex:0 0 auto!important;
+}
+.gmailReader .toolbar button{
+  flex:0 0 auto!important;
+}
+.gmailReader .toolbar .readerMove,
+.gmailReader .toolbar .readerMoreWrap{
+  position:relative!important;
+  flex:0 0 auto!important;
+}
+.gmailReader .moveMenu,
+.gmailReader .readerMoreMenu{
+  top:40px!important;
+  z-index:40!important;
+}
+.gmailReader .moveMenu button,
+.gmailReader .readerMoreMenu button{
+  width:100%!important;
+  min-width:0!important;
+  height:36px!important;
+  padding:0 14px!important;
+  border-radius:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  text-align:left!important;
+  background:#fff!important;
+  color:#3c4043!important;
+  font-size:11px!important;
+}
+.gmailReader .moveMenu button:hover,
+.gmailReader .readerMoreMenu button:hover{
+  background:#f1f3f4!important;
+}
+
+/* ===== Reader content ===== */
+.gmailConversation .subjectLine h2{
+  font-weight:400!important;
+}
+.conversationHeader{
+  min-width:0!important;
+}
+.conversationWho{
+  min-width:0!important;
+}
+.conversationWho>div{
+  min-width:0!important;
+}
+.conversationMeta{
+  align-self:flex-start!important;
+}
+.conversationMeta time{
+  line-height:30px!important;
+}
+.conversationMeta>svg{
+  flex:0 0 auto!important;
+}
+.conversationExpanded .body{
+  overflow-wrap:anywhere!important;
+}
+.conversationExpanded .mailText{
+  line-height:1.58!important;
+}
+.conversationReply button{
+  transition:background .08s ease,border-color .08s ease,box-shadow .08s ease!important;
+}
+.conversationReply button:active{
+  background:#e8eaed!important;
+}
+
+/* ===== Compose recipients: reserve real label lane so text never overlaps ===== */
+.composeWindow .recipientChipField{
+  display:grid!important;
+  grid-template-columns:64px minmax(0,1fr) auto!important;
+  align-items:start!important;
+  min-width:0!important;
+  padding:4px 8px 4px 12px!important;
+  column-gap:4px!important;
+}
+.composeWindow .recipientChipField>span{
+  grid-column:1!important;
+  width:auto!important;
+  min-width:0!important;
+  padding:0!important;
+  line-height:30px!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+.composeWindow .recipientChipEditor{
+  grid-column:2!important;
+  min-width:0!important;
+  width:100%!important;
+}
+.composeWindow .recipientExtras{
+  grid-column:3!important;
+  flex:0 0 auto!important;
+}
+.composeWindow .recipientChipEditor input{
+  min-width:80px!important;
+  width:auto!important;
+  max-width:100%!important;
+}
+.composeWindow .recipientChip{
+  flex:0 1 auto!important;
+  min-width:0!important;
+}
+.composeWindow .recipientChip b{
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+.composeWindow .recipientChipField .recipientSuggestions{
+  left:80px!important;
+}
+.composeWindow .composeSubject{
+  display:flex!important;
+  align-items:center!important;
+}
+.composeWindow .composeSubject input{
+  min-width:0!important;
+}
+
+/* ===== Compose footer / popovers ===== */
+.composeWindow .gmailComposeFoot{
+  overflow:visible!important;
+}
+.composeWindow .composeToolGroup{
+  min-width:0!important;
+}
+.composeWindow .composeEmojiWrap,
+.composeWindow .composeMoreWrap{
+  flex:0 0 auto!important;
+}
+.composeWindow .composeMoreMenu button{
+  display:grid!important;
+  grid-template-columns:24px minmax(0,1fr)!important;
+  align-items:center!important;
+  justify-items:start!important;
+  gap:9px!important;
+}
+.composeWindow .composeMoreMenu button svg{
+  grid-column:1!important;
+  justify-self:center!important;
+}
+.composeWindow .composeMoreMenu button span{
+  grid-column:2!important;
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+
+/* ===== Account / search / popup content ===== */
+.accountMenu,
+.gmailTopbar .searchOptions{
+  border:0!important;
+  box-shadow:var(--gmail-shadow)!important;
+}
+.accountMenu>button{
+  display:grid!important;
+  grid-template-columns:24px minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:9px!important;
+}
+.accountMenu>button svg{
+  justify-self:center!important;
+}
+.accountMenu>button span{
+  justify-self:start!important;
+}
+
+/* ===== Form control consistency ===== */
+.settingsDialog input,
+.settingsDialog textarea,
+.folderDialog input,
+.gmailTopbar .searchOptions select{
+  transition:border-color .08s ease,box-shadow .08s ease!important;
+}
+.settingsDialog input:focus,
+.settingsDialog textarea:focus,
+.folderDialog input:focus,
+.gmailTopbar .searchOptions select:focus{
+  border-color:#d4ac2d!important;
+  box-shadow:0 0 0 2px rgba(255,198,43,.15)!important;
+}
+
+/* ===== Dialog / snackbar motion ===== */
+.folderDialog,
+.dangerDialog,
+.shortcutDialog,
+.settingsDialog,
+.accountMenu,
+.searchOptions,
+.selectTypeMenu,
+.bulkMoreMenu,
+.moveMenu,
+.readerMoreMenu{
+  transform-origin:top right!important;
+}
+.undoToast,
+.toast,
+.offlineBanner{
+  letter-spacing:0!important;
+}
+
+/* ===== Responsive desktop ===== */
+@media(max-width:1180px) and (min-width:851px){
+  .gmailTopbar .topbarLeft{
+    width:204px!important;
+    flex-basis:204px!important;
+  }
+  .gmailTopbar .searchArea{
+    max-width:none!important;
+  }
+  .gmailMailboxBar{
+    padding-left:10px!important;
+    padding-right:8px!important;
+  }
+  .gmailMailboxContext{
+    min-width:86px!important;
+    max-width:120px!important;
+    flex-basis:120px!important;
+  }
+  .gmailFilterChips button{
+    padding-left:7px!important;
+    padding-right:7px!important;
+  }
+  .composeWindow .recipientChipField{
+    grid-template-columns:58px minmax(0,1fr) auto!important;
+  }
+  .composeWindow .recipientChipField .recipientSuggestions{
+    left:73px!important;
+  }
+}
+
+/* ===== Mobile ===== */
+@media(max-width:850px){
+  .gmailTopbar .topbarLeft{
+    width:40px!important;
+    flex-basis:40px!important;
+  }
+  .gmailTopbar .searchArea{
+    max-width:none!important;
+  }
+  .gmailMailboxTitle{
+    min-width:0!important;
+  }
+  .gmailFilterChips{
+    -webkit-overflow-scrolling:touch!important;
+  }
+  .gmailList .mailSubject:after{
+    content:" - "!important;
+  }
+  .composeWindow .recipientChipField{
+    grid-template-columns:58px minmax(0,1fr) auto!important;
+    padding-left:10px!important;
+  }
+  .composeWindow .recipientChipField .recipientSuggestions{
+    left:8px!important;
+    right:8px!important;
+  }
+  .composeWindow .recipientExtras{
+    gap:0!important;
+  }
+  .composeWindow .recipientExtras button{
+    padding:0 4px!important;
+  }
+  .accountMenu>button{
+    grid-template-columns:24px minmax(0,1fr)!important;
+  }
+}
+
+/* ===== Very narrow ===== */
+@media(max-width:430px){
+  .composeWindow .recipientChipField{
+    grid-template-columns:52px minmax(0,1fr) auto!important;
+    padding-left:8px!important;
+    padding-right:6px!important;
+  }
+  .composeWindow .recipientExtras button{
+    font-size:9px!important;
+    padding:0 3px!important;
+  }
+  .gmailFilterChips button{
+    min-width:auto!important;
+  }
+}
+
+/* ===== Reduced motion ===== */
+@media(prefers-reduced-motion:reduce){
+  *,
+  *:before,
+  *:after{
+    scroll-behavior:auto!important;
+    transition-duration:.001ms!important;
+    animation-duration:.001ms!important;
+    animation-iteration-count:1!important;
+  }
+}
