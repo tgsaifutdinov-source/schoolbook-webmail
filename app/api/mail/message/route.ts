@@ -13,6 +13,7 @@ export async function GET(req:NextRequest){
  const token=(await getMailSession())?.token;
  if(!token)return NextResponse.json({error:"Unauthorized"},{status:401});
  const id=req.nextUrl.searchParams.get("id");
+ const prefetch=req.nextUrl.searchParams.get("prefetch")==="1";
  if(!id)return NextResponse.json({error:"Missing id"},{status:400});
  const headers={Authorization:"Basic "+token,"content-type":"application/json"};
  const sr=await fetch("http://host.docker.internal:18080/jmap/session",{headers,cache:"no-store"});
@@ -22,7 +23,7 @@ export async function GET(req:NextRequest){
  if(!accountId)return NextResponse.json({error:"Mail account not found"},{status:404});
  const u=new URL(session.apiUrl);
  const endpoint="http://host.docker.internal:18080"+u.pathname+u.search;
- const body={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/get",{accountId,ids:[id],properties:MESSAGE_PROPERTIES,fetchTextBodyValues:true,fetchHTMLBodyValues:true,maxBodyValueBytes:2_000_000},"e"]]};
+ const body={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/get",{accountId,ids:[id],properties:MESSAGE_PROPERTIES,fetchTextBodyValues:true,fetchHTMLBodyValues:true,maxBodyValueBytes:prefetch?600_000:2_000_000},"e"]]};
  const r=await fetch(endpoint,{method:"POST",headers,body:JSON.stringify(body),cache:"no-store"});
  if(!r.ok)return NextResponse.json({error:"JMAP request failed"},{status:r.status});
  const d=await r.json();
@@ -41,7 +42,7 @@ export async function GET(req:NextRequest){
    const td=await tr.json();
    const emailIds:string[]=(td.methodResponses||[]).find((x:any)=>x[0]==="Thread/get")?.[1]?.list?.[0]?.emailIds||[];
    threadTotal=emailIds.length||1;
-   if(emailIds.length>1){
+   if(emailIds.length>1&&!prefetch){
     const newest=emailIds.slice(-THREAD_LIMIT);
     const limited=newest.includes(hit.id)?newest:[...emailIds.slice(-(THREAD_LIMIT-1)),hit.id];
     const ids=[...new Set(limited)].filter(emailId=>emailId!==hit.id);
@@ -63,5 +64,5 @@ export async function GET(req:NextRequest){
    console.warn("Thread details load failed",error);
   }
  }
- return NextResponse.json({...hit,thread,threadTotal,threadTruncated});
+ return NextResponse.json({...hit,thread,threadTotal,threadTruncated,_prefetched:prefetch});
 }
