@@ -12710,3 +12710,29 @@ body{
     pointer-events:auto!important;
   }
 }
+
+
+/* Gmail visual system v29 — recipient contact chip actions */
+.composeWindow .recipientChipIdentity{
+  min-width:0!important;
+  max-width:100%!important;
+  padding:0!important;
+  border:0!important;
+  background:transparent!important;
+  color:inherit!important;
+  font:inherit!important;
+  font-weight:600!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  text-align:left!important;
+}
+.composeWindow .recipientChipIdentity:hover{
+  text-decoration:underline!important;
+  text-underline-offset:2px!important;
+}
+.composeWindow .recipientChipIdentity:focus-visible{
+  outline:1px solid rgba(168,126,0,.45)!important;
+  outline-offset:1px!important;
+  border-radius:2px!important;
+}
