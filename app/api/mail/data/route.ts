@@ -50,7 +50,7 @@ export async function GET(req:NextRequest){
   const starred=req.nextUrl.searchParams.get("starred")==="1";
   let attachment=req.nextUrl.searchParams.get("attachment")==="1";
 
-  let effectiveMailboxId=mailboxId,preloadedMailboxes:any[]=[],invalidMailboxFilter=false,mailboxState="",emailState="";
+  let effectiveMailboxId=mailboxId,preloadedMailboxes:any[]=[],invalidMailboxFilter=false,mailboxState="",emailState="",queryState="",canCalculateQueryChanges=false;
   const needsMailboxLookup=!!effectiveMailboxId||!starred||!!search||!!parsed.ops.in?.length;
   if(needsMailboxLookup){
    const r=await stalwart(endpoint,auth.token,{method:"POST",body:JSON.stringify({
@@ -78,7 +78,7 @@ export async function GET(req:NextRequest){
   }
 
   if(invalidMailboxFilter){
-   return NextResponse.json({accountId,username:session.username,mailboxes:preloadedMailboxes,emails:[],position:0,total:0,nextPosition:0,hasMore:false,filteredTotal:0,selectedMailboxId:null,mailboxState,emailState});
+   return NextResponse.json({accountId,username:session.username,mailboxes:preloadedMailboxes,emails:[],position:0,total:0,nextPosition:0,hasMore:false,filteredTotal:0,selectedMailboxId:null,mailboxState,emailState,queryState:"",canCalculateQueryChanges:false});
   }
 
   const conditions:any[]=[];
@@ -133,7 +133,7 @@ export async function GET(req:NextRequest){
    for(const x of response.methodResponses||[]){
     if(x[0]==="error")return NextResponse.json({error:x[1]?.description||x[1]?.type||"JMAP error"},{status:400});
     if(x[0]==="Mailbox/get"){mailboxes=x[1].list||[];mailboxState=String(x[1]?.state||mailboxState)}
-    if(x[0]==="Email/query")query=x[1];
+    if(x[0]==="Email/query"){query=x[1];queryState=String(x[1]?.queryState||queryState);canCalculateQueryChanges=!!x[1]?.canCalculateChanges}
     if(x[0]==="Email/get"){list=x[1].list||[];emailState=String(x[1]?.state||emailState)}
    }
    const ids:string[]=query?.ids||[];
@@ -153,7 +153,7 @@ export async function GET(req:NextRequest){
     for(const x of response.methodResponses||[]){
      if(x[0]==="error")return NextResponse.json({error:x[1]?.description||x[1]?.type||"JMAP error"},{status:400});
      if(x[0]==="Mailbox/get"){mailboxes=x[1].list||[];mailboxState=String(x[1]?.state||mailboxState)}
-     if(x[0]==="Email/query")query=x[1];
+     if(x[0]==="Email/query"){query=x[1];queryState=String(x[1]?.queryState||queryState);canCalculateQueryChanges=!!x[1]?.canCalculateChanges}
      if(x[0]==="Email/get"){list=x[1].list||[];emailState=String(x[1]?.state||emailState)}
     }
     const ids:string[]=query?.ids||[];
@@ -201,7 +201,9 @@ export async function GET(req:NextRequest){
    filteredTotal:attachment?null:total,
    selectedMailboxId:effectiveMailboxId||null,
    emailState,
-   mailboxState
+   mailboxState,
+   queryState,
+   canCalculateQueryChanges
   });
  }catch(error){
   console.error("Mail data load failed",error);
