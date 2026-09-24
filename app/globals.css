@@ -4324,3 +4324,760 @@ html[data-mail-density="compact"] .gmailList .rowStar{
     opacity:1!important;
   }
 }
+
+
+/* Gmail visual system v7 — reader conversation layout */
+.gmailReader{
+  border:0!important;
+  border-radius:16px!important;
+  background:#fff!important;
+  box-shadow:0 1px 2px rgba(60,64,67,.08)!important;
+  overflow:hidden!important;
+}
+.gmailReader .toolbar{
+  position:sticky!important;
+  top:0!important;
+  z-index:20!important;
+  height:48px!important;
+  min-height:48px!important;
+  padding:0 12px!important;
+  border:0!important;
+  border-bottom:1px solid #edf0f2!important;
+  background:rgba(255,255,255,.96)!important;
+  backdrop-filter:blur(8px)!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+}
+.gmailReader .toolbar>div{
+  min-width:0!important;
+  height:100%!important;
+  gap:2px!important;
+  display:flex!important;
+  align-items:center!important;
+}
+.gmailReader .toolbar>div:first-child:after{
+  display:none!important;
+}
+.gmailReader .toolbar button{
+  width:36px!important;
+  height:36px!important;
+  min-width:36px!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:50%!important;
+  display:grid!important;
+  place-items:center!important;
+  color:#5f6368!important;
+  background:transparent!important;
+}
+.gmailReader .toolbar button:hover:not(:disabled){
+  background:#f1f3f4!important;
+  color:#202124!important;
+}
+.gmailReader .toolbar button:active:not(:disabled){
+  background:#e8eaed!important;
+}
+.gmailReader .toolbar button:disabled{
+  color:#bdc1c6!important;
+  opacity:1!important;
+}
+.gmailReader .toolbar button svg{
+  width:18px!important;
+  height:18px!important;
+  stroke-width:1.8!important;
+}
+.gmailReader .toolbar .backReader{
+  display:grid!important;
+  margin-right:6px!important;
+}
+.gmailReader .readerMove,
+.gmailReader .readerMoreWrap{
+  position:relative!important;
+  display:inline-flex!important;
+  align-items:center!important;
+}
+.gmailReader .readerNav{
+  margin-left:6px!important;
+  gap:0!important;
+}
+.gmailReader .readerNav>span{
+  min-width:72px!important;
+  margin:0 5px 0 2px!important;
+  color:#70757a!important;
+  font-size:11px!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+}
+.gmailReader .readerNav button{
+  width:34px!important;
+  height:34px!important;
+  min-width:34px!important;
+}
+.gmailReader .toolbar>div:last-child{
+  padding-left:8px!important;
+  margin-left:8px!important;
+  border-left:1px solid #e8eaed!important;
+}
+
+/* Main reader canvas */
+.gmailReader .letter,
+.gmailReader .gmailConversation{
+  width:100%!important;
+  max-width:1100px!important;
+  margin:0 auto!important;
+  padding:26px 42px 80px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+.gmailReader .gmailConversation{
+  padding-top:28px!important;
+}
+.gmailConversation .subjectLine{
+  padding:0 6px 24px 58px!important;
+}
+.gmailConversation .subjectLine>div{
+  min-width:0!important;
+  gap:10px!important;
+  display:flex!important;
+  align-items:center!important;
+  flex-wrap:wrap!important;
+}
+.gmailConversation .subjectLine h2{
+  min-width:0!important;
+  margin:0!important;
+  color:#202124!important;
+  font-size:22px!important;
+  font-weight:400!important;
+  line-height:1.28!important;
+  letter-spacing:-.25px!important;
+  overflow-wrap:anywhere!important;
+}
+.gmailConversation .conversationCount{
+  height:22px!important;
+  padding:0 8px!important;
+  border:0!important;
+  border-radius:11px!important;
+  background:#f1f3f4!important;
+  color:#5f6368!important;
+  font-size:10px!important;
+  font-weight:500!important;
+}
+
+/* Thread container: expanded mail is flat, older mails are compact rows */
+.conversationStack{
+  gap:0!important;
+}
+.conversationMessage{
+  overflow:visible!important;
+  border:0!important;
+  border-radius:0!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+.conversationMessage.expanded{
+  border-top:1px solid transparent!important;
+}
+.conversationMessage.collapsed{
+  margin:0 0 8px!important;
+  border:1px solid #e8eaed!important;
+  border-radius:8px!important;
+  cursor:pointer!important;
+}
+.conversationMessage.collapsed:hover{
+  border-color:#dadce0!important;
+  background:#f8f9fa!important;
+  box-shadow:0 1px 2px rgba(60,64,67,.14)!important;
+}
+.conversationMessage.collapsed:focus-visible{
+  outline:2px solid rgba(244,180,0,.35)!important;
+  outline-offset:1px!important;
+}
+
+/* Sender header */
+.conversationHeader{
+  min-height:58px!important;
+  padding:8px 6px!important;
+  gap:12px!important;
+  display:flex!important;
+  align-items:flex-start!important;
+}
+.conversationMessage.collapsed .conversationHeader{
+  min-height:56px!important;
+  padding:8px 10px!important;
+  align-items:center!important;
+}
+.conversationHeader .senderAvatar.big{
+  width:40px!important;
+  height:40px!important;
+  min-width:40px!important;
+  flex:0 0 40px!important;
+  border:0!important;
+  border-radius:50%!important;
+  background:var(--gmail-yellow-soft)!important;
+  color:#6f5400!important;
+  box-shadow:none!important;
+  font-size:13px!important;
+  font-weight:700!important;
+}
+.conversationWho{
+  min-width:0!important;
+  padding-top:1px!important;
+  flex:1 1 auto!important;
+}
+.conversationWho>div{
+  min-width:0!important;
+  gap:7px!important;
+  display:flex!important;
+  align-items:baseline!important;
+}
+.conversationWho b{
+  min-width:0!important;
+  max-width:100%!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  color:#202124!important;
+  font-size:13px!important;
+  font-weight:600!important;
+}
+.conversationWho>div>span{
+  min-width:0!important;
+  flex:1 1 auto!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  color:#70757a!important;
+  font-size:11px!important;
+  font-weight:400!important;
+}
+.conversationWho>small{
+  display:block!important;
+  max-width:100%!important;
+  margin-top:1px!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  color:#80868b!important;
+  font-size:10px!important;
+  line-height:1.25!important;
+}
+.conversationWho .recipientToggle{
+  width:auto!important;
+  max-width:560px!important;
+  height:22px!important;
+  margin:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:4px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:3px!important;
+  overflow:hidden!important;
+  color:#70757a!important;
+  background:transparent!important;
+  font-size:10px!important;
+  font-weight:400!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+.conversationWho .recipientToggle:hover{
+  color:#3c4043!important;
+  background:#f1f3f4!important;
+}
+.conversationWho .recipientToggle svg{
+  width:12px!important;
+  height:12px!important;
+  flex:0 0 12px!important;
+}
+
+/* Date / star controls */
+.conversationMeta{
+  min-width:max-content!important;
+  margin-left:auto!important;
+  gap:2px!important;
+  padding-left:10px!important;
+  display:flex!important;
+  align-items:center!important;
+  color:#70757a!important;
+  white-space:nowrap!important;
+}
+.conversationMeta time{
+  margin-right:4px!important;
+  color:#70757a!important;
+  font-size:10px!important;
+  font-weight:400!important;
+}
+.conversationMeta>svg{
+  width:13px!important;
+  height:13px!important;
+  margin-right:1px!important;
+  color:#70757a!important;
+}
+.conversationMeta button{
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+  padding:0!important;
+  border-radius:50%!important;
+  display:grid!important;
+  place-items:center!important;
+  color:#9aa0a6!important;
+}
+.conversationMeta button:hover{
+  background:#f1f3f4!important;
+  color:#5f6368!important;
+}
+.conversationMeta button:has(svg[fill="currentColor"]){
+  color:#f4b400!important;
+}
+.conversationMeta button svg{
+  width:16px!important;
+  height:16px!important;
+}
+
+/* Message details popover */
+.gmailReader .messageDetails{
+  top:48px!important;
+  left:0!important;
+  right:auto!important;
+  z-index:30!important;
+  min-width:380px!important;
+  max-width:min(560px,calc(100vw - 80px))!important;
+  padding:10px 0!important;
+  border:0!important;
+  border-radius:8px!important;
+  background:#fff!important;
+  box-shadow:0 8px 28px rgba(60,64,67,.24),0 2px 6px rgba(60,64,67,.12)!important;
+}
+.gmailReader .messageDetails>div{
+  min-height:28px!important;
+  padding:4px 14px!important;
+  gap:12px!important;
+}
+.gmailReader .messageDetails span{
+  width:58px!important;
+  flex:0 0 58px!important;
+  color:#80868b!important;
+  font-size:10px!important;
+}
+.gmailReader .messageDetails b{
+  min-width:0!important;
+  color:#3c4043!important;
+  font-size:10px!important;
+  font-weight:500!important;
+  overflow-wrap:anywhere!important;
+}
+
+/* Body aligns under sender text like Gmail */
+.conversationExpanded{
+  padding:0 8px 24px 58px!important;
+}
+.conversationExpanded .body{
+  min-height:110px!important;
+  margin:0!important;
+  padding:8px 0 14px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:#fff!important;
+  color:#202124!important;
+  font-size:14px!important;
+  line-height:1.6!important;
+  overflow:visible!important;
+}
+.conversationExpanded .mailText{
+  max-width:880px!important;
+  white-space:pre-wrap!important;
+  overflow-wrap:anywhere!important;
+}
+.conversationExpanded .body:has(.htmlMail){
+  overflow:hidden!important;
+  border-radius:0!important;
+}
+.conversationExpanded .htmlMail{
+  width:100%!important;
+  min-height:520px!important;
+  height:680px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:#fff!important;
+}
+.gmailReader .privacyBar{
+  min-height:34px!important;
+  margin:0 0 10px!important;
+  padding:5px 8px 5px 12px!important;
+  border:1px solid #f0dda0!important;
+  border-radius:4px!important;
+  background:#fff8df!important;
+  color:#5f4700!important;
+  font-size:10px!important;
+}
+.gmailReader .privacyBar button{
+  height:24px!important;
+  padding:0 8px!important;
+  border-radius:12px!important;
+  color:#725700!important;
+  font-size:10px!important;
+  font-weight:600!important;
+}
+.gmailReader .privacyBar button:hover{
+  background:#ffefb2!important;
+}
+
+/* Attachments */
+.conversationExpanded .attachmentGallery{
+  margin:14px 0 4px!important;
+  gap:8px!important;
+}
+.conversationExpanded .attachmentGallery button{
+  border:1px solid #dadce0!important;
+  border-radius:8px!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+.conversationExpanded .attachmentGallery button:hover{
+  border-color:#bdc1c6!important;
+  box-shadow:0 1px 2px rgba(60,64,67,.14)!important;
+}
+.conversationExpanded .attachment{
+  max-width:620px!important;
+  min-height:54px!important;
+  margin-top:8px!important;
+  padding:8px 10px!important;
+  border:1px solid #dadce0!important;
+  border-radius:8px!important;
+  background:#fff!important;
+}
+.conversationExpanded .attachment:hover{
+  border-color:#bdc1c6!important;
+  background:#f8f9fa!important;
+}
+.conversationExpanded .fileIcon{
+  width:34px!important;
+  height:34px!important;
+  border-radius:6px!important;
+  background:#f1f3f4!important;
+  color:#5f6368!important;
+}
+.conversationExpanded .fileIcon svg{
+  width:16px!important;
+  height:16px!important;
+}
+.conversationExpanded .attachment b{
+  color:#3c4043!important;
+  font-size:11px!important;
+  font-weight:600!important;
+}
+.conversationExpanded .attachment small{
+  color:#80868b!important;
+  font-size:9px!important;
+}
+.conversationExpanded .attachmentDownload{
+  color:#5f6368!important;
+  font-size:10px!important;
+  font-weight:600!important;
+}
+.conversationExpanded .attachmentDownload:hover{
+  color:#202124!important;
+  text-decoration:underline!important;
+}
+
+/* Gmail reply buttons */
+.conversationReply{
+  margin-top:22px!important;
+  padding-top:2px!important;
+  gap:8px!important;
+  display:flex!important;
+  flex-wrap:wrap!important;
+}
+.conversationReply button{
+  height:36px!important;
+  padding:0 14px!important;
+  border:1px solid #dadce0!important;
+  border-radius:18px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:7px!important;
+  background:#fff!important;
+  color:#3c4043!important;
+  font-size:11px!important;
+  font-weight:500!important;
+}
+.conversationReply button:first-child{
+  border-color:#dadce0!important;
+  background:#fff!important;
+  color:#3c4043!important;
+}
+.conversationReply button:hover{
+  border-color:#c5c9cf!important;
+  background:#f8f9fa!important;
+  box-shadow:0 1px 1px rgba(60,64,67,.10)!important;
+}
+.conversationReply button svg{
+  width:15px!important;
+  height:15px!important;
+  color:#5f6368!important;
+}
+
+/* Inline reply should feel embedded, not like another modal */
+.inlineReplyComposer{
+  max-width:760px!important;
+  margin-top:20px!important;
+  border:1px solid #dadce0!important;
+  border-radius:8px!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+.inlineReplyHead{
+  min-height:42px!important;
+  padding:6px 8px 6px 10px!important;
+  border-bottom:1px solid #f1f3f4!important;
+}
+.inlineReplyHead>span{
+  width:28px!important;
+  height:28px!important;
+  background:transparent!important;
+  color:#5f6368!important;
+}
+.inlineReplyHead b{
+  font-size:11px!important;
+  font-weight:600!important;
+}
+.inlineReplyHead small{
+  font-size:9px!important;
+  color:#80868b!important;
+}
+.inlineReplyComposer textarea{
+  min-height:150px!important;
+  padding:12px 14px!important;
+  color:#202124!important;
+  font-size:14px!important;
+  line-height:1.55!important;
+}
+.inlineReplyFoot{
+  height:48px!important;
+  padding:0 8px 0 12px!important;
+  border-top:0!important;
+}
+.inlineReplyFoot .send{
+  height:34px!important;
+  padding:0 16px!important;
+  border-radius:17px!important;
+  background:var(--gmail-yellow)!important;
+  color:#332900!important;
+  font-size:11px!important;
+  font-weight:700!important;
+}
+.inlineReplyFoot .send:hover:not(:disabled){
+  background:var(--gmail-yellow-hover)!important;
+}
+.inlineReplyFoot>button:not(.send){
+  width:32px!important;
+  min-width:32px!important;
+  height:32px!important;
+  border-radius:50%!important;
+}
+.inlineReplyFoot>button:not(.send):hover{
+  background:#f1f3f4!important;
+}
+
+/* Desktop scale */
+@media(min-width:1200px){
+  .gmailReader .letter,
+  .gmailReader .gmailConversation{
+    max-width:1180px!important;
+    padding-left:52px!important;
+    padding-right:52px!important;
+  }
+  .gmailConversation .subjectLine{
+    padding-left:60px!important;
+  }
+  .gmailConversation .subjectLine h2{
+    font-size:23px!important;
+  }
+  .conversationHeader{
+    gap:14px!important;
+  }
+  .conversationHeader .senderAvatar.big{
+    width:42px!important;
+    height:42px!important;
+    min-width:42px!important;
+    flex-basis:42px!important;
+  }
+  .conversationWho b{
+    font-size:13px!important;
+  }
+  .conversationMeta time{
+    font-size:11px!important;
+  }
+  .conversationExpanded{
+    padding-left:62px!important;
+  }
+  .conversationExpanded .body{
+    font-size:15px!important;
+  }
+}
+
+/* Mobile reader */
+@media(max-width:850px){
+  .gmailReader{
+    inset:58px 0 0!important;
+    border-radius:0!important;
+  }
+  .gmailReader .toolbar{
+    height:48px!important;
+    min-height:48px!important;
+    padding:0 6px!important;
+  }
+  .gmailReader .toolbar button{
+    width:34px!important;
+    height:34px!important;
+    min-width:34px!important;
+  }
+  .gmailReader .toolbar .backReader{
+    margin-right:2px!important;
+  }
+  .gmailReader .toolbar>div:first-child{
+    gap:0!important;
+  }
+  .gmailReader .toolbar>div:first-child .readerMove,
+  .gmailReader .toolbar>div:first-child .readerMoreWrap,
+  .gmailReader .toolbar>div:first-child .readerNav{
+    display:none!important;
+  }
+  .gmailReader .toolbar>div:last-child{
+    margin-left:0!important;
+    padding-left:0!important;
+    border-left:0!important;
+    gap:0!important;
+  }
+  .gmailReader .letter,
+  .gmailReader .gmailConversation{
+    max-width:none!important;
+    padding:16px 12px 82px!important;
+  }
+  .gmailReader .gmailConversation{
+    padding-top:16px!important;
+  }
+  .gmailConversation .subjectLine{
+    padding:0 4px 16px!important;
+  }
+  .gmailConversation .subjectLine h2{
+    font-size:19px!important;
+    line-height:1.3!important;
+  }
+  .gmailConversation .conversationCount{
+    height:20px!important;
+    font-size:9px!important;
+  }
+  .conversationMessage.collapsed{
+    margin-bottom:6px!important;
+    border-radius:8px!important;
+  }
+  .conversationHeader,
+  .conversationMessage.collapsed .conversationHeader{
+    min-height:56px!important;
+    padding:8px 4px!important;
+    gap:9px!important;
+  }
+  .conversationMessage.collapsed .conversationHeader{
+    padding-left:8px!important;
+    padding-right:8px!important;
+  }
+  .conversationHeader .senderAvatar.big{
+    width:36px!important;
+    height:36px!important;
+    min-width:36px!important;
+    flex-basis:36px!important;
+    font-size:11px!important;
+  }
+  .conversationWho b{
+    font-size:11px!important;
+  }
+  .conversationWho>div>span{
+    font-size:10px!important;
+  }
+  .conversationWho>small,
+  .conversationWho .recipientToggle,
+  .conversationMeta time{
+    font-size:9px!important;
+  }
+  .conversationWho .recipientToggle{
+    max-width:220px!important;
+  }
+  .conversationMeta{
+    gap:0!important;
+    padding-left:4px!important;
+  }
+  .conversationMeta>svg{
+    display:none!important;
+  }
+  .conversationMeta button{
+    width:28px!important;
+    height:28px!important;
+    min-width:28px!important;
+  }
+  .gmailReader .messageDetails{
+    position:fixed!important;
+    top:112px!important;
+    left:12px!important;
+    right:12px!important;
+    min-width:0!important;
+    max-width:none!important;
+  }
+  .conversationExpanded{
+    padding:0 4px 18px 45px!important;
+  }
+  .conversationExpanded .body{
+    padding-top:6px!important;
+    font-size:13px!important;
+  }
+  .conversationExpanded .htmlMail{
+    min-height:420px!important;
+    height:calc(100vh - 300px)!important;
+  }
+  .conversationReply{
+    display:none!important;
+  }
+  .gmailConversation>.mobileReplyBar{
+    display:flex!important;
+    position:sticky!important;
+    bottom:0!important;
+    z-index:12!important;
+    margin:22px -12px -82px!important;
+    padding:8px 10px max(8px,env(safe-area-inset-bottom))!important;
+    gap:6px!important;
+    border-top:1px solid #e8eaed!important;
+    background:rgba(255,255,255,.96)!important;
+    backdrop-filter:blur(8px)!important;
+  }
+  .gmailConversation>.mobileReplyBar button{
+    flex:1!important;
+    height:38px!important;
+    padding:0 8px!important;
+    border:1px solid #dadce0!important;
+    border-radius:19px!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:center!important;
+    gap:5px!important;
+    background:#fff!important;
+    color:#3c4043!important;
+    font-size:10px!important;
+    font-weight:500!important;
+  }
+  .gmailConversation>.mobileReplyBar button:active{
+    background:#f1f3f4!important;
+  }
+  .gmailConversation>.mobileReplyBar svg{
+    width:14px!important;
+    height:14px!important;
+  }
+  .inlineReplyComposer{
+    margin-left:-41px!important;
+    border-radius:8px!important;
+  }
+}
