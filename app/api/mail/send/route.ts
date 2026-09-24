@@ -3,11 +3,21 @@ import {sameOriginGuard} from "../../../../lib/security";
 import {buildJmapEmail} from "../../../../lib/jmap-email";
 import {NextRequest,NextResponse} from "next/server";
 
+type SendRecord={status:"processing"|"sent";expiresAt:number;response?:{ok:true,emailId:string}};
+declare global{var __schoolbookSendRequests:Map<string,SendRecord>|undefined}
+const sendRequests=globalThis.__schoolbookSendRequests||(globalThis.__schoolbookSendRequests=new Map<string,SendRecord>());
+function trimSendRequests(){
+ const now=Date.now();
+ for(const [key,value] of sendRequests)if(value.expiresAt<=now)sendRequests.delete(key);
+ while(sendRequests.size>2000){const first=sendRequests.keys().next().value as string|undefined;if(!first)break;sendRequests.delete(first)}
+}
+
 export async function POST(req:NextRequest){
  const blocked=sameOriginGuard(req);if(blocked)return blocked;
  const token=(await getMailSession())?.token;
  if(!token)return NextResponse.json({error:"Unauthorized"},{status:401});
- const body=await req.json().catch(()=>({}));const to=String(body.to||""),cc=String(body.cc||""),bcc=String(body.bcc||""),subject=String(body.subject||""),text=String(body.text||""),html=String(body.html||""),attachments=Array.isArray(body.attachments)?body.attachments.slice(0,100):[],draftId=String(body.draftId||"");
+ const body=await req.json().catch(()=>({}));const to=String(body.to||""),cc=String(body.cc||""),bcc=String(body.bcc||""),subject=String(body.subject||""),text=String(body.text||""),html=String(body.html||""),attachments=Array.isArray(body.attachments)?body.attachments.slice(0,100):[],draftId=String(body.draftId||""),clientRequestId=String(body.clientRequestId||"").trim();
+ if(clientRequestId&&!/^[A-Za-z0-9._:-]{8,160}$/.test(clientRequestId))return NextResponse.json({error:"Некорректный идентификатор отправки"},{status:400});
  if(subject.length>998||text.length>5_000_000||html.length>5_000_000)return NextResponse.json({error:"Письмо слишком большое"},{status:413});
  if(!to?.trim())return NextResponse.json({error:"Укажите получателя"},{status:400});
 
@@ -16,6 +26,12 @@ export async function POST(req:NextRequest){
  if(!sr.ok)return NextResponse.json({error:"Unauthorized"},{status:401});
  const s=await sr.json();
  const accountId=s.primaryAccounts?.["urn:ietf:params:jmap:mail"]||Object.keys(s.accounts||{})[0];
+ const requestKey=clientRequestId?String(accountId)+":"+clientRequestId:"";
+ trimSendRequests();
+ if(requestKey){
+  const previous=sendRequests.get(requestKey);
+  if(previous?.status==="sent"&&previous.response)return NextResponse.json({...previous.response,deduplicated:true});
+ }
  const u=new URL(s.apiUrl);
  const endpoint="http://host.docker.internal:18080"+u.pathname+u.search;
 
@@ -35,14 +51,21 @@ export async function POST(req:NextRequest){
  const addresses=(v:string)=>String(v||"").split(/[;,\n]+/).map((x:string)=>x.trim()).filter(Boolean).map((email:string)=>({email}));const valid=(email:string)=>/^[^\s@<>]+@[^\s@<>]+\.[^\s@<>]+$/.test(email);const recipients=addresses(to);
  const allRecipients=[...recipients,...addresses(cc),...addresses(bcc)];if(!recipients.length||allRecipients.some((x:any)=>!valid(x.email)))return NextResponse.json({error:"Проверьте адреса получателей"},{status:400});if(allRecipients.length>200)return NextResponse.json({error:"Слишком много получателей в одном письме"},{status:400});
  const email=buildJmapEmail({drafts,identity,to,cc,bcc,subject,text,html,attachments,includeFrom:true});
+ if(requestKey){
+  const previous=sendRequests.get(requestKey);
+  if(previous?.status==="sent"&&previous.response)return NextResponse.json({...previous.response,deduplicated:true});
+  if(previous?.status==="processing"&&previous.expiresAt>Date.now())return NextResponse.json({ok:false,pending:true},{status:202});
+  sendRequests.set(requestKey,{status:"processing",expiresAt:Date.now()+10*60*1000});
+ }
 
  const createBody={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",{accountId,create:{send:email}},"e"]]};
  const cr=await fetch(endpoint,{method:"POST",headers,body:JSON.stringify(createBody),cache:"no-store"});const cd=await cr.json();
  const created=cd.methodResponses?.find((x:any)=>x[0]==="Email/set");const emailError=created?.[1]?.notCreated?.send;const emailId=created?.[1]?.created?.send?.id;
- if(emailError||!emailId){console.error("JMAP Email/set failed",JSON.stringify(cd));return NextResponse.json({error:emailError?.description||"Не удалось создать письмо",type:emailError?.type||"jmapError",properties:emailError?.properties||[]},{status:400})}
+ if(emailError||!emailId){if(requestKey)sendRequests.delete(requestKey);console.error("JMAP Email/set failed",JSON.stringify(cd));return NextResponse.json({error:emailError?.description||"Не удалось создать письмо",type:emailError?.type||"jmapError",properties:emailError?.properties||[]},{status:400})}
  const submitBody={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail","urn:ietf:params:jmap:submission"],methodCalls:[["EmailSubmission/set",{accountId,create:{send:{identityId:identity.id,emailId}}},"s"]]};
  const rr=await fetch(endpoint,{method:"POST",headers,body:JSON.stringify(submitBody),cache:"no-store"});const sd=await rr.json();const submissionResult=sd.methodResponses?.find((x:any)=>x[0]==="EmailSubmission/set");const sendError=submissionResult?.[1]?.notCreated?.send;
- if(sendError||!submissionResult){console.error("JMAP EmailSubmission/set failed",JSON.stringify(sd));await fetch(endpoint,{method:"POST",headers,body:JSON.stringify({using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",{accountId,destroy:[emailId]},"cleanupFailedSend"]]}),cache:"no-store"}).catch(()=>null);return NextResponse.json({error:sendError?.description||"Не удалось отправить письмо",type:sendError?.type||"jmapError"},{status:400})}
+ if(sendError||!submissionResult){if(requestKey)sendRequests.delete(requestKey);console.error("JMAP EmailSubmission/set failed",JSON.stringify(sd));await fetch(endpoint,{method:"POST",headers,body:JSON.stringify({using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",{accountId,destroy:[emailId]},"cleanupFailedSend"]]}),cache:"no-store"}).catch(()=>null);return NextResponse.json({error:sendError?.description||"Не удалось отправить письмо",type:sendError?.type||"jmapError"},{status:400})}
+ if(requestKey)sendRequests.set(requestKey,{status:"sent",expiresAt:Date.now()+15*60*1000,response:{ok:true,emailId}});
 
  if(emailId&&sent){
   const patch:any={"keywords/$draft":null};
@@ -52,5 +75,5 @@ export async function POST(req:NextRequest){
  if(draftId&&draftId!==emailId){
   await fetch(endpoint,{method:"POST",headers,body:JSON.stringify({using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",{accountId,destroy:[draftId]},"cleanup"]]}),cache:"no-store"}).catch(()=>null);
  }
- return NextResponse.json({ok:true});
+ return NextResponse.json({ok:true,emailId});
 }
