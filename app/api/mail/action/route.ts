@@ -119,28 +119,58 @@ export async function POST(req:NextRequest){
   return NextResponse.json({ok:true,ids:messageIds});
  }
 
- const reversible=["archive","trash","move","spam","notSpam"].includes(action);
+ const reversible=["archive","trash","move","spam","notSpam","labelAdd","labelRemove"].includes(action);
  const restoreMap=reversible?await snapshotMailboxes(c,messageIds):{};
  let update:any={};
+ let perMessage:Record<string,any>|null=null;
 
  if(action==="read")update={"keywords/$seen":true};
  else if(action==="unread")update={"keywords/$seen":null};
  else if(action==="star")update={"keywords/$flagged":true};
  else if(action==="unstar")update={"keywords/$flagged":null};
- else if(action==="move"){
+ else if(action==="move"||action==="labelAdd"||action==="labelRemove"){
   const targetMailboxId=typeof body.targetMailboxId==="string"?body.targetMailboxId:"";
   if(!targetMailboxId)return NextResponse.json({error:"Missing target mailbox"},{status:400});
-  update={mailboxIds:{[targetMailboxId]:true}};
+  const md=await jmap(c,[["Mailbox/get",{accountId:c.accountId,ids:[targetMailboxId],properties:["id","role","name"]},"target"]]);
+  const target=md.methodResponses?.find((x:any)=>x[0]==="Mailbox/get")?.[1]?.list?.[0];
+  if(!target)return NextResponse.json({error:"Target mailbox not found"},{status:404});
+  if((action==="labelAdd"||action==="labelRemove")&&target.role)return NextResponse.json({error:"Only custom folders can be used as labels"},{status:400});
+  if(action==="labelAdd")update={["mailboxIds/"+targetMailboxId]:true};
+  else if(action==="labelRemove")update={["mailboxIds/"+targetMailboxId]:null};
+  else{
+   perMessage={};
+   for(const id of messageIds){
+    const next:MailboxMap={...(restoreMap[id]||{})};
+    if(mailboxScopeId&&mailboxScopeId!==targetMailboxId)delete next[mailboxScopeId];
+    next[targetMailboxId]=true;
+    perMessage[id]={mailboxIds:next};
+   }
+  }
  }else if(action==="archive"||action==="restore"||action==="trash"||action==="spam"||action==="notSpam"){
   const wanted=action==="archive"?"archive":action==="restore"||action==="notSpam"?"inbox":action==="spam"?"junk":"trash";
-  const d=await jmap(c,[["Mailbox/get",{accountId:c.accountId,properties:["id","role"]},"mailboxes"]]);
-  const target=d.methodResponses?.[0]?.[1]?.list?.find((x:any)=>x.role===wanted);
+  const md=await jmap(c,[["Mailbox/get",{accountId:c.accountId,properties:["id","role"]},"mailboxes"]]);
+  const list=md.methodResponses?.find((x:any)=>x[0]==="Mailbox/get")?.[1]?.list||[];
+  const target=list.find((x:any)=>x.role===wanted);
   if(!target)return NextResponse.json({error:"Target mailbox not found"},{status:404});
-  update={mailboxIds:{[target.id]:true}};
+  const roles=new Map<string,string>(list.filter((x:any)=>x.role).map((x:any)=>[String(x.id),String(x.role)]));
+  perMessage={};
+  for(const id of messageIds){
+   const next:MailboxMap={...(restoreMap[id]||{})};
+   if(action==="archive"){
+    for(const key of Object.keys(next))if(roles.get(key)==="inbox")delete next[key];
+   }else if(action==="restore"||action==="notSpam"){
+    for(const key of Object.keys(next))if(roles.get(key)==="trash"||roles.get(key)==="junk")delete next[key];
+   }else{
+    for(const key of Object.keys(next))if(roles.has(key))delete next[key];
+   }
+   next[String(target.id)]=true;
+   perMessage[id]={mailboxIds:next};
+  }
  }else return NextResponse.json({error:"Unknown action"},{status:400});
 
  for(const batch of chunks(messageIds)){
-  const d=await jmap(c,[["Email/set",{accountId:c.accountId,update:Object.fromEntries(batch.map(id=>[id,update]))},"update"]]);
+  const updates=perMessage?Object.fromEntries(batch.map(id=>[id,perMessage?.[id]||{}])):Object.fromEntries(batch.map(id=>[id,update]));
+  const d=await jmap(c,[["Email/set",{accountId:c.accountId,update:updates},"update"]]);
   const response=d.methodResponses?.[0];
   if(response?.[0]==="error"||Object.keys(response?.[1]?.notUpdated||{}).length)return NextResponse.json({error:"Update failed",details:response?.[1]},{status:400});
  }
