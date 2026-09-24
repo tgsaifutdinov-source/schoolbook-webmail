@@ -441,3 +441,25 @@
   animation:none;
  }
 }
+
+
+/* Login readability pass v2 */
+.authBrand>span,
+.authMobileBrand>span{font-size:13px!important}
+.authEyebrow{font-size:11px!important}
+.authIntroCopy p{font-size:15px!important;line-height:1.65!important}
+.authIntroFoot p{font-size:11px!important}
+.authCardHead h2{font-size:27px!important}
+.authCardHead p{font-size:13.5px!important}
+.authField>span{font-size:12px!important}
+.authInput input{font-size:14px!important}
+.authError{font-size:12px!important}
+.authSubmit{font-size:14px!important}
+.authCardFoot{font-size:11px!important}
+@media(max-width:760px){
+ .authCardHead h2{font-size:25px!important}
+ .authCardHead p{font-size:13.5px!important}
+ .authField>span{font-size:12px!important}
+ .authInput input{font-size:14px!important}
+ .authSubmit{font-size:14px!important}
+}
