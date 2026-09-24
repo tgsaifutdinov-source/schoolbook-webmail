@@ -3463,3 +3463,479 @@ html[data-mail-density="compact"] .messages article{min-height:66px;padding-top:
     font-size:13px!important;
   }
 }
+
+
+/* Gmail visual system v5 — mailbox toolbar and tabs */
+.gmailMailboxBar{
+  height:48px!important;
+  min-height:48px!important;
+  padding:0 10px 0 12px!important;
+  border-bottom:0!important;
+  background:#fff!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+}
+.mailbarMain{
+  min-width:0!important;
+  height:100%!important;
+  gap:4px!important;
+  display:flex!important;
+  align-items:center!important;
+}
+.gmailMailboxBar button{
+  width:36px!important;
+  height:36px!important;
+  min-width:36px!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:50%!important;
+  display:grid!important;
+  place-items:center!important;
+  color:#5f6368!important;
+  background:transparent!important;
+}
+.gmailMailboxBar button:hover:not(:disabled){
+  background:#f1f3f4!important;
+  color:#3c4043!important;
+}
+.gmailMailboxBar button:active:not(:disabled){
+  background:#e8eaed!important;
+}
+.gmailMailboxBar button:disabled{
+  color:#bdc1c6!important;
+  opacity:1!important;
+  cursor:default!important;
+}
+.gmailMailboxBar button svg{
+  width:18px!important;
+  height:18px!important;
+  stroke-width:1.8!important;
+}
+.gmailSelectControl{
+  position:relative!important;
+  height:36px!important;
+  margin-right:2px!important;
+  display:flex!important;
+  align-items:center!important;
+}
+.gmailSelectControl .toolbarCheck{
+  width:30px!important;
+  min-width:30px!important;
+  height:36px!important;
+  border-radius:18px 0 0 18px!important;
+}
+.gmailSelectControl .selectCaret{
+  width:20px!important;
+  min-width:20px!important;
+  height:36px!important;
+  border-radius:0 18px 18px 0!important;
+}
+.gmailSelectControl .toolbarCheck:hover,
+.gmailSelectControl .selectCaret:hover{
+  background:#f1f3f4!important;
+}
+.gmailSelectControl .toolbarCheck>span{
+  width:14px!important;
+  height:14px!important;
+  border:2px solid #6f7378!important;
+  border-radius:2px!important;
+  background:#fff!important;
+}
+.gmailSelectControl .toolbarCheck>span.checkOn,
+.gmailSelectControl .toolbarCheck>span.checkSome{
+  border-color:#c89600!important;
+  background:var(--gmail-yellow)!important;
+}
+.gmailSelectControl .toolbarCheck>span.checkOn:after{
+  left:3px!important;
+  top:0!important;
+  width:4px!important;
+  height:7px!important;
+  border-right-width:2px!important;
+  border-bottom-width:2px!important;
+}
+.gmailSelectControl .toolbarCheck>span.checkSome:after{
+  left:2px!important;
+  right:2px!important;
+  top:4px!important;
+  height:2px!important;
+}
+.gmailSelectControl .selectCaret svg{
+  width:10px!important;
+  height:10px!important;
+  stroke-width:2!important;
+}
+.gmailMailboxBar .mailbarIcon{
+  margin-left:1px!important;
+}
+.mailbarBulk{
+  min-width:0!important;
+  height:100%!important;
+  gap:2px!important;
+  display:flex!important;
+  align-items:center!important;
+}
+.mailbarBulk>span{
+  max-width:100px!important;
+  margin:0 6px 0 2px!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  color:#5f6368!important;
+  font-size:11px!important;
+  font-weight:500!important;
+}
+.mailbarBulk .readerMove,
+.mailbarBulk .bulkMoreWrap{
+  position:relative!important;
+  display:inline-flex!important;
+  align-items:center!important;
+}
+.mailbarBulk button[title="Удалить навсегда"],
+.mailbarBulk button[title="В корзину"]{
+  color:#5f6368!important;
+}
+.mailbarBulk button[title="Удалить навсегда"]:hover,
+.mailbarBulk button[title="В корзину"]:hover{
+  color:#b3261e!important;
+  background:#fce8e6!important;
+}
+.mailbarBulk button[title="В спам"]:hover{
+  color:#8a6400!important;
+  background:#fff3c4!important;
+}
+.selectTypeMenu,
+.bulkMoreMenu,
+.moveMenu{
+  border:0!important;
+  border-radius:8px!important;
+  background:#fff!important;
+  box-shadow:0 8px 28px rgba(60,64,67,.22),0 2px 6px rgba(60,64,67,.12)!important;
+}
+.selectTypeMenu{
+  top:40px!important;
+  left:0!important;
+  width:180px!important;
+  padding:6px 0!important;
+}
+.selectTypeMenu button{
+  width:100%!important;
+  height:36px!important;
+  min-width:0!important;
+  padding:0 16px!important;
+  border-radius:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  color:#3c4043!important;
+  font-size:12px!important;
+  font-weight:400!important;
+}
+.selectTypeMenu button:hover{
+  background:#f1f3f4!important;
+}
+.bulkMoreMenu,
+.moveMenu{
+  top:40px!important;
+  padding:6px 0!important;
+}
+.bulkMoreMenu{
+  width:230px!important;
+}
+.moveMenu{
+  min-width:210px!important;
+}
+.bulkMoreMenu button,
+.moveMenu button{
+  width:100%!important;
+  min-width:0!important;
+  height:36px!important;
+  padding:0 14px!important;
+  border-radius:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:10px!important;
+  color:#3c4043!important;
+  font-size:11px!important;
+}
+.bulkMoreMenu button:hover,
+.moveMenu button:hover{
+  background:#f1f3f4!important;
+}
+.bulkMoreMenu button svg{
+  width:16px!important;
+  height:16px!important;
+  color:#5f6368!important;
+}
+
+/* Gmail-like paging cluster */
+.mailbarPaging{
+  height:100%!important;
+  gap:0!important;
+  display:flex!important;
+  align-items:center!important;
+}
+.mailbarPaging>span{
+  min-width:0!important;
+  margin-right:6px!important;
+  color:#5f6368!important;
+  font-size:11px!important;
+  font-weight:400!important;
+  white-space:nowrap!important;
+}
+.mailbarPaging button{
+  width:34px!important;
+  min-width:34px!important;
+  height:34px!important;
+}
+.mailbarPaging button svg{
+  width:17px!important;
+  height:17px!important;
+}
+
+/* Secondary strip: closer to Gmail tabs than filter pills */
+.gmailMailboxTitle{
+  height:44px!important;
+  min-height:44px!important;
+  padding:0 14px 0 18px!important;
+  gap:14px!important;
+  border-top:1px solid #f1f3f4!important;
+  border-bottom:1px solid #e8eaed!important;
+  background:#fff!important;
+  display:flex!important;
+  align-items:stretch!important;
+  justify-content:flex-start!important;
+}
+.gmailMailboxContext{
+  min-width:118px!important;
+  max-width:190px!important;
+  padding-right:6px!important;
+  display:flex!important;
+  flex:0 0 auto!important;
+  align-items:center!important;
+  gap:6px!important;
+}
+.gmailMailboxContext h1{
+  margin:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  color:#3c4043!important;
+  font-size:12px!important;
+  font-weight:600!important;
+  line-height:1!important;
+  white-space:nowrap!important;
+}
+.gmailMailboxContext>span{
+  display:none!important;
+}
+.gmailFilterChips{
+  min-width:0!important;
+  height:100%!important;
+  flex:1 1 auto!important;
+  gap:0!important;
+  display:flex!important;
+  align-items:stretch!important;
+  justify-content:flex-start!important;
+  overflow-x:auto!important;
+  scrollbar-width:none!important;
+}
+.gmailFilterChips::-webkit-scrollbar{
+  display:none!important;
+}
+.gmailFilterChips button{
+  position:relative!important;
+  height:100%!important;
+  min-width:0!important;
+  padding:0 14px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  color:#5f6368!important;
+  font-size:11px!important;
+  font-weight:500!important;
+  white-space:nowrap!important;
+}
+.gmailFilterChips button:hover{
+  background:#f7f8f9!important;
+  color:#3c4043!important;
+}
+.gmailFilterChips button.active{
+  background:transparent!important;
+  color:#3c4043!important;
+  font-weight:700!important;
+}
+.gmailFilterChips button.active:after{
+  content:""!important;
+  position:absolute!important;
+  left:10px!important;
+  right:10px!important;
+  bottom:0!important;
+  height:3px!important;
+  border-radius:3px 3px 0 0!important;
+  background:var(--gmail-yellow)!important;
+}
+.gmailFilterChips .sortChip{
+  margin-left:4px!important;
+  padding-right:10px!important;
+  gap:4px!important;
+  display:flex!important;
+  align-items:center!important;
+}
+.gmailFilterChips .sortChip:after{
+  display:none!important;
+}
+.gmailFilterChips .sortChip svg{
+  width:12px!important;
+  height:12px!important;
+  opacity:.75!important;
+}
+
+/* Search-filter strip */
+.gmailList .activeSearchFilters{
+  min-height:36px!important;
+  padding:4px 14px 4px 18px!important;
+  gap:6px!important;
+  border-bottom:1px solid #e8eaed!important;
+  background:#fff!important;
+  display:flex!important;
+  align-items:center!important;
+}
+.gmailList .activeSearchFilters button{
+  height:26px!important;
+  padding:0 8px 0 10px!important;
+  border:1px solid #dadce0!important;
+  border-radius:13px!important;
+  background:#fff!important;
+  color:#3c4043!important;
+  font-size:10px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:5px!important;
+}
+.gmailList .activeSearchFilters button:hover{
+  background:#f8f9fa!important;
+}
+.gmailList .activeSearchFilters button svg{
+  width:12px!important;
+  height:12px!important;
+}
+
+/* Selection banner */
+.gmailList .selectAllResults{
+  min-height:36px!important;
+  padding:0 14px!important;
+  border-bottom:1px solid #f0dda0!important;
+  background:#fff8df!important;
+  color:#5f4700!important;
+  font-size:11px!important;
+}
+.gmailList .selectAllResults button{
+  height:28px!important;
+  padding:0 10px!important;
+  border-radius:14px!important;
+  color:#735700!important;
+  font-size:11px!important;
+  font-weight:600!important;
+}
+.gmailList .selectAllResults button:hover{
+  background:#ffefb2!important;
+}
+
+/* Keep message list visually attached to toolbar */
+.gmailList .messages{
+  border-top:0!important;
+}
+.gmailList .messages .mailRow:first-child{
+  border-top:0!important;
+}
+
+@media(min-width:1200px){
+  .gmailMailboxBar{
+    padding-left:14px!important;
+    padding-right:14px!important;
+  }
+  .mailbarBulk>span,
+  .mailbarPaging>span{
+    font-size:12px!important;
+  }
+  .gmailMailboxContext h1,
+  .gmailFilterChips button{
+    font-size:12px!important;
+  }
+}
+@media(max-width:1000px) and (min-width:851px){
+  .mailbarBulk>span{
+    display:none!important;
+  }
+  .gmailMailboxContext{
+    min-width:94px!important;
+    max-width:130px!important;
+  }
+  .gmailFilterChips button{
+    padding:0 10px!important;
+    font-size:10px!important;
+  }
+}
+@media(max-width:850px){
+  .gmailMailboxBar{
+    height:44px!important;
+    min-height:44px!important;
+    padding:0 6px!important;
+  }
+  .gmailMailboxBar button{
+    width:32px!important;
+    min-width:32px!important;
+    height:32px!important;
+  }
+  .gmailSelectControl{
+    height:32px!important;
+  }
+  .gmailSelectControl .toolbarCheck{
+    height:32px!important;
+    width:27px!important;
+    min-width:27px!important;
+  }
+  .gmailSelectControl .selectCaret{
+    height:32px!important;
+    width:18px!important;
+    min-width:18px!important;
+  }
+  .mailbarBulk>span{
+    display:none!important;
+  }
+  .mailbarPaging>span{
+    display:none!important;
+  }
+  .selectTypeMenu{
+    position:fixed!important;
+    top:103px!important;
+    left:8px!important;
+    width:180px!important;
+  }
+  .gmailMailboxTitle{
+    height:42px!important;
+    min-height:42px!important;
+    padding:0 6px 0 10px!important;
+    gap:4px!important;
+  }
+  .gmailMailboxContext{
+    min-width:0!important;
+    max-width:88px!important;
+  }
+  .gmailMailboxContext h1{
+    font-size:11px!important;
+  }
+  .gmailFilterChips button{
+    padding:0 8px!important;
+    font-size:10px!important;
+  }
+  .gmailFilterChips button.active:after{
+    left:6px!important;
+    right:6px!important;
+  }
+  .gmailFilterChips .sortChip{
+    margin-left:0!important;
+  }
+}
