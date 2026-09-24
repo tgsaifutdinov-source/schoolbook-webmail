@@ -40,5 +40,5 @@ export async function GET(req:NextRequest){
   const data=Buffer.from(await r.arrayBuffer());total+=data.length;if(total>MAX_TOTAL_BYTES)return NextResponse.json({error:"Суммарный размер вложений превышает 50 МБ"},{status:413});files.push({name,data});
  }
  const zip=makeZip(files),base=safeName(String(mail.subject||"attachments"),"attachments").replace(/\.zip$/i,""),filename=(base||"attachments")+".zip",encoded=encodeURIComponent(filename);
- return new NextResponse(new Uint8Array(zip),{status:200,headers:{"content-type":"application/zip","content-disposition":"attachment; filename=\"attachments.zip\"; filename*=UTF-8''"+encoded,"content-length":String(zip.length),"cache-control":"private, no-store","x-content-type-options":"nosniff"}});
+ return new NextResponse(new Uint8Array(zip),{status:200,headers:{"content-type":"application/zip","content-disposition":"attachment; filename=\"attachments.zip\"; filename*=UTF-8''"+encoded,"content-length":String(zip.length),"cache-control":"private, no-store","x-content-type-options":"nosniff","x-download-options":"noopen","cross-origin-resource-policy":"same-origin","referrer-policy":"no-referrer","content-security-policy":"default-src 'none'; sandbox"}});
 }
