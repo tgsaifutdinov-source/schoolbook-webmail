@@ -9,6 +9,7 @@ function sanitizeComposerHtml(value:string){
   const closing=!!match[1],tag=match[2].toLowerCase();if(!allowed.has(tag))return "";
   if(closing)return tag==="br"?"":`</${tag}>`;
   if(tag==="br")return "<br>";
+  if(tag==="div"&&/\bdata-sb-quote\s*=\s*(?:"1"|\'1\'|1)/i.test(match[3]||""))return `<div data-sb-quote="1">`;
   if(tag==="a"){
    const hrefMatch=/\bhref\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+))/i.exec(match[3]||"");
    const href=(hrefMatch?.[1]||hrefMatch?.[2]||hrefMatch?.[3]||"").trim();
@@ -24,6 +25,10 @@ function sanitizeComposerHtml(value:string){
 
 function addresses(value:string):Address[]{
  return String(value||"").split(/[;,\n]+/).map(v=>v.trim()).filter(Boolean).map(email=>({email}));
+}
+function messageIds(values?:string[]){
+ const seen=new Set<string>();
+ return (Array.isArray(values)?values:[]).map(v=>String(v||"").trim()).filter(v=>v&&!/[\r\n]/.test(v)&&v.length<=998).filter(v=>{const key=v.toLowerCase();if(seen.has(key))return false;seen.add(key);return true}).slice(0,100);
 }
 function attachmentPart(a:Attachment,_index:number){
  return {
@@ -43,11 +48,14 @@ export function buildJmapEmail(input:{
  text?:string;
  html?:string;
  attachments?:Attachment[];
+ inReplyTo?:string[];
+ references?:string[];
  includeFrom?:boolean;
 }){
  const seen=new Set<string>();const unique=(items:Address[])=>items.filter(a=>{const key=a.email.toLowerCase();if(seen.has(key))return false;seen.add(key);return true});
  const to=unique(addresses(input.to||"")),cc=unique(addresses(input.cc||"")),bcc=unique(addresses(input.bcc||""));
  const attachments=(input.attachments||[]).filter(a=>a&&typeof a.blobId==="string"&&a.blobId).slice(0,100);
+ const inReplyTo=messageIds(input.inReplyTo),references=messageIds(input.references);
  const html=sanitizeComposerHtml(input.html||"").trim();
  const textPart={partId:"text",type:"text/plain"};
  const htmlPart={partId:"html",type:"text/html"};
@@ -69,6 +77,8 @@ export function buildJmapEmail(input:{
   }
  };
  if(input.includeFrom)email.from=from;
+ if(inReplyTo.length)email.inReplyTo=inReplyTo;
+ if(references.length)email.references=references;
  if(to.length)email.to=to;
  if(cc.length)email.cc=cc;
  if(bcc.length)email.bcc=bcc;
