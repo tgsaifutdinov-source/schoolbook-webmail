@@ -11,7 +11,7 @@ async function stalwart(path:string,token:string,init?:RequestInit){
 
 function parseMailSearch(input:string){
  const ops:Record<string,string[]>={};
- const re=/\b(from|to|cc|bcc|subject|has|is|after|before|newer_than|older_than|larger|smaller|in):(?:"([^"]+)"|(\S+))/gi;
+ const re=/\b(from|to|cc|bcc|contact|subject|has|is|after|before|newer_than|older_than|larger|smaller|in):(?:"([^"]+)"|(\S+))/gi;
  const free=input.replace(re,(_all,key:string,quoted:string,bare:string)=>{(ops[key.toLowerCase()]||=[]).push((quoted||bare||"").trim());return " "}).replace(/\s+/g," ").trim();
  return {ops,free};
 }
@@ -87,6 +87,7 @@ export async function GET(req:NextRequest){
   for(const value of parsed.ops.to||[])if(value)conditions.push({to:value});
   for(const value of parsed.ops.cc||[])if(value)conditions.push({cc:value});
   for(const value of parsed.ops.bcc||[])if(value)conditions.push({bcc:value});
+  for(const value of parsed.ops.contact||[])if(value)conditions.push({operator:"OR",conditions:[{from:value},{to:value},{cc:value},{bcc:value}]});
   for(const value of parsed.ops.subject||[])if(value)conditions.push({subject:value});
   if(parsed.free){
    if(["from","to","subject","body"].includes(scope))conditions.push({[scope]:parsed.free});
