@@ -14659,3 +14659,239 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
   .gmailFilterChips button{font-size:10px!important}
   .gmailConversation>.mobileReplyBar button{font-size:10px!important;padding:0 5px!important}
 }
+
+
+/* Gmail visual system v34 — overflow and recipient cleanup */
+
+/* Sidebar counters: plain quiet numbers, never badge-like. */
+.mailSidebar nav>button em,
+.mailSidebar .folderMain em{
+  margin-left:auto!important;
+  min-width:0!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:#7a838e!important;
+  font-size:11px!important;
+  font-weight:600!important;
+  font-style:normal!important;
+  line-height:1!important;
+  font-variant-numeric:tabular-nums!important;
+  opacity:.9!important;
+}
+.mailSidebar nav>button.active em,
+.mailSidebar .customFolderRow.active .folderMain em{
+  color:#6f5600!important;
+}
+
+/* The hover-expanded rail remains scrollable but never shows an ugly inner scrollbar. */
+@media(min-width:851px){
+  .workspace.sidebarCollapsed .mailSidebar{
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+    scrollbar-width:none!important;
+    -ms-overflow-style:none!important;
+    max-width:min(250px,calc(100vw - 8px))!important;
+  }
+  .workspace.sidebarCollapsed .mailSidebar::-webkit-scrollbar{
+    width:0!important;
+    height:0!important;
+    display:none!important;
+  }
+  .workspace.sidebarCollapsed .mailSidebar:hover,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within{
+    width:min(250px,calc(100vw - 8px))!important;
+    min-width:min(250px,calc(100vw - 8px))!important;
+  }
+}
+
+/* Recipient chips: show the whole address/name. Wrap instead of ellipsis. */
+.composeWindow .recipientChipEditor{
+  min-width:0!important;
+  flex:1 1 auto!important;
+  align-content:flex-start!important;
+  overflow:visible!important;
+}
+.composeWindow .recipientChip{
+  width:auto!important;
+  max-width:100%!important;
+  min-width:0!important;
+  height:auto!important;
+  min-height:28px!important;
+  padding:2px 3px 2px 9px!important;
+  flex:0 1 auto!important;
+  align-items:center!important;
+  overflow:visible!important;
+}
+.composeWindow .recipientChipIdentity{
+  width:auto!important;
+  max-width:calc(100% - 25px)!important;
+  min-width:0!important;
+  height:auto!important;
+  padding:2px 0!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  word-break:break-word!important;
+  line-height:1.35!important;
+  text-align:left!important;
+  font-size:12px!important;
+}
+.composeWindow .recipientChip b{
+  max-width:none!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  white-space:normal!important;
+  overflow-wrap:anywhere!important;
+  word-break:break-word!important;
+  font-size:12px!important;
+}
+.composeWindow .recipientChip>button:last-child{
+  flex:0 0 21px!important;
+  align-self:center!important;
+}
+.composeWindow .recipientChipField{
+  overflow:visible!important;
+}
+.composeWindow .recipientChipField.hasChips{
+  min-height:43px!important;
+}
+
+/* Contact suggestions should also show complete normal addresses on desktop. */
+@media(min-width:851px){
+  .composeWindow .contactName,
+  .composeWindow .contactEmail{
+    overflow:visible!important;
+    text-overflow:clip!important;
+    white-space:normal!important;
+    overflow-wrap:anywhere!important;
+  }
+  .composeWindow .recipientSuggestion{
+    height:auto!important;
+    min-height:48px!important;
+  }
+}
+
+/* Inline reply: hard containment inside the reader at every width. */
+.gmailReader,
+.gmailReader .letter,
+.gmailReader .gmailConversation,
+.conversationStack,
+.conversationMessage,
+.conversationExpanded{
+  min-width:0!important;
+  box-sizing:border-box!important;
+}
+.conversationExpanded{
+  overflow-x:hidden!important;
+}
+.conversationExpanded .inlineReplyComposer,
+.inlineReplyComposer{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  margin-left:0!important;
+  margin-right:0!important;
+  box-sizing:border-box!important;
+  overflow:hidden!important;
+}
+.inlineReplyHead,
+.inlineReplyEditor,
+.inlineReplyFormatBar,
+.inlineReplyFiles,
+.inlineReplyFoot,
+.inlineReplyComposer .composeQuoteBlock{
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+}
+.inlineReplyHead{
+  flex-wrap:nowrap!important;
+}
+.inlineReplyHead>div{
+  min-width:0!important;
+  overflow:hidden!important;
+}
+.inlineReplyHead small{
+  display:block!important;
+  max-width:100%!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+.inlineReplyIdentity{
+  min-width:0!important;
+  max-width:min(210px,30%)!important;
+  flex:0 1 210px!important;
+}
+.inlineReplyEditor{
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  overflow-wrap:anywhere!important;
+  word-break:break-word!important;
+}
+.inlineReplyFiles{
+  overflow:hidden!important;
+}
+.inlineReplyFiles>span{
+  min-width:0!important;
+  max-width:100%!important;
+}
+.inlineReplyFiles>span>span{
+  min-width:0!important;
+}
+.inlineReplyFoot{
+  overflow:hidden!important;
+}
+.inlineReplyTools{
+  min-width:0!important;
+  overflow-x:auto!important;
+  scrollbar-width:none!important;
+}
+.inlineReplyTools::-webkit-scrollbar{display:none!important}
+
+@media(max-width:850px){
+  .conversationExpanded{
+    overflow-x:hidden!important;
+  }
+  .conversationExpanded .inlineReplyComposer,
+  .inlineReplyComposer{
+    width:100%!important;
+    max-width:100%!important;
+    margin:12px 0 2px!important;
+    transform:none!important;
+  }
+  .inlineReplyHead{
+    padding-left:9px!important;
+    padding-right:7px!important;
+  }
+  .inlineReplyIdentity{
+    display:none!important;
+  }
+  .inlineReplyHead small{
+    font-size:10.5px!important;
+  }
+  .composeWindow .recipientChip{
+    max-width:100%!important;
+  }
+  .composeWindow .recipientChipIdentity{
+    max-width:calc(100% - 25px)!important;
+    font-size:12px!important;
+  }
+}
+
+@media(max-width:430px){
+  .inlineReplyHead>span{
+    display:none!important;
+  }
+  .inlineReplyHead small{
+    white-space:normal!important;
+    display:-webkit-box!important;
+    -webkit-line-clamp:2!important;
+    -webkit-box-orient:vertical!important;
+  }
+}
