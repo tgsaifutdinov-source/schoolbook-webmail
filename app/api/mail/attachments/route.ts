@@ -2,6 +2,8 @@ import {getMailSession} from "../../../../lib/mail-session";
 import {NextRequest,NextResponse} from "next/server";
 import {deflateRawSync} from "zlib";
 
+export const runtime="nodejs";
+
 const MAX_FILES=50;
 const MAX_TOTAL_BYTES=50*1024*1024;
 const CRC_TABLE=(()=>{const table=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=(c&1)?0xedb88320^(c>>>1):c>>>1;table[n]=c>>>0}return table})();
@@ -37,6 +39,6 @@ export async function GET(req:NextRequest){
   if(!r.ok)return NextResponse.json({error:"Не удалось скачать "+name},{status:502});
   const data=Buffer.from(await r.arrayBuffer());total+=data.length;if(total>MAX_TOTAL_BYTES)return NextResponse.json({error:"Суммарный размер вложений превышает 50 МБ"},{status:413});files.push({name,data});
  }
- const zip=makeZip(files),base=safeName(String(mail.subject||"attachments"),"attachments").replace(/\.zip$/i,""),filename=(base||"attachments")+".zip";
- return new NextResponse(new Uint8Array(zip),{status:200,headers:{"content-type":"application/zip","content-disposition":'attachment; filename="'+filename+'"',"content-length":String(zip.length),"cache-control":"private, no-store","x-content-type-options":"nosniff"}});
+ const zip=makeZip(files),base=safeName(String(mail.subject||"attachments"),"attachments").replace(/\.zip$/i,""),filename=(base||"attachments")+".zip",encoded=encodeURIComponent(filename);
+ return new NextResponse(new Uint8Array(zip),{status:200,headers:{"content-type":"application/zip","content-disposition":"attachment; filename=\"attachments.zip\"; filename*=UTF-8''"+encoded,"content-length":String(zip.length),"cache-control":"private, no-store","x-content-type-options":"nosniff"}});
 }
