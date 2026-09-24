@@ -10377,6 +10377,11 @@ body{
   .mailSidebar .customFolderRow .folderMain{
     padding-right:48px!important;
   }
+  .folderContextWrap{
+    top:2px!important;
+    right:6px!important;
+    transform:none!important;
+  }
   .folderMenuButton{
     opacity:1!important;
     visibility:visible!important;
