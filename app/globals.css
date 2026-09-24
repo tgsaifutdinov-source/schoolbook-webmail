@@ -13060,3 +13060,28 @@ body{
     max-width:none!important;
   }
 }
+
+
+/* Conversation Reader Pro: rich in-place thread expansion */
+.conversationLimit{display:inline-flex;align-items:center;height:22px;padding:0 8px;border-radius:11px;background:#f8f9fa;color:#7a828d;font-size:9px;font-weight:650}
+.conversationMessage.expanded .conversationHeader[role="button"]{cursor:pointer}
+.conversationMessage.expanded .conversationHeader[role="button"]:hover{background:#fbfcfd;border-radius:12px 12px 0 0}
+.threadExpandedBody .compactThreadPrivacy{margin:0 0 10px;min-height:34px;padding:6px 9px;border-radius:8px}
+.threadExpandedBody .compactThreadPrivacy span{font-size:9px}
+.threadExpandedBody .compactThreadPrivacy button{font-size:9px}
+.threadExpandedBody .threadHtmlMail{height:380px!important;min-height:300px!important;max-height:52vh!important}
+.threadExpandedBody .threadAttachmentSummary{max-width:620px;margin-top:10px}
+.threadExpandedBody .attachmentGallery{margin-top:10px;margin-bottom:8px}
+.threadExpandedBody .attachment{margin-top:7px}
+.threadExpandedBody .threadInlineActions{padding-top:12px;border-top:1px solid #eef1f4}
+.threadExpandedBody .threadInlineActions button:nth-child(2){border-color:#e7e9ec!important}
+@media(max-width:850px){
+ .conversationLimit{height:20px;font-size:8px}
+ .threadExpandedBody .threadHtmlMail{height:330px!important;min-height:260px!important;max-height:48vh!important}
+ .threadExpandedBody .compactThreadPrivacy{align-items:flex-start;gap:6px}
+}
+@media(max-width:560px){
+ .threadExpandedBody .threadHtmlMail{height:300px!important;min-height:240px!important}
+ .threadInlineActions{flex-wrap:wrap!important}
+ .threadInlineActions button{flex:1 1 auto!important;justify-content:center!important}
+}
