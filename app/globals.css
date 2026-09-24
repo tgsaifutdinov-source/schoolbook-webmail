@@ -13132,3 +13132,11 @@ body{
  .inlineReplyHead{flex-wrap:wrap}
  .inlineReplyHead>div{min-width:0;flex:1}
 }
+
+
+/* Inbox Productivity Pro */
+.gmailList .rowActions .rowMoreAction{color:#5f6368}
+.gmailList .rowActions .rowMoreAction:hover{background:#e9edf2!important;color:#202124}
+.gmailReader .readerNav button:disabled{opacity:.28!important;background:transparent!important}
+.gmailReader .readerNav>span{min-width:76px;display:flex;align-items:center;justify-content:flex-end;padding:0 7px;color:#737b87;font-size:10px;white-space:nowrap}
+@media(min-width:1200px){.gmailReader .readerNav>span{font-size:11px;min-width:88px}}
