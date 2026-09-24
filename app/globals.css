@@ -6370,3 +6370,444 @@ html[data-mail-density="compact"] .gmailList .rowStar{
     width:220px!important;
   }
 }
+
+
+/* Gmail visual system v10 — dialogs, feedback and empty states */
+
+/* Neutral modal scrim */
+.dialogScrim{
+  background:rgba(32,33,36,.18)!important;
+  backdrop-filter:none!important;
+}
+
+/* Folder dialogs */
+.folderDialog{
+  width:min(400px,calc(100vw - 28px))!important;
+  padding:22px!important;
+  border:0!important;
+  border-radius:12px!important;
+  background:#fff!important;
+  box-shadow:0 12px 44px rgba(60,64,67,.28)!important;
+}
+.folderDialogIcon{
+  width:36px!important;
+  height:36px!important;
+  border-radius:50%!important;
+  background:#fff3c4!important;
+  color:#775a00!important;
+}
+.folderDialogIcon svg{
+  width:18px!important;
+  height:18px!important;
+}
+.folderDialog h3{
+  margin:14px 0 6px!important;
+  color:#202124!important;
+  font-size:17px!important;
+  font-weight:500!important;
+}
+.folderDialog p{
+  margin:0 0 16px!important;
+  color:#5f6368!important;
+  font-size:11px!important;
+  line-height:1.55!important;
+}
+.folderDialog p b{
+  color:#3c4043!important;
+  font-weight:600!important;
+}
+.folderDialog input{
+  width:100%!important;
+  height:40px!important;
+  padding:0 11px!important;
+  border:1px solid #dadce0!important;
+  border-radius:6px!important;
+  background:#fff!important;
+  color:#202124!important;
+  font-size:12px!important;
+  outline:0!important;
+}
+.folderDialog input:focus{
+  border-color:#caa12a!important;
+  box-shadow:0 0 0 2px rgba(255,198,43,.16)!important;
+}
+.folderDialogActions{
+  margin-top:20px!important;
+  gap:6px!important;
+}
+.folderDialogActions button{
+  height:34px!important;
+  padding:0 13px!important;
+  border:0!important;
+  border-radius:17px!important;
+  background:transparent!important;
+  color:#5f6368!important;
+  font-size:10px!important;
+  font-weight:600!important;
+}
+.folderDialogActions button:hover:not(:disabled){
+  background:#f1f3f4!important;
+  color:#202124!important;
+}
+.folderDialogActions .primary{
+  background:var(--gmail-yellow)!important;
+  color:#332900!important;
+}
+.folderDialogActions .primary:hover:not(:disabled){
+  background:var(--gmail-yellow-hover)!important;
+}
+.folderDialogActions .danger{
+  background:#d93025!important;
+  color:#fff!important;
+}
+.folderDialogActions .danger:hover:not(:disabled){
+  background:#c5221f!important;
+}
+
+/* Permanent-delete dialog */
+.dangerDialog{
+  width:min(410px,calc(100vw - 28px))!important;
+  padding:22px!important;
+  border:0!important;
+  border-radius:12px!important;
+  background:#fff!important;
+  box-shadow:0 12px 44px rgba(60,64,67,.28)!important;
+}
+.dangerMark{
+  width:36px!important;
+  height:36px!important;
+  border-radius:50%!important;
+  background:#fce8e6!important;
+  color:#b3261e!important;
+}
+.dangerMark svg{
+  width:18px!important;
+  height:18px!important;
+}
+.dangerDialog h3{
+  margin:14px 0 6px!important;
+  color:#202124!important;
+  font-size:17px!important;
+  font-weight:500!important;
+}
+.dangerDialog p{
+  margin:0!important;
+  color:#5f6368!important;
+  font-size:11px!important;
+  line-height:1.55!important;
+}
+.dangerDialog>div:last-child{
+  margin-top:20px!important;
+  gap:6px!important;
+}
+.dangerDialog button{
+  height:34px!important;
+  padding:0 13px!important;
+  border:0!important;
+  border-radius:17px!important;
+  background:transparent!important;
+  color:#5f6368!important;
+  font-size:10px!important;
+  font-weight:600!important;
+}
+.dangerDialog button:hover:not(:disabled){
+  background:#f1f3f4!important;
+  color:#202124!important;
+}
+.dangerDialog .dangerConfirmButton{
+  background:#d93025!important;
+  color:#fff!important;
+}
+.dangerDialog .dangerConfirmButton:hover:not(:disabled){
+  background:#c5221f!important;
+}
+
+/* Snackbar / undo */
+.toast,
+.undoToast{
+  z-index:320!important;
+  left:50%!important;
+  right:auto!important;
+  bottom:24px!important;
+  transform:translateX(-50%)!important;
+  min-width:288px!important;
+  max-width:min(520px,calc(100vw - 28px))!important;
+  height:46px!important;
+  padding:0 10px 0 16px!important;
+  border:0!important;
+  border-radius:4px!important;
+  background:#323232!important;
+  color:#fff!important;
+  box-shadow:0 6px 18px rgba(0,0,0,.26)!important;
+  font-size:11px!important;
+  font-weight:400!important;
+}
+.toast{
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+.undoToast{
+  display:flex!important;
+  align-items:center!important;
+  gap:12px!important;
+}
+.undoToast span{
+  min-width:0!important;
+  flex:1!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+.undoToast button{
+  height:32px!important;
+  padding:0 10px!important;
+  border-radius:4px!important;
+  color:#f7cb42!important;
+  font-size:10px!important;
+  font-weight:700!important;
+}
+.undoToast button:hover{
+  background:rgba(255,255,255,.10)!important;
+}
+
+/* Offline status */
+.offlineBanner{
+  z-index:330!important;
+  top:8px!important;
+  max-width:min(520px,calc(100vw - 24px))!important;
+  min-height:34px!important;
+  padding:7px 12px!important;
+  border:0!important;
+  border-radius:17px!important;
+  background:#3c4043!important;
+  color:#fff!important;
+  box-shadow:0 4px 12px rgba(60,64,67,.26)!important;
+  font-size:10px!important;
+  font-weight:500!important;
+  line-height:1.35!important;
+}
+
+/* Inline errors */
+.inlineError{
+  min-height:38px!important;
+  margin:8px 12px!important;
+  padding:7px 9px 7px 11px!important;
+  border:1px solid #f2c7c4!important;
+  border-radius:6px!important;
+  background:#fce8e6!important;
+  color:#8c1d18!important;
+  font-size:10px!important;
+  gap:8px!important;
+}
+.inlineError button{
+  height:26px!important;
+  padding:0 8px!important;
+  border-radius:13px!important;
+  color:#8c1d18!important;
+  font-weight:600!important;
+  text-decoration:none!important;
+}
+.inlineError button:hover{
+  background:#f6d6d3!important;
+}
+
+/* Empty mailbox / no selection */
+.empty,
+.noSelection{
+  height:100%!important;
+  min-height:220px!important;
+  padding:36px 24px!important;
+  color:#80868b!important;
+  text-align:center!important;
+}
+.empty>svg,
+.noSelection svg{
+  width:34px!important;
+  height:34px!important;
+  color:#9aa0a6!important;
+  stroke-width:1.5!important;
+}
+.empty b{
+  margin-top:12px!important;
+  color:#3c4043!important;
+  font-size:13px!important;
+  font-weight:500!important;
+}
+.empty span,
+.noSelection p{
+  max-width:340px!important;
+  margin-top:4px!important;
+  color:#80868b!important;
+  font-size:10px!important;
+  line-height:1.5!important;
+}
+.noSelection h2{
+  margin:12px 0 4px!important;
+  color:#3c4043!important;
+  font-size:17px!important;
+  font-weight:500!important;
+}
+.noSelection>div{
+  padding:24px!important;
+}
+.empty.error{
+  color:#b3261e!important;
+}
+.empty.error>svg,
+.empty.error b{
+  color:#b3261e!important;
+}
+.empty.error button,
+.resetFilters{
+  height:32px!important;
+  margin-top:12px!important;
+  padding:0 12px!important;
+  border:1px solid #dadce0!important;
+  border-radius:16px!important;
+  background:#fff!important;
+  color:#3c4043!important;
+  font-size:10px!important;
+  font-weight:600!important;
+}
+.empty.error button:hover,
+.resetFilters:hover{
+  background:#f8f9fa!important;
+  border-color:#c8ccd1!important;
+}
+
+/* Loading states */
+.listProgress{
+  height:2px!important;
+  background:#f6e8b8!important;
+}
+.listProgress:after{
+  background:var(--gmail-yellow)!important;
+}
+.readerSkeleton{
+  padding:18px 2px!important;
+  gap:10px!important;
+}
+.readerSkeleton span{
+  height:10px!important;
+  border-radius:5px!important;
+  background:linear-gradient(90deg,#f1f3f4 25%,#e4e7ea 40%,#f1f3f4 60%)!important;
+  background-size:300% 100%!important;
+}
+
+/* Attachment preview */
+.previewScrim{
+  background:rgba(18,18,18,.88)!important;
+  backdrop-filter:none!important;
+}
+.attachmentPreview{
+  inset:4vh 4vw!important;
+  border:0!important;
+  border-radius:10px!important;
+  background:#202124!important;
+  box-shadow:0 14px 52px rgba(0,0,0,.48)!important;
+}
+.attachmentPreviewHead{
+  height:52px!important;
+  padding:0 10px 0 14px!important;
+  background:#303134!important;
+  color:#fff!important;
+}
+.attachmentPreviewHead b{
+  color:#fff!important;
+  font-size:11px!important;
+  font-weight:500!important;
+}
+.attachmentPreviewHead small{
+  margin-top:2px!important;
+  color:#bdc1c6!important;
+  font-size:9px!important;
+}
+.attachmentPreviewHead>div:last-child{
+  gap:2px!important;
+}
+.attachmentPreviewHead a,
+.attachmentPreviewHead button{
+  height:34px!important;
+  padding:0 10px!important;
+  border-radius:17px!important;
+  background:transparent!important;
+  color:#e8eaed!important;
+  font-size:10px!important;
+  font-weight:500!important;
+}
+.attachmentPreviewHead button{
+  width:34px!important;
+  padding:0!important;
+}
+.attachmentPreviewHead a:hover,
+.attachmentPreviewHead button:hover{
+  background:#45474a!important;
+  color:#fff!important;
+}
+.attachmentPreviewBody{
+  padding:16px!important;
+  background:#202124!important;
+}
+.attachmentPreviewBody img{
+  box-shadow:0 8px 28px rgba(0,0,0,.42)!important;
+}
+
+/* Mobile sheets */
+@media(max-width:850px){
+  .toast,
+  .undoToast{
+    left:12px!important;
+    right:12px!important;
+    bottom:74px!important;
+    transform:none!important;
+    min-width:0!important;
+    max-width:none!important;
+    width:auto!important;
+    height:46px!important;
+  }
+  .offlineBanner{
+    top:6px!important;
+    max-width:calc(100vw - 16px)!important;
+    font-size:9px!important;
+  }
+  .folderDialog,
+  .dangerDialog{
+    top:auto!important;
+    bottom:0!important;
+    left:0!important;
+    transform:none!important;
+    width:100%!important;
+    max-width:none!important;
+    padding:20px 18px max(18px,env(safe-area-inset-bottom))!important;
+    border-radius:18px 18px 0 0!important;
+  }
+  .folderDialogActions,
+  .dangerDialog>div:last-child{
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    gap:8px!important;
+  }
+  .folderDialogActions button,
+  .dangerDialog button{
+    width:100%!important;
+    height:40px!important;
+    border-radius:20px!important;
+  }
+  .empty,
+  .noSelection{
+    padding:28px 18px!important;
+  }
+  .attachmentPreview{
+    inset:0!important;
+    border-radius:0!important;
+  }
+  .attachmentPreviewHead{
+    height:54px!important;
+    padding-left:12px!important;
+    padding-right:8px!important;
+  }
+  .attachmentPreviewBody{
+    padding:8px!important;
+  }
+}
