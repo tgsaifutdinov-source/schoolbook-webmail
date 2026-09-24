@@ -78,7 +78,7 @@ export async function GET(req:NextRequest){
   }
 
   if(invalidMailboxFilter){
-   return NextResponse.json({accountId,username:session.username,mailboxes:preloadedMailboxes,emails:[],position:0,total:0,nextPosition:0,hasMore:false,filteredTotal:0,selectedMailboxId:null});
+   return NextResponse.json({accountId,username:session.username,mailboxes:preloadedMailboxes,emails:[],position:0,total:0,nextPosition:0,hasMore:false,filteredTotal:0,selectedMailboxId:null,mailboxState,emailState});
   }
 
   const conditions:any[]=[];
@@ -131,9 +131,9 @@ export async function GET(req:NextRequest){
    let query:any=null,list:any[]=[];
    for(const x of response.methodResponses||[]){
     if(x[0]==="error")return NextResponse.json({error:x[1]?.description||x[1]?.type||"JMAP error"},{status:400});
-    if(x[0]==="Mailbox/get")mailboxes=x[1].list||[];
+    if(x[0]==="Mailbox/get"){mailboxes=x[1].list||[];mailboxState=String(x[1]?.state||mailboxState)}
     if(x[0]==="Email/query")query=x[1];
-    if(x[0]==="Email/get")list=x[1].list||[];
+    if(x[0]==="Email/get"){list=x[1].list||[];emailState=String(x[1]?.state||emailState)}
    }
    const ids:string[]=query?.ids||[];
    total=query?.total||0;
@@ -198,7 +198,9 @@ export async function GET(req:NextRequest){
    nextPosition:cursor,
    hasMore:cursor<total,
    filteredTotal:attachment?null:total,
-   selectedMailboxId:effectiveMailboxId||null
+   selectedMailboxId:effectiveMailboxId||null,
+   emailState,
+   mailboxState
   });
  }catch(error){
   console.error("Mail data load failed",error);
