@@ -12736,3 +12736,327 @@ body{
   outline-offset:1px!important;
   border-radius:2px!important;
 }
+
+
+/* Gmail visual system v30 — compose reply and quoted message pro */
+
+/* Separate quoted content from editable body */
+.composeQuoteBlock{
+  min-width:0!important;
+  margin:0 14px 8px!important;
+  color:#5f6368!important;
+}
+.composeQuoteToggle{
+  min-width:0!important;
+  max-width:100%!important;
+  height:30px!important;
+  padding:0 8px!important;
+  border-radius:15px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:6px!important;
+  background:#f1f3f4!important;
+  color:#5f6368!important;
+  font-size:9px!important;
+  font-weight:600!important;
+}
+.composeQuoteToggle:hover{
+  background:#e8eaed!important;
+  color:#3c4043!important;
+}
+.composeQuoteToggle>svg:first-child{
+  width:15px!important;
+  height:15px!important;
+}
+.composeQuoteToggle>svg:last-child{
+  width:12px!important;
+  height:12px!important;
+  transition:transform .12s ease!important;
+}
+.composeQuoteBlock.open .composeQuoteToggle>svg:last-child{
+  transform:rotate(180deg)!important;
+}
+.composeQuoteToggle span{
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+.composeQuoteBlock pre{
+  width:100%!important;
+  max-height:220px!important;
+  margin:7px 0 0!important;
+  padding:10px 12px!important;
+  overflow:auto!important;
+  border-left:2px solid #dadce0!important;
+  border-radius:0 7px 7px 0!important;
+  background:#fafafa!important;
+  color:#70757a!important;
+  font:11px/1.5 system-ui,-apple-system,Segoe UI,sans-serif!important;
+  white-space:pre-wrap!important;
+  overflow-wrap:anywhere!important;
+}
+
+/* Inline reply now uses the same rich editor model as full compose */
+.inlineReplyComposer{
+  overflow:visible!important;
+}
+.inlineReplyEditor{
+  min-height:155px!important;
+  max-height:42vh!important;
+  padding:14px!important;
+  overflow:auto!important;
+  outline:0!important;
+  color:#202124!important;
+  background:#fff!important;
+  font-size:14px!important;
+  line-height:1.55!important;
+  overflow-wrap:anywhere!important;
+  word-break:break-word!important;
+}
+.inlineReplyEditor:empty:before{
+  content:attr(data-placeholder)!important;
+  color:#9aa0a6!important;
+  pointer-events:none!important;
+}
+.inlineReplyEditor a{
+  color:#1a73e8!important;
+}
+.inlineReplyEditor blockquote{
+  margin:8px 0!important;
+  padding-left:10px!important;
+  border-left:2px solid #dadce0!important;
+  color:#5f6368!important;
+}
+.inlineReplyComposer .composeQuoteBlock{
+  margin:0 12px 8px!important;
+}
+.inlineReplyComposer .composeQuoteBlock.compact:not(.open){
+  margin-top:-3px!important;
+}
+.inlineReplyComposer .composeQuoteBlock.compact:not(.open) .composeQuoteToggle{
+  width:34px!important;
+  padding:0!important;
+  justify-content:center!important;
+}
+.inlineReplyComposer .composeQuoteBlock.compact:not(.open) .composeQuoteToggle span,
+.inlineReplyComposer .composeQuoteBlock.compact:not(.open) .composeQuoteToggle>svg:last-child{
+  display:none!important;
+}
+.inlineReplyComposer .composeQuoteBlock pre{
+  max-height:190px!important;
+  font-size:10px!important;
+}
+
+/* Inline formatting strip */
+.inlineReplyFormatBar{
+  min-height:38px!important;
+  padding:3px 10px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:2px!important;
+  overflow-x:auto!important;
+  border-top:1px solid #f1f3f4!important;
+  border-bottom:1px solid #f1f3f4!important;
+  scrollbar-width:none!important;
+}
+.inlineReplyFormatBar::-webkit-scrollbar{display:none!important}
+.inlineReplyFormatBar button{
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+  padding:0!important;
+  border-radius:5px!important;
+  display:grid!important;
+  place-items:center!important;
+  color:#5f6368!important;
+  font-size:10px!important;
+}
+.inlineReplyFormatBar button:hover,
+.inlineReplyFormatBar button.active{
+  background:#f1f3f4!important;
+  color:#202124!important;
+}
+.inlineReplyFormatBar button.active{
+  background:#fff3c4!important;
+  color:#5c4700!important;
+}
+.inlineReplyFormatBar button svg{
+  width:14px!important;
+  height:14px!important;
+}
+.inlineReplyFormatBar i{
+  width:1px!important;
+  height:18px!important;
+  margin:0 3px!important;
+  background:#e8eaed!important;
+}
+.inlineReplyFormatBar .removeFormat{
+  width:34px!important;
+  font-weight:600!important;
+}
+
+/* Reply attachment cards */
+.inlineReplyFiles{
+  padding:4px 10px 7px!important;
+  display:flex!important;
+  flex-wrap:wrap!important;
+  gap:5px!important;
+}
+.inlineReplyFiles>span{
+  min-width:0!important;
+  max-width:360px!important;
+  min-height:34px!important;
+  padding:4px 5px 4px 8px!important;
+  display:grid!important;
+  grid-template-columns:18px minmax(0,1fr) 26px!important;
+  align-items:center!important;
+  gap:6px!important;
+  border:1px solid #dadce0!important;
+  border-radius:7px!important;
+  background:#fff!important;
+}
+.inlineReplyFiles>span>svg{
+  width:14px!important;
+  height:14px!important;
+  color:#5f6368!important;
+}
+.inlineReplyFiles>span>span{
+  min-width:0!important;
+}
+.inlineReplyFiles b,
+.inlineReplyFiles small{
+  display:block!important;
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+.inlineReplyFiles b{
+  color:#3c4043!important;
+  font-size:9px!important;
+  font-weight:600!important;
+}
+.inlineReplyFiles small{
+  margin-top:1px!important;
+  color:#80868b!important;
+  font-size:7px!important;
+}
+.inlineReplyFiles>span>button{
+  width:26px!important;
+  height:26px!important;
+  min-width:26px!important;
+  border-radius:50%!important;
+  color:#80868b!important;
+}
+.inlineReplyFiles>span>button:hover{
+  background:#f1f3f4!important;
+}
+
+/* Footer tools */
+.inlineReplyFoot{
+  display:grid!important;
+  grid-template-columns:auto auto minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:7px!important;
+}
+.inlineReplyTools{
+  display:flex!important;
+  align-items:center!important;
+  gap:2px!important;
+}
+.inlineReplyTools>button{
+  width:32px!important;
+  height:32px!important;
+  min-width:32px!important;
+  padding:0!important;
+  border-radius:50%!important;
+  display:grid!important;
+  place-items:center!important;
+  color:#5f6368!important;
+  font-size:10px!important;
+}
+.inlineReplyTools>button:hover,
+.inlineReplyTools>button.active{
+  background:#f1f3f4!important;
+}
+.inlineReplyTools>button.active{
+  background:#fff3c4!important;
+  color:#5c4700!important;
+}
+.inlineReplyTools svg{
+  width:15px!important;
+  height:15px!important;
+}
+.inlineReplyFoot>small{
+  min-width:0!important;
+  justify-self:end!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  color:#80868b!important;
+  font-size:8px!important;
+}
+
+/* Quote content in the full composer should not steal the whole editor */
+.composeWindow .composeQuoteBlock{
+  flex:0 0 auto!important;
+}
+.composeWindow .composeQuoteBlock.open pre{
+  max-height:min(220px,28vh)!important;
+}
+
+/* Old textarea rules no longer apply */
+.inlineReplyComposer textarea{
+  display:none!important;
+}
+
+@media(max-height:700px) and (min-width:851px){
+  .composeQuoteBlock pre{
+    max-height:120px!important;
+  }
+  .inlineReplyEditor{
+    min-height:110px!important;
+    max-height:30vh!important;
+  }
+}
+
+@media(max-width:850px){
+  .inlineReplyEditor{
+    min-height:130px!important;
+    max-height:32vh!important;
+    padding:12px!important;
+    font-size:13px!important;
+  }
+  .inlineReplyComposer .composeQuoteBlock{
+    margin-left:10px!important;
+    margin-right:10px!important;
+  }
+  .composeQuoteBlock pre{
+    max-height:180px!important;
+    font-size:10px!important;
+  }
+  .inlineReplyFoot{
+    grid-template-columns:auto minmax(0,1fr)!important;
+  }
+  .inlineReplyTools{
+    min-width:0!important;
+    overflow-x:auto!important;
+    scrollbar-width:none!important;
+  }
+  .inlineReplyFoot>small{
+    grid-column:1/-1!important;
+    justify-self:start!important;
+    padding:0 4px 4px!important;
+  }
+}
+
+@media(max-width:430px){
+  .composeQuoteToggle span{
+    max-width:150px!important;
+  }
+  .inlineReplyFiles>span{
+    width:100%!important;
+    max-width:none!important;
+  }
+}
