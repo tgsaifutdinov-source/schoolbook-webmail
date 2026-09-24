@@ -13585,18 +13585,29 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{
     grid-template-columns:24px 28px minmax(0,1fr) 58px!important;
     padding:0 8px!important;
   }
+  .mailSkeletonRow .skeletonCheck,
+  .mailSkeletonRow .skeletonStar{
+    grid-row:1/3!important;
+  }
   .mailSkeletonRow .skeletonSender{
     grid-column:3!important;
+    grid-row:1!important;
     width:44%!important;
+    align-self:end!important;
+    margin-bottom:3px!important;
   }
   .mailSkeletonRow .skeletonSubject{
     grid-column:3!important;
+    grid-row:2!important;
     width:82%!important;
-    margin-top:23px!important;
+    align-self:start!important;
+    margin-top:3px!important;
   }
   .mailSkeletonRow .skeletonDate{
     grid-column:4!important;
     grid-row:1!important;
+    align-self:end!important;
+    margin-bottom:3px!important;
   }
 
   .gmailList .messages .mailRow,
