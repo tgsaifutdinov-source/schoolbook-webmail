@@ -8,7 +8,9 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "check:source": "node scripts/check-source.mjs",
-    "check": "npm run check:source && npm run typecheck && npm run build"
+    "check": "npm run check:source && npm run typecheck && npm run build",
+    "seed:test-mail": "node scripts/seed-test-mail.mjs",
+    "check:test-mail-seed": "JMAP_USER=qa@example.com node scripts/seed-test-mail.mjs --dry-run"
   },
   "dependencies": {
     "lucide-react": "^0.468.0",
