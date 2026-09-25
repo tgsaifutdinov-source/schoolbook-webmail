@@ -585,10 +585,13 @@ export default function Home(){
    const tiny=(Number.isFinite(w)&&w>0&&w<=3)||(Number.isFinite(h)&&h>0&&h<=3)||(styleW&&Number(styleW[1])<=3)||(styleH&&Number(styleH[1])<=3);
    if(/^(https?:)?\/\//i.test(src)&&(tiny||hidden))img.setAttribute("data-sb-tracker","1");
   });
+  const safeStyleProperties=new Set(["color","background","background-color","font","font-family","font-size","font-style","font-weight","line-height","letter-spacing","text-align","text-decoration","text-transform","white-space","vertical-align","display","visibility","opacity","width","min-width","max-width","height","min-height","max-height","margin","margin-top","margin-right","margin-bottom","margin-left","padding","padding-top","padding-right","padding-bottom","padding-left","border","border-top","border-right","border-bottom","border-left","border-width","border-style","border-color","border-radius","border-collapse","border-spacing","table-layout","box-sizing","overflow","overflow-x","overflow-y"]);
+  const sanitizeInlineStyle=(style:string)=>style.split(";").map(part=>part.trim()).filter(Boolean).map(part=>{const i=part.indexOf(":");if(i<1)return "";const property=part.slice(0,i).trim().toLowerCase(),value=part.slice(i+1).trim();if(!safeStyleProperties.has(property)||!value)return "";if(/url\s*\(|expression\s*\(|javascript\s*:|@import|behavior\s*:|-moz-binding/i.test(value))return "";if(property==="display"&&!/^(block|inline|inline-block|table|table-row|table-cell|table-header-group|table-footer-group|table-row-group|flex|inline-flex|none)$/i.test(value))return "";return property+":"+value}).filter(Boolean).join(";");
   doc.querySelectorAll("*").forEach(el=>{
    for(const attr of Array.from(el.attributes)){
     const name=attr.name.toLowerCase(),value=attr.value.trim();
-    if(name.startsWith("on")||name==="style"||name==="srcset"||name==="background"||name==="poster"||name==="ping"||name==="formaction"||name==="srcdoc"){el.removeAttribute(attr.name);continue}
+    if(name.startsWith("on")||name==="srcset"||name==="background"||name==="poster"||name==="ping"||name==="formaction"||name==="srcdoc"){el.removeAttribute(attr.name);continue}
+    if(name==="style"){const safe=sanitizeInlineStyle(value);if(safe)el.setAttribute("style",safe);else el.removeAttribute("style");continue}
     if(name==="href"&&!/^(https?:|mailto:)/i.test(value)){el.removeAttribute(attr.name);continue}
     if(name==="src"&&el.tagName!=="IMG")el.removeAttribute(attr.name);
    }
