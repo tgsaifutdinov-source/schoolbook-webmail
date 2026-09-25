@@ -19408,3 +19408,186 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
     border-radius:22px!important;
   }
 }
+
+
+/* Gmail reader v57 — recipient metadata popover */
+.gmailReader .conversationWho{
+  position:relative!important;
+  overflow:visible!important;
+}
+.gmailReader .conversationWho .recipientToggle{
+  position:relative!important;
+  z-index:2!important;
+  width:max-content!important;
+  max-width:min(720px,100%)!important;
+  min-height:22px!important;
+  padding:2px 4px 2px 0!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  gap:4px!important;
+  border:0!important;
+  border-radius:5px!important;
+  background:transparent!important;
+  color:#69737e!important;
+  box-shadow:none!important;
+  font-size:10.5px!important;
+  line-height:18px!important;
+  cursor:pointer!important;
+}
+.gmailReader .conversationWho .recipientToggle:hover{
+  background:#f1f3f4!important;
+  color:#3c4043!important;
+}
+.gmailReader .conversationWho .recipientToggle[aria-expanded="true"]{
+  color:#3c4043!important;
+}
+.gmailReader .conversationWho .recipientToggle svg{
+  width:12px!important;
+  height:12px!important;
+  transition:transform .14s ease!important;
+}
+.gmailReader .conversationWho .recipientToggle[aria-expanded="true"] svg{
+  transform:rotate(180deg)!important;
+}
+
+.gmailReader .conversationWho .messageDetails{
+  position:absolute!important;
+  z-index:450!important;
+  top:calc(100% + 8px)!important;
+  left:0!important;
+  right:auto!important;
+  width:min(590px,calc(100vw - 110px))!important;
+  min-width:430px!important;
+  max-width:590px!important;
+  max-height:min(440px,calc(100dvh - 150px))!important;
+  margin:0!important;
+  padding:16px 18px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:0!important;
+  overflow:auto!important;
+  border:1px solid #e1e5e9!important;
+  border-radius:16px!important;
+  background:#fff!important;
+  box-shadow:
+    0 14px 38px rgba(60,64,67,.22),
+    0 3px 10px rgba(60,64,67,.12)!important;
+  box-sizing:border-box!important;
+  overscroll-behavior:contain!important;
+  scrollbar-width:thin!important;
+}
+.gmailReader .conversationWho .messageDetails::before{
+  content:""!important;
+  position:absolute!important;
+  top:-5px!important;
+  left:34px!important;
+  width:10px!important;
+  height:10px!important;
+  border-top:1px solid #e1e5e9!important;
+  border-left:1px solid #e1e5e9!important;
+  background:#fff!important;
+  transform:rotate(45deg)!important;
+}
+
+.gmailReader .conversationWho .messageDetails>.messageDetailsRow{
+  min-height:30px!important;
+  padding:4px 0!important;
+  display:grid!important;
+  grid-template-columns:128px minmax(0,1fr)!important;
+  align-items:start!important;
+  column-gap:14px!important;
+  border:0!important;
+  background:transparent!important;
+  box-sizing:border-box!important;
+}
+.gmailReader .conversationWho .messageDetails>.messageDetailsRow>span{
+  width:auto!important;
+  min-width:0!important;
+  padding-top:1px!important;
+  color:#7b838d!important;
+  font-size:11.5px!important;
+  font-weight:400!important;
+  line-height:20px!important;
+  text-align:right!important;
+  white-space:nowrap!important;
+}
+.gmailReader .conversationWho .messageDetails>.messageDetailsRow>b{
+  min-width:0!important;
+  margin:0!important;
+  color:#30363d!important;
+  font-size:12.5px!important;
+  font-weight:500!important;
+  line-height:20px!important;
+  overflow-wrap:anywhere!important;
+  word-break:break-word!important;
+}
+.gmailReader .conversationWho .messageDetails>.messageDetailsSecurity{
+  margin-top:2px!important;
+  padding-top:8px!important;
+  border-top:1px solid #f0f2f4!important;
+}
+.gmailReader .conversationWho .messageDetails>.messageDetailsSecurity>b{
+  display:flex!important;
+  align-items:flex-start!important;
+  gap:6px!important;
+}
+.gmailReader .conversationWho .messageDetails>.messageDetailsSecurity>b>svg{
+  width:14px!important;
+  height:14px!important;
+  min-width:14px!important;
+  margin-top:3px!important;
+  color:#68727d!important;
+}
+.gmailReader .conversationWho .messageDetails>.messageDetailsSecurity>b>span{
+  width:auto!important;
+  color:#30363d!important;
+  font-size:12.5px!important;
+  font-weight:500!important;
+  line-height:20px!important;
+}
+
+/* Make sure the popup stays over the message body and other reader chrome. */
+.gmailReader .conversationMessage.expanded,
+.gmailReader .conversationHeader{
+  overflow:visible!important;
+}
+.gmailReader .conversationMessage.expanded:has(.messageDetails){
+  position:relative!important;
+  z-index:80!important;
+}
+
+@media(max-width:850px){
+  .gmailReader .conversationWho .messageDetails{
+    position:fixed!important;
+    z-index:1200!important;
+    top:96px!important;
+    right:12px!important;
+    left:12px!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+    max-height:calc(100dvh - 116px)!important;
+    padding:15px 14px!important;
+    border-radius:14px!important;
+  }
+  .gmailReader .conversationWho .messageDetails::before{
+    display:none!important;
+  }
+  .gmailReader .conversationWho .messageDetails>.messageDetailsRow{
+    grid-template-columns:96px minmax(0,1fr)!important;
+    column-gap:10px!important;
+  }
+  .gmailReader .conversationWho .messageDetails>.messageDetailsRow>span{
+    font-size:10.5px!important;
+  }
+  .gmailReader .conversationWho .messageDetails>.messageDetailsRow>b,
+  .gmailReader .conversationWho .messageDetails>.messageDetailsSecurity>b>span{
+    font-size:11.5px!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .gmailReader .conversationWho .recipientToggle svg{
+    transition:none!important;
+  }
+}
