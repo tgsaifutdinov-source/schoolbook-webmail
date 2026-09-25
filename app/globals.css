@@ -19689,3 +19689,48 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
   color:#332900!important;
   filter:none!important;
 }
+
+
+/* Gmail compose v61 — restore full-width row separators */
+/* Draw separators as dedicated layers so button/input reset rules cannot hide them. */
+.composeWindow.sbGmailCompose .composeRecipientsCollapsed,
+.composeWindow.sbGmailCompose .composeSubject,
+.composeWindow.sbGmailCompose .composeRecipientDetails .composeIdentity,
+.composeWindow.sbGmailCompose .composeRecipientDetails .recipientChipField{
+  position:relative!important;
+  border-bottom:0!important;
+}
+
+.composeWindow.sbGmailCompose .composeRecipientsCollapsed::after,
+.composeWindow.sbGmailCompose .composeSubject::after,
+.composeWindow.sbGmailCompose .composeRecipientDetails .composeIdentity::after,
+.composeWindow.sbGmailCompose .composeRecipientDetails .recipientChipField::after{
+  content:""!important;
+  position:absolute!important;
+  z-index:2!important;
+  left:12px!important;
+  right:12px!important;
+  bottom:0!important;
+  height:1px!important;
+  background:#e1e5e9!important;
+  pointer-events:none!important;
+}
+
+/* Keep the divider visible while recipients are focused/open. */
+.composeWindow.sbGmailCompose .composeRecipientsCollapsed:hover::after,
+.composeWindow.sbGmailCompose .composeRecipientsCollapsed:focus-visible::after,
+.composeWindow.sbGmailCompose .composeSubject:focus-within::after,
+.composeWindow.sbGmailCompose .composeRecipientDetails .composeIdentity:focus-within::after,
+.composeWindow.sbGmailCompose .composeRecipientDetails .recipientChipField:focus-within::after{
+  background:#d9dee4!important;
+}
+
+@media(max-width:850px){
+  .composeWindow.sbGmailCompose .composeRecipientsCollapsed::after,
+  .composeWindow.sbGmailCompose .composeSubject::after,
+  .composeWindow.sbGmailCompose .composeRecipientDetails .composeIdentity::after,
+  .composeWindow.sbGmailCompose .composeRecipientDetails .recipientChipField::after{
+    left:10px!important;
+    right:10px!important;
+  }
+}
