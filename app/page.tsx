@@ -400,13 +400,25 @@ export default function Home(){
  function replySubject(value:string,mode:"reply"|"all"|"forward"){const clean=String(value||"").replace(/^\s*(?:(?:re|fw|fwd)\s*:\s*)+/i,"").trim();return (mode==="forward"?"Fwd: ":"Re: ")+clean}
  function replyThreadMeta(message:any){const ids=normalizeMessageIds(message?.messageId),refs=normalizeMessageIds([...(message?.references||[]),...ids]);return {inReplyTo:ids,references:refs}}
  function composeQuotePanel(compact=false){if(!composeQuoteText.trim())return null;const label=composeContext==="forward"?"Пересланное сообщение":"Исходное сообщение";return <div className={"composeQuoteBlock "+(compact?"compact ":"")+(composeQuoteOpen?"open":"")}><button type="button" className="composeQuoteToggle" onMouseDown={e=>e.preventDefault()} onClick={()=>setComposeQuoteOpen(v=>!v)} aria-expanded={composeQuoteOpen} title={composeQuoteOpen?"Скрыть исходное сообщение":"Показать исходное сообщение"}><MoreHorizontal/><span>{label}</span><ChevronDown/></button>{composeQuoteOpen&&<pre>{composeQuoteText}</pre>}</div>}
+ function localScheduleValue(date:Date){const pad=(n:number)=>String(n).padStart(2,"0");return date.getFullYear()+"-"+pad(date.getMonth()+1)+"-"+pad(date.getDate())+"T"+pad(date.getHours())+":"+pad(date.getMinutes())}
+ function scheduleDate(minutes:number){return new Date(Date.now()+minutes*60_000)}
+ function tomorrowMorning(){const d=new Date();d.setDate(d.getDate()+1);d.setHours(8,0,0,0);return d}
+ function scheduleLabel(value:string){const d=new Date(value);return Number.isNaN(d.getTime())?"":d.toLocaleString("ru-RU",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})}
+ function scheduleMessageAt(value:string){const d=new Date(value);if(Number.isNaN(d.getTime())||d.getTime()<Date.now()+60_000){setSendError("Выберите время минимум на минуту позже текущего");return}setSendMenuOpen(false);setCustomScheduleAt("");void sendMail(false,d.toISOString())}
  function composeFormatDock(){
+  const fonts=[["Без засечек","Arial"],["Serif","Georgia"],["Моноширинный","Courier New"],["Системный","Verdana"]] as const,sizes=[["Мелкий","2"],["Обычный","3"],["Крупный","4"],["Очень крупный","5"]] as const;
   return <div className="sbComposeFormatDock" role="toolbar" aria-label="Форматирование текста">
    <button type="button" onMouseDown={e=>e.preventDefault()} onClick={()=>composeCommand("undo")} title="Отменить">↶</button>
    <button type="button" onMouseDown={e=>e.preventDefault()} onClick={()=>composeCommand("redo")} title="Повторить">↷</button>
    <span className="sbComposeFormatDivider"/>
-   <button type="button" className="sbComposeFontChoice" onMouseDown={e=>e.preventDefault()} onClick={()=>composeCommand("fontName","Arial")} title="Шрифт: без засечек"><span>Без засечек</span><ChevronDown/></button>
-   <button type="button" className="sbComposeSizeChoice" onMouseDown={e=>e.preventDefault()} onClick={()=>composeCommand("fontSize","3")} title="Размер текста"><span>Tt</span><ChevronDown/></button>
+   <div className="sbComposeFormatMenuWrap">
+    <button type="button" className={"sbComposeFontChoice "+(fontMenuOpen?"active":"")} onMouseDown={e=>e.preventDefault()} onClick={()=>{setFontMenuOpen(v=>!v);setSizeMenuOpen(false);setSendMenuOpen(false)}} title="Выбрать шрифт"><span>Без засечек</span><ChevronDown/></button>
+    {fontMenuOpen&&<div className="sbComposeFormatMenu fontMenu">{fonts.map(([label,font])=><button key={font} type="button" style={{fontFamily:font}} onMouseDown={e=>e.preventDefault()} onClick={()=>{composeCommand("fontName",font);setFontMenuOpen(false)}}>{label}</button>)}</div>}
+   </div>
+   <div className="sbComposeFormatMenuWrap">
+    <button type="button" className={"sbComposeSizeChoice "+(sizeMenuOpen?"active":"")} onMouseDown={e=>e.preventDefault()} onClick={()=>{setSizeMenuOpen(v=>!v);setFontMenuOpen(false);setSendMenuOpen(false)}} title="Выбрать размер текста"><span>Tt</span><ChevronDown/></button>
+    {sizeMenuOpen&&<div className="sbComposeFormatMenu sizeMenu">{sizes.map(([label,size])=><button key={size} type="button" onMouseDown={e=>e.preventDefault()} onClick={()=>{composeCommand("fontSize",size);setSizeMenuOpen(false)}}><span className={"fontSizePreview size"+size}>A</span><span>{label}</span></button>)}</div>}
+   </div>
    <button type="button" className={formatState.bold?"active":""} onMouseDown={e=>e.preventDefault()} onClick={()=>composeCommand("bold")} title="Жирный"><Bold/></button>
    <button type="button" className={formatState.italic?"active":""} onMouseDown={e=>e.preventDefault()} onClick={()=>composeCommand("italic")} title="Курсив"><Italic/></button>
    <button type="button" className={formatState.underline?"active":""} onMouseDown={e=>e.preventDefault()} onClick={()=>composeCommand("underline")} title="Подчёркнутый"><Underline/></button>
@@ -422,29 +434,33 @@ export default function Home(){
   </div>
  }
  function composeActionDock(inline=false){
-  const formattingOpen=inline?inlineFormatOpen:formatBarOpen;
-  const toggleFormatting=()=>{if(inline)setInlineFormatOpen(v=>!v);else setFormatBarOpen(v=>!v);setEmojiOpen(false);setComposeMoreOpen(false)};
+  const formattingOpen=inline?inlineFormatOpen:formatBarOpen,sendDisabled=sending||uploading||!isOnline||!splitAddresses(to).length;
+  const toggleFormatting=()=>{if(inline)setInlineFormatOpen(v=>!v);else setFormatBarOpen(v=>!v);setEmojiOpen(false);setComposeMoreOpen(false);setSendMenuOpen(false)};
+  const later10=scheduleDate(10),later60=scheduleDate(60),tomorrow=tomorrowMorning(),minCustom=localScheduleValue(scheduleDate(1));
   return <div className={"sbComposeActionDock "+(inline?"inline":"")} role="toolbar" aria-label="Действия с письмом">
-   <button type="button" className="sbComposeSend" onClick={()=>sendMail()} disabled={sending||uploading||!isOnline||!splitAddresses(to).length} title={!isOnline?"Нет подключения к интернету":"Отправить письмо · Ctrl+Enter"}><span>{sending?"Отправляем…":"Отправить"}</span><ChevronDown aria-hidden="true"/></button>
+   <div className="sbComposeSendWrap">
+    <button type="button" className="sbComposeSendMain" onClick={()=>sendMail()} disabled={sendDisabled} title={!isOnline?"Нет подключения к интернету":"Отправить письмо · Ctrl+Enter"}><span>{sending?"Отправляем…":"Отправить"}</span></button>
+    <button type="button" className={"sbComposeSendCaret "+(sendMenuOpen?"active":"")} onClick={()=>{setSendMenuOpen(v=>!v);setEmojiOpen(false);setComposeMoreOpen(false);setFontMenuOpen(false);setSizeMenuOpen(false)}} disabled={sending||uploading||!isOnline} title="Запланировать отправку" aria-label="Запланировать отправку" aria-expanded={sendMenuOpen}><ChevronDown/></button>
+    {sendMenuOpen&&<div className="sbComposeSendMenu" role="menu"><div className="sbComposeSendMenuTitle">Запланировать отправку</div><button type="button" onClick={()=>scheduleMessageAt(later10.toISOString())}><span>Через 10 минут</span><small>{scheduleLabel(later10.toISOString())}</small></button><button type="button" onClick={()=>scheduleMessageAt(later60.toISOString())}><span>Через 1 час</span><small>{scheduleLabel(later60.toISOString())}</small></button><button type="button" onClick={()=>scheduleMessageAt(tomorrow.toISOString())}><span>Завтра утром</span><small>{scheduleLabel(tomorrow.toISOString())}</small></button><div className="sbComposeScheduleCustom"><label><span>Своя дата и время</span><input type="datetime-local" min={minCustom} value={customScheduleAt} onChange={e=>setCustomScheduleAt(e.target.value)}/></label><button type="button" disabled={!customScheduleAt} onClick={()=>scheduleMessageAt(customScheduleAt)}>Запланировать</button></div></div>}
+   </div>
    <div className="sbComposeActionTools">
     <button type="button" className={"sbComposeTool sbComposeAa "+(formattingOpen?"active":"")} onClick={toggleFormatting} title="Параметры форматирования">Aa</button>
-    <button type="button" className="sbComposeTool" onClick={()=>fileRef.current?.click()} title="Прикрепить файл"><Paperclip/></button>
+    <button type="button" className="sbComposeTool" onClick={()=>{setSendMenuOpen(false);fileRef.current?.click()}} title="Прикрепить файл"><Paperclip/></button>
     <input ref={fileRef} hidden type="file" multiple onChange={e=>addFiles(e.target.files)}/>
-    <button type="button" className="sbComposeTool" onMouseDown={e=>e.preventDefault()} onClick={()=>{setEmojiOpen(false);setComposeMoreOpen(false);composeLink()}} title="Вставить ссылку"><Link/></button>
+    <button type="button" className="sbComposeTool" onMouseDown={e=>e.preventDefault()} onClick={()=>{setSendMenuOpen(false);setEmojiOpen(false);setComposeMoreOpen(false);composeLink()}} title="Вставить ссылку"><Link/></button>
     <div className="composeEmojiWrap sbComposeEmojiWrap">
-     <button type="button" className={"sbComposeTool "+(emojiOpen?"active":"")} onClick={()=>{setEmojiOpen(v=>!v);setComposeMoreOpen(false)}} title="Вставить эмодзи"><Smile/></button>
+     <button type="button" className={"sbComposeTool "+(emojiOpen?"active":"")} onClick={()=>{setEmojiOpen(v=>!v);setComposeMoreOpen(false);setSendMenuOpen(false)}} title="Вставить эмодзи"><Smile/></button>
      {emojiOpen&&<div className="sbComposeEmojiMenu">{["😀","😁","😂","😊","😍","👍","🙏","🎉","❤️","🔥","✅","📌","📎","🙂","😉","🤝","👏","💡"].map(x=><button key={x} type="button" onMouseDown={e=>e.preventDefault()} onClick={()=>insertEmoji(x)}>{x}</button>)}</div>}
     </div>
-    <button type="button" className="sbComposeTool" onClick={()=>imageRef.current?.click()} title="Прикрепить изображение"><ImageIcon/></button>
+    <button type="button" className="sbComposeTool" onClick={()=>{setSendMenuOpen(false);imageRef.current?.click()}} title="Прикрепить изображение"><ImageIcon/></button>
     <input ref={imageRef} hidden type="file" accept="image/*" multiple onChange={e=>addFiles(e.target.files)}/>
-    <button type="button" className="sbComposeTool" onMouseDown={e=>e.preventDefault()} onClick={insertSignature} title="Вставить подпись"><PenLine/></button>
+    <button type="button" className="sbComposeTool" onMouseDown={e=>e.preventDefault()} onClick={()=>{setSendMenuOpen(false);insertSignature()}} title="Вставить подпись"><PenLine/></button>
     <div className="composeMoreWrap sbComposeMoreWrap">
-     <button type="button" className={"sbComposeTool "+(composeMoreOpen?"active":"")} onClick={()=>{setComposeMoreOpen(v=>!v);setEmojiOpen(false)}} title="Дополнительные параметры"><MoreHorizontal/></button>
+     <button type="button" className={"sbComposeTool "+(composeMoreOpen?"active":"")} onClick={()=>{setComposeMoreOpen(v=>!v);setEmojiOpen(false);setSendMenuOpen(false)}} title="Дополнительные параметры"><MoreHorizontal/></button>
      {composeMoreOpen&&<div className="sbComposeMoreMenu">{!inline&&<button type="button" onClick={()=>{setComposeMoreOpen(false);setComposeMax(true);setComposeMin(false)}}><Maximize2/><span>На весь экран</span></button>}<button type="button" onClick={()=>{setComposeMoreOpen(false);toggleFormatting()}}><Bold/><span>{formattingOpen?"Скрыть форматирование":"Показать форматирование"}</span></button><button type="button" onClick={()=>{setComposeMoreOpen(false);insertSignature()}}><PenLine/><span>Вставить подпись</span></button></div>}
     </div>
    </div>
    <span className="sbComposeDockSpacer"/>
-   <small className="sbComposeSaveState">{draftState==="saving"?"Сохраняем…":draftState==="saved"?(inline?"Черновик сохранён":"Сохранено"):draftState==="offline"?"Нет сети":draftState==="error"?"Ошибка сохранения":""}</small>
    <button type="button" className="sbComposeDiscard" onClick={discardDraft} title="Удалить черновик" aria-label="Удалить черновик"><Trash2/></button>
   </div>
  }
