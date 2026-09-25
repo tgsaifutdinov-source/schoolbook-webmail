@@ -19628,3 +19628,24 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
     grid-template-columns:92px minmax(0,1fr)!important;
   }
 }
+
+
+/* Gmail selection v59 — shared hover for checkbox and caret */
+/* Hovering or pressing the arrow highlights the checkbox half as part of one control. */
+.gmailSelectControl:has(.selectCaret:hover) .toolbarCheck,
+.gmailSelectControl:has(.selectCaret:active) .toolbarCheck,
+.gmailSelectControl:has(.selectTypeMenu) .toolbarCheck{
+  background:#f1f3f4!important;
+}
+
+/* Keep both halves visually joined while the dropdown is open. */
+.gmailSelectControl:has(.selectTypeMenu) .selectCaret{
+  background:#f1f3f4!important;
+  color:#3c4043!important;
+}
+
+/* A subtle unified hover when the pointer is anywhere over the split control. */
+.gmailSelectControl:hover .toolbarCheck,
+.gmailSelectControl:hover .selectCaret{
+  background:#f1f3f4!important;
+}
