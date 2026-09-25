@@ -19649,3 +19649,43 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
 .gmailSelectControl:hover .selectCaret{
   background:#f1f3f4!important;
 }
+
+
+/* Gmail topbar v60 — avatar itself carries hover/active state */
+.gmailTopbar .accountButton{
+  background:transparent!important;
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+}
+.gmailTopbar .accountButton:hover,
+.gmailTopbar .accountButton:active,
+.gmailTopbar .accountButton:focus,
+.gmailTopbar .accountButton:focus-visible,
+.gmailTopbar .accountButton.active{
+  background:transparent!important;
+  outline:0!important;
+  box-shadow:none!important;
+}
+
+.gmailTopbar .accountButton .avatar{
+  border:0!important;
+  outline:0!important;
+  box-shadow:none!important;
+  background:#fff1b8!important;
+  color:#5c4700!important;
+  transition:background .12s ease,color .12s ease,filter .12s ease!important;
+}
+
+.gmailTopbar .accountButton:hover .avatar,
+.gmailTopbar .accountButton:focus-visible .avatar{
+  background:#ffe68a!important;
+  color:#493800!important;
+}
+
+.gmailTopbar .accountButton:active .avatar,
+.gmailTopbar .accountButton.active .avatar{
+  background:#f4c542!important;
+  color:#332900!important;
+  filter:none!important;
+}
