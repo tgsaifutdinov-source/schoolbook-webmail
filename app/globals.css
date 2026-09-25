@@ -17768,3 +17768,14 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
   .composeWindow.sbGmailCompose .sbComposeSaveState{display:none!important}
 }
 
+
+
+/* Gmail visual system v35 — flat sidebar shell */
+.mailSidebar,
+.workspace.sidebarCollapsed .mailSidebar,
+.workspace.sidebarCollapsed .mailSidebar:hover,
+.workspace.sidebarCollapsed .mailSidebar:focus-within,
+.mailSidebar.open{
+  border-radius:0!important;
+  box-shadow:none!important;
+}
