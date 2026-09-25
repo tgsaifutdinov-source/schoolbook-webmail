@@ -191,7 +191,25 @@ export default function Home(){
  async function goNextPage(){if(loading||!data?.hasMore)return;const next=Number(data.nextPosition??pagePosition+emails.length);if(next<=pagePosition)return;pageHistoryRef.current=[...pageHistoryRef.current,pagePosition].slice(-50);await goPage(next)}
  async function goPreviousPage(){if(loading||!pageHistoryRef.current.length)return;const history=[...pageHistoryRef.current],previous=history.pop();pageHistoryRef.current=history;if(typeof previous==="number")await goPage(previous)}
  function nextKeywords(current:Record<string,boolean>|undefined,kind:string):Record<string,boolean>{const keywords:Record<string,boolean>={...(current||{})};if(kind==="read")keywords["$seen"]=true;else if(kind==="unread")delete keywords["$seen"];else if(kind==="star")keywords["$flagged"]=true;else if(kind==="unstar")delete keywords["$flagged"];return keywords}
- function patchLocalKeywords(ids:string[],kind:string){setData(old=>old?{...old,emails:old.emails.map(m=>ids.includes(m.id)?{...m,keywords:nextKeywords(m.keywords,kind)}:m)}:old);if(selected&&ids.includes(selected.id))setSelected(m=>m?{...m,keywords:nextKeywords(m.keywords,kind)}:m)}
+ function patchLocalKeywords(ids:string[],kind:string){
+  const idSet=new Set(ids);
+  setData(old=>{
+   if(!old)return old;
+   const unreadDelta=new Map<string,number>();
+   const emails=old.emails.map(m=>{
+    if(!idSet.has(m.id))return m;
+    const wasSeen=!!m.keywords?.["$seen"],willSeen=kind==="read"?true:kind==="unread"?false:wasSeen;
+    if((kind==="read"||kind==="unread")&&wasSeen!==willSeen){
+     const delta=willSeen?-1:1;
+     for(const [mailboxId,present] of Object.entries(m.mailboxIds||{}))if(present)unreadDelta.set(mailboxId,(unreadDelta.get(mailboxId)||0)+delta);
+    }
+    return {...m,keywords:nextKeywords(m.keywords,kind)};
+   });
+   const mailboxes=unreadDelta.size?old.mailboxes.map(m=>{const delta=unreadDelta.get(m.id)||0;if(!delta)return m;return {...m,unreadEmails:Math.max(0,Number(m.unreadEmails||0)+delta)}}):old.mailboxes;
+   return {...old,emails,mailboxes};
+  });
+  if(selected&&idSet.has(selected.id))setSelected(m=>m?{...m,keywords:nextKeywords(m.keywords,kind)}:m);
+ }
  function restoreSnapshot(messages:MailItem[],addMissing=false){if(!messages.length)return;const snap=new Map(messages.map(m=>[m.id,m]));setData(old=>{if(!old)return old;const existing=old.emails.map(m=>snap.get(m.id)||m),missing=addMissing?messages.filter(m=>!old.emails.some(x=>x.id===m.id)):[],merged=[...existing,...missing].sort((a,b)=>sortOldest?String(a.receivedAt||"").localeCompare(String(b.receivedAt||"")):String(b.receivedAt||"").localeCompare(String(a.receivedAt||"")));return {...old,emails:merged,total:Math.max(0,(old.total??old.emails.length)+missing.length)}});if(selected&&snap.has(selected.id))setSelected(snap.get(selected.id)||null)}
  function applyIncrementalSync(payload:any,queryChangesEnabled:boolean){
   const q=payload?.query||{},emailChanges=payload?.emailChanges||{},mailboxChanges=payload?.mailboxChanges||{};
@@ -300,14 +318,14 @@ export default function Home(){
     if(advanceCandidate)openMail(advanceCandidate,"replace");
     else{setReaderOpen(false);writeWorkspaceUrl("replace",{readerOpen:false,selectedId:""})}
    }
-   if(mailboxChange||listDependsOnKeywordAction(kind))queueMailboxRefresh();
+   if(mailboxChange||kind==="read"||kind==="unread"||listDependsOnKeywordAction(kind))queueMailboxRefresh(60);
   }catch(e:any){
    if(snapshot.length)restoreSnapshot(snapshot,removable);
    if(wasSelected&&snapshot[0]){setSelected(snapshot[0]);setReaderOpen(true);writeWorkspaceUrl("replace",{readerOpen:true,selectedId:snapshot[0].id})}
    setToast(e.message||"Не удалось выполнить действие");queueMailboxRefresh(80);
   }finally{endMutation()}
  }
- async function bulkAction(kind:string){const ids=[...checked];if(!ids.length||bulkBusy)return;if(kind==="delete"){setDangerConfirm({kind:"bulkDelete",ids,mailboxScopeId:bulkInTrash?box:trashBox?.id});return}setBulkBusy(true);beginMutation();const messages=(data?.emails||[]).filter(m=>ids.includes(m.id)),mailboxChange=["archive","trash","restore","spam","notSpam"].includes(kind),removable=mailboxChange&&!query.trim();if(["read","unread","star","unstar"].includes(kind))patchLocalKeywords(ids,kind);if(removable)setData(old=>old?{...old,emails:old.emails.filter(m=>!ids.includes(m.id)),total:Math.max(0,(old.total||old.emails.length)-ids.length)}:old);try{const payload=(kind==="star"||kind==="unstar")?{ids}:actionPayload(ids,kind);const r=await fetch("/api/mail/action",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({...payload,action:kind})});const d=await r.json().catch(()=>({}));if(r.status===401){router.replace("/login");return}if(!r.ok)throw new Error(d.error||"Не удалось обработать выбранные переписки");if((kind==="archive"||kind==="trash"||kind==="spam"||kind==="notSpam")&&d.restoreMap&&Array.isArray(d.ids)&&d.ids.length)setUndoOp({message:kind==="archive"?"Переписки архивированы":kind==="trash"?"Переписки перемещены в корзину":kind==="spam"?"Переписки отправлены в спам":"Переписки возвращены из спама",ids:d.ids,restoreMap:d.restoreMap});else setToast("Обработано переписок: "+ids.length);clearSelection();if(removable){setSelected(null);setFull(null);setReaderOpen(false)}if(mailboxChange||listDependsOnKeywordAction(kind))queueMailboxRefresh()}catch(e:any){restoreSnapshot(messages,removable);setToast(e.message||"Не удалось обработать выбранные переписки");queueMailboxRefresh(80)}finally{endMutation();setBulkBusy(false)}}
+ async function bulkAction(kind:string){const ids=[...checked];if(!ids.length||bulkBusy)return;if(kind==="delete"){setDangerConfirm({kind:"bulkDelete",ids,mailboxScopeId:bulkInTrash?box:trashBox?.id});return}setBulkBusy(true);beginMutation();const messages=(data?.emails||[]).filter(m=>ids.includes(m.id)),mailboxChange=["archive","trash","restore","spam","notSpam"].includes(kind),removable=mailboxChange&&!query.trim();if(["read","unread","star","unstar"].includes(kind))patchLocalKeywords(ids,kind);if(removable)setData(old=>old?{...old,emails:old.emails.filter(m=>!ids.includes(m.id)),total:Math.max(0,(old.total||old.emails.length)-ids.length)}:old);try{const payload=(kind==="star"||kind==="unstar")?{ids}:actionPayload(ids,kind);const r=await fetch("/api/mail/action",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({...payload,action:kind})});const d=await r.json().catch(()=>({}));if(r.status===401){router.replace("/login");return}if(!r.ok)throw new Error(d.error||"Не удалось обработать выбранные переписки");if((kind==="archive"||kind==="trash"||kind==="spam"||kind==="notSpam")&&d.restoreMap&&Array.isArray(d.ids)&&d.ids.length)setUndoOp({message:kind==="archive"?"Переписки архивированы":kind==="trash"?"Переписки перемещены в корзину":kind==="spam"?"Переписки отправлены в спам":"Переписки возвращены из спама",ids:d.ids,restoreMap:d.restoreMap});else setToast("Обработано переписок: "+ids.length);clearSelection();if(removable){setSelected(null);setFull(null);setReaderOpen(false)}if(mailboxChange||kind==="read"||kind==="unread"||listDependsOnKeywordAction(kind))queueMailboxRefresh(60)}catch(e:any){restoreSnapshot(messages,removable);setToast(e.message||"Не удалось обработать выбранные переписки");queueMailboxRefresh(80)}finally{endMutation();setBulkBusy(false)}}
  async function confirmPermanentDelete(){
   if(!dangerConfirm||bulkBusy)return;
   const ids=dangerConfirm.ids,wasReaderDelete=ids.length===1&&selected?.id===ids[0],rowIndex=wasReaderDelete?emails.findIndex(m=>m.id===ids[0]):-1,advanceCandidate=wasReaderDelete&&rowIndex>=0?(emails[rowIndex+1]||emails[rowIndex-1]||null):null;
