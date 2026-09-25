@@ -18588,3 +18588,191 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
     right:7px!important;
   }
 }
+
+
+/* Gmail compose v51 — collapsible sender / recipient block */
+/* Default compose state is one compact "Получатели" row. */
+.composeWindow.sbGmailCompose .composeRecipientsCollapsed{
+  width:100%!important;
+  min-width:0!important;
+  height:38px!important;
+  min-height:38px!important;
+  flex:0 0 38px!important;
+  margin:0!important;
+  padding:0 12px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  border:0!important;
+  border-bottom:1px solid #edf0f2!important;
+  border-radius:0!important;
+  background:#fff!important;
+  color:#5f6368!important;
+  box-shadow:none!important;
+  outline:0!important;
+  text-align:left!important;
+  box-sizing:border-box!important;
+}
+.composeWindow.sbGmailCompose .composeRecipientsCollapsed span{
+  display:block!important;
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  font-size:12.5px!important;
+  font-weight:500!important;
+  line-height:38px!important;
+}
+.composeWindow.sbGmailCompose .composeRecipientsCollapsed:hover,
+.composeWindow.sbGmailCompose .composeRecipientsCollapsed:focus-visible{
+  background:#fff!important;
+  color:#202124!important;
+  outline:0!important;
+  box-shadow:none!important;
+}
+
+/* Clicking "Получатели" unfolds exactly two layers: sender and To/CC/BCC. */
+.composeWindow.sbGmailCompose .composeRecipientDetails{
+  position:relative!important;
+  width:100%!important;
+  min-width:0!important;
+  flex:0 0 auto!important;
+  display:flex!important;
+  flex-direction:column!important;
+  overflow:visible!important;
+  background:#fff!important;
+  box-sizing:border-box!important;
+}
+
+/* Expanded sender row. */
+.composeWindow.sbGmailCompose .composeRecipientDetails .composeIdentity{
+  width:100%!important;
+  min-height:38px!important;
+  height:38px!important;
+  flex:0 0 38px!important;
+  padding:0 12px!important;
+  display:grid!important;
+  grid-template-columns:82px minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:8px!important;
+  border:0!important;
+  border-bottom:1px solid #edf0f2!important;
+  background:#fff!important;
+  box-sizing:border-box!important;
+}
+.composeWindow.sbGmailCompose .composeRecipientDetails .composeIdentity>span{
+  color:#5f6368!important;
+  font-size:12px!important;
+  font-weight:500!important;
+}
+.composeWindow.sbGmailCompose .composeRecipientDetails .composeIdentity select{
+  min-width:0!important;
+  height:32px!important;
+  padding-left:0!important;
+  color:#202124!important;
+  font-size:12.5px!important;
+  font-weight:500!important;
+}
+
+/* Expanded To line mirrors the Gmail screenshot. */
+.composeWindow.sbGmailCompose .composeRecipientDetails .recipientChipField{
+  width:100%!important;
+  min-width:0!important;
+  min-height:38px!important;
+  padding:3px 8px 3px 12px!important;
+  display:grid!important;
+  grid-template-columns:82px minmax(0,1fr) auto!important;
+  align-items:center!important;
+  column-gap:8px!important;
+  border:0!important;
+  border-bottom:1px solid #edf0f2!important;
+  background:#fff!important;
+  overflow:visible!important;
+  box-sizing:border-box!important;
+}
+.composeWindow.sbGmailCompose .composeRecipientDetails .recipientFieldLabel{
+  min-width:0!important;
+  width:82px!important;
+  height:30px!important;
+  color:#5f6368!important;
+  font-size:12px!important;
+  font-weight:500!important;
+  line-height:30px!important;
+}
+.composeWindow.sbGmailCompose .composeRecipientDetails .recipientChipEditor{
+  width:100%!important;
+  min-width:0!important;
+  min-height:30px!important;
+}
+.composeWindow.sbGmailCompose .composeRecipientDetails .recipientChipEditor>input{
+  min-width:80px!important;
+  height:30px!important;
+  font-size:12.5px!important;
+  line-height:30px!important;
+}
+.composeWindow.sbGmailCompose .composeRecipientDetails .recipientExtras{
+  align-self:center!important;
+  gap:2px!important;
+}
+.composeWindow.sbGmailCompose .composeRecipientDetails .recipientExtras button{
+  height:30px!important;
+  padding:0 3px!important;
+  border:0!important;
+  background:transparent!important;
+  color:#5f6368!important;
+  font-size:11.5px!important;
+  font-weight:500!important;
+  line-height:30px!important;
+}
+.composeWindow.sbGmailCompose .composeRecipientDetails .recipientExtras button:hover{
+  background:transparent!important;
+  color:#202124!important;
+}
+
+/* Contact suggestions align under the actual input, not under the label. */
+.composeWindow.sbGmailCompose .composeRecipientDetails .recipientChipField .recipientSuggestions{
+  left:102px!important;
+  right:auto!important;
+  width:min(322px,calc(100% - 114px))!important;
+  min-width:260px!important;
+  max-width:322px!important;
+}
+
+/* Subject follows immediately after either collapsed or expanded recipient block. */
+.composeWindow.sbGmailCompose .composeSubject{
+  flex:0 0 38px!important;
+}
+
+/* Mobile keeps the same interaction with slightly narrower label columns. */
+@media(max-width:850px){
+  .composeWindow.sbGmailCompose .composeRecipientsCollapsed{
+    height:40px!important;
+    min-height:40px!important;
+    flex-basis:40px!important;
+    padding-left:12px!important;
+  }
+  .composeWindow.sbGmailCompose .composeRecipientsCollapsed span{
+    font-size:13px!important;
+    line-height:40px!important;
+  }
+  .composeWindow.sbGmailCompose .composeRecipientDetails .composeIdentity{
+    grid-template-columns:64px minmax(0,1fr)!important;
+    height:40px!important;
+    min-height:40px!important;
+    flex-basis:40px!important;
+  }
+  .composeWindow.sbGmailCompose .composeRecipientDetails .recipientChipField{
+    grid-template-columns:64px minmax(0,1fr) auto!important;
+    min-height:40px!important;
+  }
+  .composeWindow.sbGmailCompose .composeRecipientDetails .recipientFieldLabel{
+    width:64px!important;
+  }
+  .composeWindow.sbGmailCompose .composeRecipientDetails .recipientChipField .recipientSuggestions{
+    left:76px!important;
+    right:8px!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+  }
+}
