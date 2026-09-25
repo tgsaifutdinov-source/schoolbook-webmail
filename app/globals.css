@@ -19591,3 +19591,40 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
     transition:none!important;
   }
 }
+
+
+/* Gmail reader v58 — left-aligned recipient metadata */
+.gmailReader .conversationWho .messageDetails{
+  align-items:stretch!important;
+  text-align:left!important;
+}
+
+.gmailReader .conversationWho .messageDetails>.messageDetailsRow{
+  grid-template-columns:112px minmax(0,1fr)!important;
+  justify-items:start!important;
+  text-align:left!important;
+}
+
+.gmailReader .conversationWho .messageDetails>.messageDetailsRow>span{
+  width:auto!important;
+  min-width:0!important;
+  text-align:left!important;
+  justify-self:start!important;
+}
+
+.gmailReader .conversationWho .messageDetails>.messageDetailsRow>b{
+  width:100%!important;
+  text-align:left!important;
+  justify-self:start!important;
+}
+
+.gmailReader .conversationWho .messageDetails>.messageDetailsSecurity>b{
+  justify-content:flex-start!important;
+  text-align:left!important;
+}
+
+@media(max-width:850px){
+  .gmailReader .conversationWho .messageDetails>.messageDetailsRow{
+    grid-template-columns:92px minmax(0,1fr)!important;
+  }
+}
