@@ -124,6 +124,7 @@ export default function Home(){
  useEffect(()=>{if(settingsOpen)void ensureIdentities(true)},[settingsOpen]);
  useEffect(()=>{if(compose||contactPanelOpen)void ensureContacts()},[compose,contactPanelOpen]);
  useEffect(()=>{if(!compose||inlineReplyMode||composeMin)return;const el=composeEditorRef.current;if(!el)return;if(!el.innerHTML)el.innerHTML=html||textToHtml(text)},[compose,inlineReplyMode,composeMin]);
+ useEffect(()=>{if(!compose||!inlineReplyMode)return;const frame=requestAnimationFrame(()=>{const editor=composeEditorRef.current,root=editor?.closest(".inlineReplyComposer") as HTMLElement|null;root?.scrollIntoView({behavior:"smooth",block:"nearest"});editor?.focus({preventScroll:true})});return()=>cancelAnimationFrame(frame)},[compose,inlineReplyMode,selected?.id]);
  useEffect(()=>{if(!compose||inlineReplyMode||!formatBarOpen)return;const update=()=>{const sel=document.getSelection();if(sel?.anchorNode&&composeEditorRef.current?.contains(sel.anchorNode))refreshFormatState()};document.addEventListener("selectionchange",update);return()=>document.removeEventListener("selectionchange",update)},[compose,inlineReplyMode,formatBarOpen]);
  const currentBox=data?.mailboxes.find(x=>x.id===box);
  const inboxBox=data?.mailboxes.find(x=>x.role==="inbox");
