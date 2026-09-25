@@ -3,7 +3,7 @@ import {sameOriginGuard} from "../../../../lib/security";
 import {buildJmapEmail} from "../../../../lib/jmap-email";
 import {NextRequest,NextResponse} from "next/server";
 
-type SendRecord={status:"processing"|"sent";expiresAt:number;response?:{ok:true,emailId:string,scheduledAt?:string}};
+type SendRecord={status:"processing"|"sent";expiresAt:number;response?:{ok:true,emailId:string,scheduledAt?:string,submissionId?:string,undoUntil?:string,undoable?:boolean}};
 declare global{var __schoolbookSendRequests:Map<string,SendRecord>|undefined}
 const sendRequests=globalThis.__schoolbookSendRequests||(globalThis.__schoolbookSendRequests=new Map<string,SendRecord>());
 function trimSendRequests(){
@@ -26,8 +26,8 @@ export async function POST(req:NextRequest){
  if(!sr.ok)return NextResponse.json({error:"Unauthorized"},{status:401});
  const s=await sr.json();
  const accountId=s.primaryAccounts?.["urn:ietf:params:jmap:mail"]||Object.keys(s.accounts||{})[0];
- const submissionCapabilities=s.accounts?.[accountId]?.accountCapabilities?.["urn:ietf:params:jmap:submission"]||{},maxDelayedSend=Math.max(0,Number(submissionCapabilities.maxDelayedSend)||0);
- const scheduledMs=scheduleAt?Date.parse(scheduleAt):0,delaySeconds=scheduleAt?Math.ceil((scheduledMs-Date.now())/1000):0;
+ const submissionCapabilities=s.accounts?.[accountId]?.accountCapabilities?.["urn:ietf:params:jmap:submission"]||{},maxDelayedSend=Math.max(0,Number(submissionCapabilities.maxDelayedSend)||0),undoHoldSeconds=8,undoable=!scheduleAt&&maxDelayedSend>=undoHoldSeconds;
+ const scheduledMs=scheduleAt?Date.parse(scheduleAt):0,delaySeconds=scheduleAt?Math.ceil((scheduledMs-Date.now())/1000):0,undoUntilMs=undoable?Date.now()+undoHoldSeconds*1000:0;
  if(scheduleAt&&(!Number.isFinite(scheduledMs)||delaySeconds<60))return NextResponse.json({error:"Выберите время отправки минимум на минуту позже текущего"},{status:400});
  if(scheduleAt&&maxDelayedSend<=0)return NextResponse.json({error:"Этот сервер не поддерживает отложенную отправку через JMAP"},{status:400});
  if(scheduleAt&&delaySeconds>maxDelayedSend)return NextResponse.json({error:"Сервер позволяет отложить отправку максимум на "+Math.floor(maxDelayedSend/3600)+" ч."},{status:400});
@@ -68,11 +68,11 @@ export async function POST(req:NextRequest){
  const cr=await fetch(endpoint,{method:"POST",headers,body:JSON.stringify(createBody),cache:"no-store"});const cd=await cr.json();
  const created=cd.methodResponses?.find((x:any)=>x[0]==="Email/set");const emailError=created?.[1]?.notCreated?.send;const emailId=created?.[1]?.created?.send?.id;
  if(emailError||!emailId){if(requestKey)sendRequests.delete(requestKey);console.error("JMAP Email/set failed",JSON.stringify(cd));return NextResponse.json({error:emailError?.description||"Не удалось создать письмо",type:emailError?.type||"jmapError",properties:emailError?.properties||[]},{status:400})}
- const submission:any={identityId:identity.id,emailId};if(scheduleAt)submission.sendAt=new Date(scheduledMs).toISOString();
+ const submission:any={identityId:identity.id,emailId};if(scheduleAt)submission.sendAt=new Date(scheduledMs).toISOString();else if(undoable)submission.sendAt=new Date(undoUntilMs).toISOString();
  const submitBody={using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail","urn:ietf:params:jmap:submission"],methodCalls:[["EmailSubmission/set",{accountId,create:{send:submission}},"s"]]};
- const rr=await fetch(endpoint,{method:"POST",headers,body:JSON.stringify(submitBody),cache:"no-store"});const sd=await rr.json();const submissionResult=sd.methodResponses?.find((x:any)=>x[0]==="EmailSubmission/set");const sendError=submissionResult?.[1]?.notCreated?.send;
+ const rr=await fetch(endpoint,{method:"POST",headers,body:JSON.stringify(submitBody),cache:"no-store"});const sd=await rr.json();const submissionResult=sd.methodResponses?.find((x:any)=>x[0]==="EmailSubmission/set");const sendError=submissionResult?.[1]?.notCreated?.send,submissionId=submissionResult?.[1]?.created?.send?.id;
  if(sendError||!submissionResult){if(requestKey)sendRequests.delete(requestKey);console.error("JMAP EmailSubmission/set failed",JSON.stringify(sd));await fetch(endpoint,{method:"POST",headers,body:JSON.stringify({using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",{accountId,destroy:[emailId]},"cleanupFailedSend"]]}),cache:"no-store"}).catch(()=>null);return NextResponse.json({error:sendError?.description||"Не удалось отправить письмо",type:sendError?.type||"jmapError"},{status:400})}
- if(requestKey)sendRequests.set(requestKey,{status:"sent",expiresAt:Date.now()+15*60*1000,response:{ok:true,emailId,...(scheduleAt?{scheduledAt:new Date(scheduledMs).toISOString()}:{})}});
+ if(requestKey)sendRequests.set(requestKey,{status:"sent",expiresAt:Date.now()+15*60*1000,response:{ok:true,emailId,...(scheduleAt?{scheduledAt:new Date(scheduledMs).toISOString()}:{}),...(undoable&&submissionId?{submissionId,undoUntil:new Date(undoUntilMs).toISOString(),undoable:true}:{undoable:false})}});
 
  if(emailId&&sent){
   const patch:any={"keywords/$draft":null};
@@ -82,5 +82,5 @@ export async function POST(req:NextRequest){
  if(draftId&&draftId!==emailId){
   await fetch(endpoint,{method:"POST",headers,body:JSON.stringify({using:["urn:ietf:params:jmap:core","urn:ietf:params:jmap:mail"],methodCalls:[["Email/set",{accountId,destroy:[draftId]},"cleanup"]]}),cache:"no-store"}).catch(()=>null);
  }
- return NextResponse.json({ok:true,emailId,identityId:identity.id,...(scheduleAt?{scheduledAt:new Date(scheduledMs).toISOString()}:{})});
+ return NextResponse.json({ok:true,emailId,identityId:identity.id,...(scheduleAt?{scheduledAt:new Date(scheduledMs).toISOString()}:{}),...(undoable&&submissionId?{submissionId,undoUntil:new Date(undoUntilMs).toISOString(),undoable:true}:{undoable:false})});
 }
