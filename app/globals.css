@@ -17818,3 +17818,127 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
     border-radius:0 0 12px 12px!important;
   }
 }
+
+
+/* Gmail inline reply v46 — proper overflow popovers */
+.gmailReader .sbInlineReply .sbComposeMoreWrap,
+.gmailReader .sbInlineReply .sbComposeEmojiWrap{
+  position:relative!important;
+  flex:0 0 auto!important;
+}
+
+/* Three-dot menu must float above the toolbar, never take space in the row. */
+.gmailReader .sbInlineReply .sbComposeMoreMenu{
+  position:absolute!important;
+  z-index:900!important;
+  right:-4px!important;
+  bottom:38px!important;
+  width:218px!important;
+  min-width:218px!important;
+  padding:6px!important;
+  display:flex!important;
+  flex-direction:column!important;
+  gap:1px!important;
+  overflow:hidden!important;
+  border:1px solid #e2e5e9!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  box-shadow:
+    0 8px 24px rgba(60,64,67,.20),
+    0 2px 6px rgba(60,64,67,.10)!important;
+  box-sizing:border-box!important;
+}
+
+.gmailReader .sbInlineReply .sbComposeMoreMenu>button{
+  width:100%!important;
+  height:36px!important;
+  min-height:36px!important;
+  margin:0!important;
+  padding:0 10px!important;
+  display:grid!important;
+  grid-template-columns:20px minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:9px!important;
+  border:0!important;
+  border-radius:6px!important;
+  background:transparent!important;
+  color:#3c4043!important;
+  box-shadow:none!important;
+  font-size:11.5px!important;
+  font-weight:500!important;
+  line-height:1!important;
+  text-align:left!important;
+  white-space:nowrap!important;
+}
+
+.gmailReader .sbInlineReply .sbComposeMoreMenu>button:hover,
+.gmailReader .sbInlineReply .sbComposeMoreMenu>button:focus-visible{
+  background:#f1f3f4!important;
+  color:#202124!important;
+  outline:0!important;
+  box-shadow:none!important;
+}
+
+.gmailReader .sbInlineReply .sbComposeMoreMenu>button svg{
+  width:15px!important;
+  height:15px!important;
+  color:#5f6368!important;
+  stroke-width:1.9!important;
+}
+
+/* Emoji picker uses the same floating-popover behavior. */
+.gmailReader .sbInlineReply .sbComposeEmojiMenu{
+  position:absolute!important;
+  z-index:900!important;
+  left:-88px!important;
+  bottom:38px!important;
+  width:220px!important;
+  padding:8px!important;
+  display:grid!important;
+  grid-template-columns:repeat(6,30px)!important;
+  justify-content:center!important;
+  gap:3px!important;
+  border:1px solid #e2e5e9!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  box-shadow:
+    0 8px 24px rgba(60,64,67,.20),
+    0 2px 6px rgba(60,64,67,.10)!important;
+}
+
+.gmailReader .sbInlineReply .sbComposeEmojiMenu>button{
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+  padding:0!important;
+  display:grid!important;
+  place-items:center!important;
+  border:0!important;
+  border-radius:6px!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  font-size:17px!important;
+  line-height:1!important;
+}
+
+.gmailReader .sbInlineReply .sbComposeEmojiMenu>button:hover{
+  background:#f1f3f4!important;
+}
+
+@media(max-width:850px){
+  .gmailReader .sbInlineReply .sbComposeMoreMenu{
+    position:fixed!important;
+    right:10px!important;
+    bottom:max(62px,calc(env(safe-area-inset-bottom) + 58px))!important;
+    width:min(218px,calc(100vw - 20px))!important;
+    min-width:0!important;
+  }
+  .gmailReader .sbInlineReply .sbComposeEmojiMenu{
+    position:fixed!important;
+    left:10px!important;
+    right:10px!important;
+    bottom:max(62px,calc(env(safe-area-inset-bottom) + 58px))!important;
+    width:auto!important;
+    grid-template-columns:repeat(6,minmax(30px,1fr))!important;
+  }
+}
