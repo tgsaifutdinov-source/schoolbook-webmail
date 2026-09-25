@@ -17942,3 +17942,207 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
     grid-template-columns:repeat(6,minmax(30px,1fr))!important;
   }
 }
+
+
+/* Gmail sidebar v47 — adaptive width and modern unread badges */
+:root{
+  --sb-sidebar-expanded:clamp(248px,18.5vw,286px);
+}
+
+/* Give the desktop sidebar enough room for icon + label + unread count.
+   The collapsed rail keeps its 70px footprint and expands as an overlay. */
+@media(min-width:851px){
+  .workspace:not(.sidebarCollapsed){
+    grid-template-columns:var(--sb-sidebar-expanded) minmax(0,1fr)!important;
+  }
+
+  .workspace:not(.sidebarCollapsed) .mailSidebar{
+    width:100%!important;
+    min-width:0!important;
+    max-width:none!important;
+  }
+
+  .workspace.sidebarCollapsed .mailSidebar:hover,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within{
+    width:min(var(--sb-sidebar-expanded),calc(100vw - 8px))!important;
+    min-width:min(var(--sb-sidebar-expanded),calc(100vw - 8px))!important;
+    max-width:min(var(--sb-sidebar-expanded),calc(100vw - 8px))!important;
+    box-shadow:none!important;
+  }
+}
+
+/* No horizontal scrollbar in the navigation: rows shrink internally instead. */
+.mailSidebar,
+.mailSidebar nav,
+.mailSidebar .primaryFolders,
+.mailSidebar .customFolders,
+.mailSidebar .savedSearchSidebar{
+  overflow-x:hidden!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+}
+
+.mailSidebar nav{
+  scrollbar-width:none!important;
+}
+.mailSidebar nav::-webkit-scrollbar{
+  width:0!important;
+  height:0!important;
+  display:none!important;
+}
+
+/* Expanded rows use a stable icon / text / counter grid. */
+.workspace:not(.sidebarCollapsed) .mailSidebar nav>button,
+.workspace:not(.sidebarCollapsed) .mailSidebar .folderMain,
+.workspace:not(.sidebarCollapsed) .mailSidebar .savedSearchMain,
+.workspace.sidebarCollapsed .mailSidebar:hover nav>button,
+.workspace.sidebarCollapsed .mailSidebar:focus-within nav>button,
+.workspace.sidebarCollapsed .mailSidebar:hover .folderMain,
+.workspace.sidebarCollapsed .mailSidebar:focus-within .folderMain,
+.workspace.sidebarCollapsed .mailSidebar:hover .savedSearchMain,
+.workspace.sidebarCollapsed .mailSidebar:focus-within .savedSearchMain{
+  width:100%!important;
+  min-width:0!important;
+  display:grid!important;
+  grid-template-columns:22px minmax(0,1fr) auto!important;
+  align-items:center!important;
+  column-gap:12px!important;
+  padding-right:12px!important;
+  overflow:hidden!important;
+  box-sizing:border-box!important;
+}
+
+.workspace:not(.sidebarCollapsed) .mailSidebar .sidebarMoreButton,
+.workspace.sidebarCollapsed .mailSidebar:hover .sidebarMoreButton,
+.workspace.sidebarCollapsed .mailSidebar:focus-within .sidebarMoreButton{
+  grid-template-columns:22px minmax(0,1fr) 18px!important;
+}
+
+.workspace:not(.sidebarCollapsed) .mailSidebar nav>button>svg,
+.workspace:not(.sidebarCollapsed) .mailSidebar .folderMain>svg,
+.workspace:not(.sidebarCollapsed) .mailSidebar .savedSearchMain>svg,
+.workspace.sidebarCollapsed .mailSidebar:hover nav>button>svg,
+.workspace.sidebarCollapsed .mailSidebar:focus-within nav>button>svg,
+.workspace.sidebarCollapsed .mailSidebar:hover .folderMain>svg,
+.workspace.sidebarCollapsed .mailSidebar:focus-within .folderMain>svg,
+.workspace.sidebarCollapsed .mailSidebar:hover .savedSearchMain>svg,
+.workspace.sidebarCollapsed .mailSidebar:focus-within .savedSearchMain>svg{
+  justify-self:center!important;
+  flex:none!important;
+}
+
+.workspace:not(.sidebarCollapsed) .mailSidebar nav>button>span,
+.workspace:not(.sidebarCollapsed) .mailSidebar .folderMain>span,
+.workspace:not(.sidebarCollapsed) .mailSidebar .savedSearchMain>span,
+.workspace.sidebarCollapsed .mailSidebar:hover nav>button>span,
+.workspace.sidebarCollapsed .mailSidebar:focus-within nav>button>span,
+.workspace.sidebarCollapsed .mailSidebar:hover .folderMain>span,
+.workspace.sidebarCollapsed .mailSidebar:focus-within .folderMain>span,
+.workspace.sidebarCollapsed .mailSidebar:hover .savedSearchMain>span,
+.workspace.sidebarCollapsed .mailSidebar:focus-within .savedSearchMain>span{
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+
+/* Compact, modern unread pills. */
+.mailSidebar nav>button em,
+.mailSidebar .folderMain em{
+  justify-self:end!important;
+  flex:0 0 auto!important;
+  margin:0!important;
+  min-width:22px!important;
+  max-width:48px!important;
+  height:20px!important;
+  padding:0 7px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  overflow:hidden!important;
+  border:0!important;
+  border-radius:999px!important;
+  background:#e9edf2!important;
+  box-shadow:none!important;
+  color:#55606c!important;
+  font-size:10px!important;
+  font-weight:700!important;
+  font-style:normal!important;
+  line-height:20px!important;
+  letter-spacing:0!important;
+  font-variant-numeric:tabular-nums!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  opacity:1!important;
+}
+
+.mailSidebar nav>button:hover em,
+.mailSidebar .folderMain:hover em{
+  background:#dfe5eb!important;
+  color:#3f4852!important;
+}
+
+.mailSidebar nav>button.active em,
+.mailSidebar .customFolderRow.active .folderMain em{
+  background:#f4c542!important;
+  color:#3d3000!important;
+}
+
+.mailSidebar nav>button.active:hover em,
+.mailSidebar .customFolderRow.active .folderMain:hover em{
+  background:#efbd2f!important;
+  color:#332800!important;
+}
+
+/* Keep custom-folder action controls from forcing the row wider. */
+.mailSidebar .customFolderRow,
+.mailSidebar .savedSearchSidebarRow{
+  min-width:0!important;
+  max-width:100%!important;
+  box-sizing:border-box!important;
+}
+.mailSidebar .folderContextWrap,
+.mailSidebar .savedSearchRemove{
+  flex:0 0 auto!important;
+}
+
+/* Mobile drawer gets the same clean row geometry without exceeding the viewport. */
+@media(max-width:850px){
+  .mailSidebar{
+    width:min(286px,88vw)!important;
+    min-width:0!important;
+    max-width:88vw!important;
+    overflow-x:hidden!important;
+  }
+  .mailSidebar nav>button,
+  .mailSidebar .folderMain,
+  .mailSidebar .savedSearchMain{
+    width:100%!important;
+    min-width:0!important;
+    display:grid!important;
+    grid-template-columns:20px minmax(0,1fr) auto!important;
+    column-gap:11px!important;
+    padding-right:11px!important;
+    overflow:hidden!important;
+    box-sizing:border-box!important;
+  }
+  .mailSidebar .sidebarMoreButton{
+    grid-template-columns:20px minmax(0,1fr) 18px!important;
+  }
+  .mailSidebar nav>button>span,
+  .mailSidebar .folderMain>span,
+  .mailSidebar .savedSearchMain>span{
+    min-width:0!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+  }
+  .mailSidebar nav>button em,
+  .mailSidebar .folderMain em{
+    min-width:20px!important;
+    height:19px!important;
+    padding:0 6px!important;
+    font-size:9.5px!important;
+    line-height:19px!important;
+  }
+}
