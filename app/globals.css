@@ -15260,3 +15260,180 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
     display:none!important;
   }
 }
+
+
+/* Recipient chooser hard reset v36 */
+.composeWindow .recipientChipField{
+  position:relative!important;
+}
+.composeWindow .recipientChipField .recipientSuggestions{
+  position:absolute!important;
+  z-index:230!important;
+  top:calc(100% + 4px)!important;
+  left:72px!important;
+  right:10px!important;
+  width:auto!important;
+  min-width:0!important;
+  max-width:none!important;
+  max-height:300px!important;
+  padding:6px 0!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  border:1px solid #e0e4e9!important;
+  border-radius:10px!important;
+  background:#fff!important;
+  box-shadow:0 12px 28px rgba(32,33,36,.16),0 2px 7px rgba(32,33,36,.08)!important;
+}
+.composeWindow .recipientSuggestionCaption{
+  height:30px!important;
+  padding:0 12px!important;
+  display:flex!important;
+  align-items:center!important;
+  color:#6f7782!important;
+  font-size:11px!important;
+  font-weight:600!important;
+}
+.composeWindow .recipientSuggestionRow{
+  position:relative!important;
+  width:100%!important;
+  min-width:0!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 36px!important;
+  align-items:center!important;
+  background:#fff!important;
+}
+.composeWindow .recipientSuggestionRow:hover,
+.composeWindow .recipientSuggestionRow.active{
+  background:#f5f7f9!important;
+}
+.composeWindow .recipientSuggestionRow .recipientSuggestion{
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+  min-height:54px!important;
+  height:auto!important;
+  padding:7px 10px!important;
+  display:grid!important;
+  grid-template-columns:34px minmax(0,1fr) 18px!important;
+  align-items:center!important;
+  column-gap:10px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  text-align:left!important;
+  overflow:hidden!important;
+}
+.composeWindow .recipientSuggestionRow .contactAvatar{
+  width:34px!important;
+  height:34px!important;
+  min-width:34px!important;
+  flex:0 0 34px!important;
+  font-size:12px!important;
+}
+.composeWindow .recipientSuggestionRow .contactMeta{
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:flex-start!important;
+  gap:2px!important;
+  overflow:hidden!important;
+}
+.composeWindow .recipientSuggestionRow .contactName,
+.composeWindow .recipientSuggestionRow .contactEmail{
+  display:block!important;
+  width:100%!important;
+  max-width:100%!important;
+  margin:0!important;
+  padding:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+}
+.composeWindow .recipientSuggestionRow .contactName{
+  color:#202124!important;
+  font-size:13px!important;
+  font-weight:600!important;
+  line-height:1.3!important;
+}
+.composeWindow .recipientSuggestionRow .contactEmail{
+  color:#6f7782!important;
+  font-size:11.5px!important;
+  font-weight:400!important;
+  line-height:1.3!important;
+}
+.composeWindow .recipientFavoriteMark{
+  width:14px!important;
+  height:14px!important;
+  min-width:14px!important;
+}
+.composeWindow .recipientSuggestionHide{
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+  margin-right:4px!important;
+  border-radius:50%!important;
+}
+.composeWindow .recipientEmpty{
+  min-height:46px!important;
+  padding:0 12px!important;
+  display:flex!important;
+  align-items:center!important;
+  color:#6f7782!important;
+  font-size:12px!important;
+}
+
+/* The typed address/chip also stays readable. */
+.composeWindow .recipientChipEditor{
+  min-width:0!important;
+}
+.composeWindow .recipientChipIdentity{
+  width:auto!important;
+  max-width:none!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  white-space:nowrap!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+}
+.composeWindow .recipientChip{
+  max-width:100%!important;
+}
+.composeWindow .recipientChipEditor>input{
+  min-width:150px!important;
+  flex:1 1 180px!important;
+}
+
+/* Smaller desktops: keep the popup wide instead of squeezing the text column. */
+@media(max-width:1100px) and (min-width:851px){
+  .composeWindow .recipientChipField .recipientSuggestions{
+    left:66px!important;
+    right:8px!important;
+  }
+}
+@media(max-width:850px){
+  .composeWindow .recipientChipField .recipientSuggestions{
+    position:absolute!important;
+    left:8px!important;
+    right:8px!important;
+    top:calc(100% + 4px)!important;
+    bottom:auto!important;
+    width:auto!important;
+    max-width:none!important;
+    max-height:min(320px,44dvh)!important;
+  }
+  .composeWindow .recipientSuggestionRow .recipientSuggestion{
+    min-height:56px!important;
+    grid-template-columns:36px minmax(0,1fr) 18px!important;
+    padding:8px 10px!important;
+  }
+  .composeWindow .recipientSuggestionRow .contactName{
+    font-size:13px!important;
+  }
+  .composeWindow .recipientSuggestionRow .contactEmail{
+    font-size:11.5px!important;
+  }
+}
