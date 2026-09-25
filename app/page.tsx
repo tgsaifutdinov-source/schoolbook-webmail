@@ -2,7 +2,7 @@
 import {useEffect,useMemo,useRef,useState} from "react";
 import type {KeyboardEvent as ReactKeyboardEvent} from "react";
 import {useRouter} from "next/navigation";
-import {Archive,ArrowLeft,Bold,ChevronDown,ChevronLeft,ChevronRight,Copy,Download,FileText,Folder,Forward,Image as ImageIcon,Inbox,Italic,Link,LogOut,Mail,MailOpen,Maximize2,Menu,Minimize2,Minus,MoreHorizontal,Paperclip,PenLine,Plus,RefreshCw,Reply,ReplyAll,Search,Send,Settings2,ShieldAlert,SlidersHorizontal,Smile,Star,Tag,Trash2,Underline,Users,X,List,ListOrdered} from "lucide-react";
+import {AlignLeft,Archive,ArrowLeft,Bold,ChevronDown,ChevronLeft,ChevronRight,Copy,Download,FileText,Folder,Forward,Image as ImageIcon,Inbox,IndentDecrease,IndentIncrease,Italic,Link,LogOut,Mail,MailOpen,Maximize2,Menu,Minimize2,Minus,MoreHorizontal,Paperclip,PenLine,Plus,Quote,RefreshCw,Reply,ReplyAll,Search,Send,Settings2,ShieldAlert,SlidersHorizontal,Smile,Star,Tag,Trash2,Underline,Users,X,List,ListOrdered} from "lucide-react";
 type Box={id:string,name:string,role?:string,sortOrder?:number,totalEmails?:number,unreadEmails?:number};
 type Addr={name?:string,email:string};
 type MailIdentity={id:string,name?:string,email:string,replyTo?:Addr[],bcc?:Addr[],textSignature?:string,htmlSignature?:string,mayDelete?:boolean};
@@ -396,10 +396,14 @@ export default function Home(){
    <button type="button" className={formatState.bold?"active":""} onMouseDown={e=>e.preventDefault()} onClick={()=>composeCommand("bold")} title="Жирный"><Bold/></button>
    <button type="button" className={formatState.italic?"active":""} onMouseDown={e=>e.preventDefault()} onClick={()=>composeCommand("italic")} title="Курсив"><Italic/></button>
    <button type="button" className={formatState.underline?"active":""} onMouseDown={e=>e.preventDefault()} onClick={()=>composeCommand("underline")} title="Подчёркнутый"><Underline/></button>
+   <button type="button" className="sbComposeColorChoice" onMouseDown={e=>e.preventDefault()} onClick={composeTextColor} title="Цвет текста"><span>A</span><i/></button>
    <span className="sbComposeFormatDivider"/>
+   <button type="button" onMouseDown={e=>e.preventDefault()} onClick={()=>composeCommand("justifyLeft")} title="Выровнять по левому краю"><AlignLeft/></button>
    <button type="button" className={formatState.ol?"active":""} onMouseDown={e=>e.preventDefault()} onClick={()=>composeCommand("insertOrderedList")} title="Нумерованный список"><ListOrdered/></button>
    <button type="button" className={formatState.ul?"active":""} onMouseDown={e=>e.preventDefault()} onClick={()=>composeCommand("insertUnorderedList")} title="Маркированный список"><List/></button>
-   <button type="button" onMouseDown={e=>e.preventDefault()} onClick={composeLink} title="Добавить ссылку"><Link/></button>
+   <button type="button" onMouseDown={e=>e.preventDefault()} onClick={()=>composeCommand("outdent")} title="Уменьшить отступ"><IndentDecrease/></button>
+   <button type="button" onMouseDown={e=>e.preventDefault()} onClick={()=>composeCommand("indent")} title="Увеличить отступ"><IndentIncrease/></button>
+   <button type="button" onMouseDown={e=>e.preventDefault()} onClick={()=>composeCommand("formatBlock","blockquote")} title="Цитата"><Quote/></button>
    <button type="button" className="sbComposeRemoveFormat" onMouseDown={e=>e.preventDefault()} onClick={()=>composeCommand("removeFormat")} title="Очистить форматирование">Tx</button>
   </div>
  }
@@ -454,6 +458,7 @@ export default function Home(){
  function syncComposeEditor(){const el=composeEditorRef.current;if(!el)return;const plain=el.innerText.replace(/\u00a0/g," "),rich=el.innerHTML,meaningful=rich.replace(/<br\s*\/?>/gi,"").replace(/<\/?(?:div|p)>/gi,"").replace(/&nbsp;/gi,"").trim();setText(plain);setHtml(plain.trim()||meaningful?rich:"");setSendError("");refreshFormatState()}
  function seedComposeEditor(nextHtml:string,nextText:string,atStart=false){requestAnimationFrame(()=>{const el=composeEditorRef.current;if(!el)return;el.innerHTML=nextHtml||textToHtml(nextText);if(atStart){el.focus();const range=document.createRange(),sel=window.getSelection();range.selectNodeContents(el);range.collapse(true);sel?.removeAllRanges();sel?.addRange(range)}})}
  function composeCommand(command:string,value?:string){document.execCommand(command,false,value);syncComposeEditor();refreshFormatState()}
+ function composeTextColor(){focusComposeEditor();const entered=window.prompt("Цвет текста в формате HEX","#202124");if(!entered)return;const color=entered.trim();if(!/^#[0-9a-f]{6}$/i.test(color)){setSendError("Укажите цвет в формате #RRGGBB");return}composeCommand("foreColor",color)}
  function composeLink(){focusComposeEditor();const selectedText=window.getSelection()?.toString()||"",entered=window.prompt("Адрес ссылки","https://");if(!entered)return;const url=/^(https?:|mailto:)/i.test(entered.trim())?entered.trim():"https://"+entered.trim();if(!/^https?:\/\//i.test(url)&&!/^mailto:/i.test(url)){setSendError("Проверьте адрес ссылки");return}if(selectedText)document.execCommand("createLink",false,url);else{const safe=url.replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");document.execCommand("insertHTML",false,`<a href="${safe}">${safe}</a>`)}syncComposeEditor()}
  function focusComposeEditor(){composeEditorRef.current?.focus()}
  function insertEmoji(value:string){focusComposeEditor();document.execCommand("insertText",false,value);syncComposeEditor();setEmojiOpen(false)}
