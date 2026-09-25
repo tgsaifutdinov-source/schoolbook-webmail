@@ -15713,73 +15713,100 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
 }
 
 
-/* Gmail visual system v38 — compact centered reader reference */
+/* Gmail visual system v40 — full-width Gmail reader */
 
-/* Reader canvas: calm centered column instead of stretching content across the monitor. */
+/* Desktop reader fills the whole available mail canvas, like Gmail. */
 @media(min-width:851px){
   .gmailReader{
+    min-width:0!important;
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
     background:#fff!important;
   }
   .gmailReader .toolbar{
+    position:sticky!important;
+    top:0!important;
+    z-index:20!important;
     width:100%!important;
     min-height:50px!important;
     height:50px!important;
     padding:0 12px!important;
-    border-bottom:1px solid #e7eaee!important;
-    background:#fff!important;
+    display:flex!important;
+    align-items:center!important;
+    justify-content:space-between!important;
+    border-bottom:1px solid #edf0f2!important;
+    background:rgba(255,255,255,.98)!important;
     box-shadow:none!important;
+    backdrop-filter:blur(7px)!important;
   }
   .gmailReader .toolbar>div{
+    display:flex!important;
+    align-items:center!important;
     gap:2px!important;
   }
   .gmailReader .toolbar button{
     width:32px!important;
     height:32px!important;
     min-width:32px!important;
+    padding:0!important;
+    display:grid!important;
+    place-items:center!important;
     border-radius:50%!important;
-    color:#606a75!important;
+    background:transparent!important;
+    color:#5f6873!important;
   }
   .gmailReader .toolbar button:hover{
     background:#f0f2f4!important;
     color:#202124!important;
   }
+  .gmailReader .toolbar button svg{
+    width:16px!important;
+    height:16px!important;
+  }
 
   .gmailReader .letter,
   .gmailReader .gmailConversation{
-    width:min(1040px,calc(100% - 64px))!important;
-    max-width:1040px!important;
-    margin:0 auto!important;
-    padding:18px 0 64px!important;
+    width:100%!important;
+    max-width:none!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:22px 28px 72px!important;
     box-sizing:border-box!important;
+    background:#fff!important;
   }
 
   .gmailConversation .subjectLine{
     width:100%!important;
     max-width:none!important;
     margin:0!important;
-    padding:0 4px 14px 54px!important;
+    padding:0 8px 18px 38px!important;
     box-sizing:border-box!important;
   }
   .gmailConversation .subjectLine>div{
-    min-height:28px!important;
+    width:100%!important;
+    min-width:0!important;
+    min-height:30px!important;
     display:flex!important;
     align-items:center!important;
-    gap:9px!important;
     flex-wrap:wrap!important;
+    gap:8px!important;
   }
   .gmailConversation .subjectLine h2{
+    min-width:0!important;
+    max-width:none!important;
     margin:0!important;
     color:#202124!important;
-    font-size:20px!important;
-    font-weight:600!important;
+    font-size:22px!important;
+    font-weight:500!important;
     line-height:1.25!important;
-    letter-spacing:-.2px!important;
+    letter-spacing:-.15px!important;
   }
   .conversationCount{
     height:22px!important;
     padding:0 8px!important;
     display:inline-flex!important;
     align-items:center!important;
+    border:0!important;
     border-radius:11px!important;
     background:#f1f3f4!important;
     color:#5f6368!important;
@@ -15804,37 +15831,40 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
     max-width:none!important;
     display:flex!important;
     flex-direction:column!important;
-    gap:8px!important;
+    gap:2px!important;
   }
-  .conversationMessage{
+
+  /* Gmail-like messages are not cards. */
+  .conversationMessage,
+  .conversationMessage.expanded,
+  .conversationMessage.collapsed{
     width:100%!important;
     max-width:none!important;
     margin:0!important;
-    border:1px solid #e2e6eb!important;
-    border-radius:10px!important;
+    border:0!important;
+    border-radius:0!important;
     background:#fff!important;
     box-shadow:none!important;
-    overflow:hidden!important;
+    overflow:visible!important;
+  }
+  .conversationMessage.collapsed{
+    border-top:1px solid #edf0f2!important;
+    border-bottom:1px solid #edf0f2!important;
   }
   .conversationMessage.collapsed:hover{
-    border-color:#d4d9df!important;
     background:#fafbfc!important;
-  }
-  .conversationMessage.expanded{
-    border-color:#e2e6eb!important;
-    background:#fff!important;
   }
 
   .conversationHeader{
     width:100%!important;
-    min-height:68px!important;
-    padding:10px 13px!important;
+    min-height:62px!important;
+    padding:8px 10px!important;
     display:grid!important;
-    grid-template-columns:40px minmax(0,1fr) auto!important;
+    grid-template-columns:38px minmax(0,1fr) auto!important;
     align-items:center!important;
     gap:10px!important;
     box-sizing:border-box!important;
-    background:#fff!important;
+    background:transparent!important;
   }
   .senderAvatar.big{
     width:36px!important;
@@ -15859,24 +15889,19 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
     font-weight:700!important;
     line-height:1.25!important;
   }
-  .conversationWho>small{
+  .conversationWho>small,
+  .conversationWho .recipientToggle{
     margin-top:1px!important;
     color:#66717c!important;
     font-size:10.5px!important;
     line-height:1.25!important;
   }
-  .conversationWho .recipientToggle{
-    margin-top:1px!important;
-    padding:0!important;
-    min-height:18px!important;
-    color:#66717c!important;
-    font-size:10.5px!important;
-    line-height:1.2!important;
-  }
   .conversationMeta{
     align-self:start!important;
-    padding-top:3px!important;
-    gap:3px!important;
+    padding-top:4px!important;
+    display:flex!important;
+    align-items:center!important;
+    gap:2px!important;
   }
   .conversationMeta time{
     color:#66717c!important;
@@ -15897,21 +15922,22 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
     width:100%!important;
     max-width:none!important;
     margin:0!important;
-    padding:0 16px 22px 64px!important;
-    overflow:hidden!important;
+    padding:0 12px 22px 56px!important;
+    overflow:visible!important;
     box-sizing:border-box!important;
   }
   .conversationExpanded .body{
     width:100%!important;
     max-width:none!important;
     margin:0!important;
+    overflow:visible!important;
   }
   .conversationExpanded .mailText{
     width:100%!important;
-    max-width:900px!important;
+    max-width:980px!important;
     color:#202124!important;
-    font-size:13.5px!important;
-    line-height:1.62!important;
+    font-size:14px!important;
+    line-height:1.65!important;
   }
   .conversationExpanded .htmlMail{
     width:100%!important;
@@ -15920,6 +15946,7 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
   }
 
   .privacyBar{
+    width:100%!important;
     min-height:36px!important;
     margin:0 0 14px!important;
     padding:6px 9px!important;
@@ -15942,18 +15969,19 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
     font-weight:650!important;
   }
 
-  /* Reference-style reply actions: compact outline pills. */
+  /* Gmail reply actions sit directly under the message body. */
   .conversationReply{
     width:auto!important;
     max-width:none!important;
-    margin:20px 0 0 64px!important;
+    margin:20px 0 0!important;
     padding:0!important;
     display:flex!important;
     align-items:center!important;
     flex-wrap:wrap!important;
     gap:8px!important;
   }
-  .conversationReply button{
+  .conversationReply button,
+  .threadInlineActions button{
     width:auto!important;
     min-width:0!important;
     height:36px!important;
@@ -15971,15 +15999,131 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
     font-weight:600!important;
     white-space:nowrap!important;
   }
-  .conversationReply button:hover{
+  .conversationReply button:hover,
+  .threadInlineActions button:hover{
     border-color:#c6ccd3!important;
     background:#f7f8fa!important;
     color:#202124!important;
   }
-  .conversationReply button svg{
+  .conversationReply button svg,
+  .threadInlineActions button svg{
     width:14px!important;
     height:14px!important;
     stroke-width:1.8!important;
+  }
+
+  /* Inline reply grows naturally. The reader owns the scroll. */
+  .inlineReplyComposer{
+    width:min(760px,100%)!important;
+    max-width:100%!important;
+    min-width:0!important;
+    height:auto!important;
+    max-height:none!important;
+    margin:20px 0 4px!important;
+    overflow:visible!important;
+    border:1px solid #d8dde3!important;
+    border-radius:8px!important;
+    background:#fff!important;
+    box-shadow:none!important;
+  }
+  .inlineReplyHead{
+    min-height:42px!important;
+    padding:6px 8px 6px 10px!important;
+    display:grid!important;
+    grid-template-columns:30px minmax(0,1fr) auto 30px!important;
+    align-items:center!important;
+    gap:8px!important;
+    border-bottom:1px solid #edf0f2!important;
+    background:#fff!important;
+  }
+  .inlineReplyHead>span{
+    width:30px!important;
+    height:30px!important;
+    display:grid!important;
+    place-items:center!important;
+    border-radius:50%!important;
+    background:#f3f5f7!important;
+    color:#5f6873!important;
+  }
+  .inlineReplyHead>div{
+    min-width:0!important;
+  }
+  .inlineReplyHead b{
+    color:#202124!important;
+    font-size:12.5px!important;
+    font-weight:650!important;
+  }
+  .inlineReplyHead small{
+    display:block!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+    white-space:nowrap!important;
+    color:#707984!important;
+    font-size:10.5px!important;
+  }
+  .inlineReplyIdentity{
+    min-width:0!important;
+    max-width:190px!important;
+    height:30px!important;
+    font-size:10.5px!important;
+  }
+  .inlineReplyEditor{
+    width:100%!important;
+    min-height:120px!important;
+    height:auto!important;
+    max-height:none!important;
+    padding:13px 14px!important;
+    overflow:visible!important;
+    outline:0!important;
+    box-sizing:border-box!important;
+    background:#fff!important;
+    color:#202124!important;
+    font-size:14px!important;
+    line-height:1.58!important;
+    overflow-wrap:anywhere!important;
+    word-break:break-word!important;
+  }
+  .inlineReplyEditor:empty:before{
+    content:attr(data-placeholder)!important;
+    color:#9aa0a6!important;
+    pointer-events:none!important;
+  }
+  .inlineReplyFormatBar{
+    min-height:38px!important;
+    padding:3px 9px!important;
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+  }
+  .inlineReplyFiles{
+    max-height:none!important;
+    overflow:visible!important;
+  }
+  .inlineReplyFoot{
+    width:100%!important;
+    min-height:48px!important;
+    height:auto!important;
+    padding:6px 9px 7px 12px!important;
+    display:grid!important;
+    grid-template-columns:auto auto minmax(0,1fr)!important;
+    align-items:center!important;
+    gap:7px!important;
+    border-top:1px solid #edf0f3!important;
+    background:#fff!important;
+  }
+  .inlineReplyFoot .send{
+    height:34px!important;
+    padding:0 16px!important;
+    border-radius:17px!important;
+    font-size:12px!important;
+  }
+  .inlineReplyTools{
+    min-width:0!important;
+    overflow:visible!important;
+  }
+  .inlineReplyFoot>small{
+    color:#747e89!important;
+    font-size:10.5px!important;
   }
 
   .threadInlineActions{
@@ -15989,28 +16133,22 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
     gap:8px!important;
     flex-wrap:wrap!important;
   }
-  .threadInlineActions button{
-    height:34px!important;
-    padding:0 13px!important;
-    border:1px solid #d8dde3!important;
-    border-radius:17px!important;
-    background:#fff!important;
-    color:#30363d!important;
-    font-size:11px!important;
-    font-weight:600!important;
-  }
 
   .attachmentSummary{
     max-width:760px!important;
     margin-top:14px!important;
   }
   .attachmentGallery{
-    max-width:820px!important;
+    max-width:920px!important;
   }
 }
 
-/* Keep the same visual language on smaller screens, but use all available width. */
+/* Smaller screens keep the same behavior: one page scroll, no nested reply scroll. */
 @media(max-width:850px){
+  .gmailReader{
+    overflow-x:hidden!important;
+    overflow-y:auto!important;
+  }
   .gmailReader .letter,
   .gmailReader .gmailConversation{
     width:100%!important;
@@ -16024,13 +16162,10 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
   .gmailConversation .subjectLine h2{
     font-size:19px!important;
   }
-  .conversationMessage{
-    border-radius:9px!important;
-  }
   .conversationHeader{
-    grid-template-columns:36px minmax(0,1fr) auto!important;
-    min-height:62px!important;
-    padding:9px!important;
+    grid-template-columns:34px minmax(0,1fr) auto!important;
+    min-height:60px!important;
+    padding:8px!important;
     gap:8px!important;
   }
   .senderAvatar.big{
@@ -16039,10 +16174,11 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
     min-width:34px!important;
   }
   .conversationExpanded{
-    padding:0 10px 16px 52px!important;
+    padding:0 8px 16px 48px!important;
+    overflow:visible!important;
   }
   .conversationReply{
-    margin:16px 0 0 52px!important;
+    margin:16px 0 0!important;
     gap:6px!important;
   }
   .conversationReply button{
@@ -16050,8 +16186,42 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
     padding:0 12px!important;
     font-size:11px!important;
   }
+  .inlineReplyComposer{
+    width:100%!important;
+    max-width:100%!important;
+    height:auto!important;
+    max-height:none!important;
+    margin:14px 0 2px!important;
+    overflow:visible!important;
+  }
+  .inlineReplyHead{
+    grid-template-columns:30px minmax(0,1fr) 30px!important;
+  }
+  .inlineReplyIdentity{
+    display:none!important;
+  }
+  .inlineReplyEditor{
+    min-height:110px!important;
+    height:auto!important;
+    max-height:none!important;
+    padding:12px!important;
+    overflow:visible!important;
+    font-size:13.5px!important;
+  }
+  .inlineReplyFiles{
+    max-height:none!important;
+    overflow:visible!important;
+  }
+  .inlineReplyFoot{
+    min-height:50px!important;
+    height:auto!important;
+    grid-template-columns:auto minmax(0,1fr)!important;
+  }
+  .inlineReplyFoot>small{
+    grid-column:1/-1!important;
+    justify-self:start!important;
+  }
 }
-
 
 /* Gmail visual system v39 — compose footer reference */
 
