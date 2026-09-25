@@ -15437,3 +15437,277 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
     font-size:11.5px!important;
   }
 }
+
+
+/* Gmail visual system v37 — clean recipients and mailbox filters */
+
+/* Recipient rows: labels live inside inputs as placeholders. */
+.composeWindow .recipientChipField{
+  position:relative!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:44px!important;
+  padding:5px 9px 5px 12px!important;
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  align-items:center!important;
+  gap:8px!important;
+  border-bottom:1px solid #edf0f3!important;
+  background:#fff!important;
+}
+.composeWindow .recipientChipField>span,
+.composeWindow .recipientLabel{
+  display:none!important;
+}
+.composeWindow .recipientChipEditor{
+  width:100%!important;
+  min-width:0!important;
+  min-height:32px!important;
+  display:flex!important;
+  flex-wrap:wrap!important;
+  align-items:center!important;
+  gap:5px!important;
+  overflow:visible!important;
+}
+.composeWindow .recipientChipEditor>input{
+  min-width:180px!important;
+  height:32px!important;
+  flex:1 1 220px!important;
+  padding:0 2px!important;
+  border:0!important;
+  outline:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  color:#202124!important;
+  font-size:13px!important;
+}
+.composeWindow .recipientChipEditor>input::placeholder{
+  color:#8a939e!important;
+  opacity:1!important;
+}
+.composeWindow .recipientExtras{
+  align-self:center!important;
+  display:flex!important;
+  gap:2px!important;
+  flex:0 0 auto!important;
+}
+.composeWindow .recipientExtras button{
+  height:30px!important;
+  padding:0 6px!important;
+  border-radius:6px!important;
+  color:#65707c!important;
+  font-size:11px!important;
+  font-weight:500!important;
+}
+.composeWindow .recipientExtras button:hover{
+  background:#f0f2f5!important;
+  color:#202124!important;
+}
+
+/* Suggestions now use the whole recipient row width, so text never collapses into columns. */
+.composeWindow .recipientChipField .recipientSuggestions{
+  left:10px!important;
+  right:10px!important;
+  width:auto!important;
+  max-width:none!important;
+}
+.composeWindow .recipientSuggestionRow .contactName,
+.composeWindow .recipientSuggestionRow .contactEmail{
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  overflow-wrap:normal!important;
+  word-break:normal!important;
+}
+
+/* Mailbox heading: title never competes with filter controls. */
+.gmailMailboxTitle{
+  width:100%!important;
+  min-width:0!important;
+  min-height:58px!important;
+  padding:8px 12px 9px!important;
+  display:flex!important;
+  flex-wrap:wrap!important;
+  align-items:center!important;
+  align-content:center!important;
+  gap:8px 18px!important;
+  overflow:visible!important;
+  border-bottom:1px solid #edf0f2!important;
+  background:#fff!important;
+}
+.gmailMailboxContext{
+  min-width:max-content!important;
+  max-width:none!important;
+  width:auto!important;
+  flex:0 0 auto!important;
+  display:flex!important;
+  align-items:baseline!important;
+  gap:10px!important;
+  overflow:visible!important;
+}
+.gmailMailboxContext h1{
+  width:auto!important;
+  max-width:none!important;
+  margin:0!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  white-space:nowrap!important;
+  color:#202124!important;
+  font-size:18px!important;
+  font-weight:600!important;
+  line-height:1.2!important;
+}
+.gmailMailboxContext>span{
+  flex:0 0 auto!important;
+  margin:0!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  white-space:nowrap!important;
+  color:#7a838e!important;
+  font-size:11.5px!important;
+  line-height:1.2!important;
+}
+
+/* One simple filter row: pills instead of tabs/underlines. */
+.gmailFilterChips{
+  min-width:0!important;
+  flex:1 1 430px!important;
+  width:auto!important;
+  height:auto!important;
+  min-height:34px!important;
+  padding:0!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:6px!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  background:transparent!important;
+  scrollbar-width:none!important;
+  scroll-snap-type:none!important;
+}
+.gmailFilterChips::-webkit-scrollbar{display:none!important}
+.gmailFilterChips button{
+  position:relative!important;
+  flex:0 0 auto!important;
+  width:auto!important;
+  min-width:0!important;
+  height:32px!important;
+  padding:0 11px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:5px!important;
+  border:1px solid #e0e4e9!important;
+  border-radius:16px!important;
+  background:#fff!important;
+  color:#59636f!important;
+  box-shadow:none!important;
+  font-size:11.5px!important;
+  font-weight:550!important;
+  white-space:nowrap!important;
+}
+.gmailFilterChips button:after{
+  content:none!important;
+  display:none!important;
+}
+.gmailFilterChips button:hover{
+  border-color:#cfd5dc!important;
+  background:#f6f8fa!important;
+  color:#202124!important;
+}
+.gmailFilterChips button.active{
+  border-color:#ead48a!important;
+  background:#fff4c7!important;
+  color:#5f4800!important;
+  box-shadow:none!important;
+  font-weight:650!important;
+}
+.gmailFilterChips .sortChip{
+  margin-left:auto!important;
+  color:#66717d!important;
+}
+.gmailFilterChips .sortChip svg{
+  width:14px!important;
+  height:14px!important;
+}
+
+/* Only advanced search filters remain in the secondary strip. */
+.activeSearchFilters{
+  min-height:0!important;
+  padding:6px 12px!important;
+  gap:6px!important;
+  border-bottom:1px solid #edf0f2!important;
+  background:#fff!important;
+}
+.activeSearchFilters button{
+  height:30px!important;
+  padding:0 9px 0 11px!important;
+  border-radius:15px!important;
+  font-size:11px!important;
+}
+.activeSearchFilters .clearAllFilters{
+  color:#6d5700!important;
+}
+
+/* Medium widths: filters fall below the title instead of truncating it. */
+@media(max-width:1120px) and (min-width:851px){
+  .gmailMailboxContext{
+    flex:1 0 100%!important;
+    width:100%!important;
+  }
+  .gmailFilterChips{
+    flex:1 1 100%!important;
+    width:100%!important;
+  }
+  .gmailFilterChips .sortChip{
+    margin-left:0!important;
+  }
+}
+
+/* Mobile keeps the same hierarchy. */
+@media(max-width:850px){
+  .composeWindow .recipientChipField{
+    min-height:46px!important;
+    padding-left:10px!important;
+    padding-right:8px!important;
+  }
+  .composeWindow .recipientChipEditor>input{
+    min-width:130px!important;
+    flex-basis:150px!important;
+    font-size:13px!important;
+  }
+  .composeWindow .recipientChipField .recipientSuggestions{
+    left:8px!important;
+    right:8px!important;
+  }
+  .gmailMailboxTitle{
+    min-height:0!important;
+    padding:7px 8px 8px!important;
+    gap:7px!important;
+  }
+  .gmailMailboxContext{
+    width:100%!important;
+    min-width:0!important;
+    flex:1 0 100%!important;
+  }
+  .gmailMailboxContext h1{
+    font-size:15px!important;
+  }
+  .gmailMailboxContext>span{
+    font-size:10.5px!important;
+  }
+  .gmailFilterChips{
+    width:100%!important;
+    flex:1 1 100%!important;
+    min-height:32px!important;
+    gap:5px!important;
+  }
+  .gmailFilterChips button{
+    height:30px!important;
+    padding:0 9px!important;
+    font-size:10.5px!important;
+  }
+  .gmailFilterChips .sortChip{
+    margin-left:0!important;
+  }
+}
