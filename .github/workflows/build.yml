@@ -35,6 +35,9 @@ jobs:
       - name: Source guard
         run: npm run check:source
 
+      - name: QA mail seed dry-run
+        run: npm run check:test-mail-seed
+
       - name: TypeScript
         run: npm run typecheck
 
