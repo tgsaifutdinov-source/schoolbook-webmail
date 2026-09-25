@@ -18776,3 +18776,13 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
     max-width:none!important;
   }
 }
+
+
+/* Gmail compose v52 — show selected recipients when collapsed */
+.composeWindow.sbGmailCompose .composeRecipientsCollapsed.hasRecipients{
+  color:#202124!important;
+}
+.composeWindow.sbGmailCompose .composeRecipientsCollapsed.hasRecipients span{
+  font-weight:500!important;
+  color:#202124!important;
+}
