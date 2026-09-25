@@ -16223,255 +16223,443 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
   }
 }
 
-/* Gmail visual system v39 — compose footer reference */
+/* Gmail compose dock v41 — rebuilt markup, isolated from legacy toolbar styles */
 
-/* Formatting strip: compact rounded toolbar like Gmail. */
-.composeWindow .composeFormatBar{
-  width:calc(100% - 24px)!important;
-  max-width:560px!important;
-  min-height:40px!important;
-  height:40px!important;
-  flex:0 0 40px!important;
-  margin:6px 12px 4px!important;
-  padding:4px 8px!important;
+/* Shared dock geometry: full compose and inline reply use the same controls. */
+.composeWindow .sbComposeFormatDock,
+.inlineReplyComposer .sbComposeFormatDock{
+  width:max-content!important;
+  max-width:calc(100% - 20px)!important;
+  height:38px!important;
+  min-height:38px!important;
+  flex:0 0 38px!important;
+  margin:6px 10px 3px!important;
+  padding:3px 7px!important;
   display:flex!important;
   align-items:center!important;
-  gap:2px!important;
+  gap:1px!important;
   overflow-x:auto!important;
   overflow-y:hidden!important;
   border:0!important;
-  border-radius:20px!important;
+  border-radius:19px!important;
   background:#f1f3f4!important;
   box-shadow:none!important;
   scrollbar-width:none!important;
 }
-.composeWindow .composeFormatBar::-webkit-scrollbar{
+.composeWindow .sbComposeFormatDock::-webkit-scrollbar,
+.inlineReplyComposer .sbComposeFormatDock::-webkit-scrollbar{
   display:none!important;
 }
-.composeWindow .composeFormatBar button{
-  width:30px!important;
-  height:30px!important;
-  min-width:30px!important;
-  flex:0 0 30px!important;
+.composeWindow .sbComposeFormatDock>button,
+.inlineReplyComposer .sbComposeFormatDock>button{
+  width:28px!important;
+  height:28px!important;
+  min-width:28px!important;
+  max-width:none!important;
+  flex:0 0 auto!important;
+  margin:0!important;
   padding:0!important;
-  display:grid!important;
-  place-items:center!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:3px!important;
   border:0!important;
-  border-radius:6px!important;
+  border-radius:5px!important;
   background:transparent!important;
-  color:#59636f!important;
+  color:#4f5964!important;
   box-shadow:none!important;
   font-size:12px!important;
+  font-weight:500!important;
+  line-height:1!important;
 }
-.composeWindow .composeFormatBar button:hover{
-  background:#e2e5e9!important;
+.composeWindow .sbComposeFormatDock>button:hover,
+.inlineReplyComposer .sbComposeFormatDock>button:hover{
+  background:#e0e3e7!important;
   color:#202124!important;
 }
-.composeWindow .composeFormatBar button.active{
-  background:#d9dde2!important;
+.composeWindow .sbComposeFormatDock>button.active,
+.inlineReplyComposer .sbComposeFormatDock>button.active{
+  background:#d8dde2!important;
   color:#202124!important;
 }
-.composeWindow .composeFormatBar button svg{
-  width:16px!important;
-  height:16px!important;
-  stroke-width:1.9!important;
+.composeWindow .sbComposeFormatDock svg,
+.inlineReplyComposer .sbComposeFormatDock svg{
+  width:15px!important;
+  height:15px!important;
+  flex:0 0 15px!important;
+  stroke-width:1.85!important;
 }
-.composeWindow .composeFormatBar .removeFormat{
-  font-size:11px!important;
-  font-weight:600!important;
+.composeWindow .sbComposeFormatDock .sbComposeFontChoice,
+.inlineReplyComposer .sbComposeFormatDock .sbComposeFontChoice{
+  width:94px!important;
+  min-width:94px!important;
+  padding:0 6px 0 9px!important;
+  justify-content:space-between!important;
+  font-size:11.5px!important;
 }
-.composeWindow .composeFormatBar i{
+.composeWindow .sbComposeFormatDock .sbComposeFontChoice>span,
+.inlineReplyComposer .sbComposeFormatDock .sbComposeFontChoice>span{
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+}
+.composeWindow .sbComposeFormatDock .sbComposeFontChoice svg,
+.inlineReplyComposer .sbComposeFormatDock .sbComposeFontChoice svg,
+.composeWindow .sbComposeFormatDock .sbComposeSizeChoice svg,
+.inlineReplyComposer .sbComposeFormatDock .sbComposeSizeChoice svg{
+  width:11px!important;
+  height:11px!important;
+  flex-basis:11px!important;
+}
+.composeWindow .sbComposeFormatDock .sbComposeSizeChoice,
+.inlineReplyComposer .sbComposeFormatDock .sbComposeSizeChoice{
+  width:44px!important;
+  min-width:44px!important;
+  padding:0 5px!important;
+  font-size:12px!important;
+}
+.composeWindow .sbComposeFormatDock .sbComposeRemoveFormat,
+.inlineReplyComposer .sbComposeFormatDock .sbComposeRemoveFormat{
+  width:32px!important;
+  min-width:32px!important;
+  font-size:10.5px!important;
+  font-weight:650!important;
+}
+.composeWindow .sbComposeFormatDivider,
+.inlineReplyComposer .sbComposeFormatDivider{
   width:1px!important;
   height:18px!important;
+  min-width:1px!important;
   flex:0 0 1px!important;
   margin:0 3px!important;
-  border:0!important;
-  background:#cfd4da!important;
+  background:#cdd2d7!important;
 }
 
-/* Main bottom action row. */
-.composeWindow .gmailComposeFoot{
+/* Bottom action line. */
+.composeWindow .sbComposeActionDock,
+.inlineReplyComposer .sbComposeActionDock{
+  position:relative!important;
   width:100%!important;
   min-width:0!important;
-  height:50px!important;
-  min-height:50px!important;
-  flex:0 0 50px!important;
-  padding:0 10px 4px 12px!important;
-  display:grid!important;
-  grid-template-columns:auto minmax(0,1fr) auto auto!important;
-  align-items:center!important;
-  gap:6px!important;
-  overflow:visible!important;
-  border-top:0!important;
-  background:#fff!important;
-}
-.composeWindow .gmailComposeFoot .send{
-  min-width:106px!important;
-  height:36px!important;
+  height:48px!important;
+  min-height:48px!important;
+  flex:0 0 48px!important;
   margin:0!important;
-  padding:0 18px!important;
+  padding:3px 9px 7px 11px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:5px!important;
+  overflow:visible!important;
   border:0!important;
-  border-radius:18px!important;
+  background:#fff!important;
+  box-sizing:border-box!important;
+}
+.composeWindow .sbComposeSend,
+.inlineReplyComposer .sbComposeSend{
+  height:34px!important;
+  min-width:104px!important;
+  max-width:none!important;
+  flex:0 0 auto!important;
+  margin:0 4px 0 0!important;
+  padding:0 8px 0 16px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:7px!important;
+  border:0!important;
+  border-radius:17px!important;
   background:var(--gmail-yellow)!important;
   color:#332900!important;
   box-shadow:none!important;
-  font-size:12.5px!important;
+  font-size:12px!important;
   font-weight:700!important;
+  line-height:1!important;
 }
-.composeWindow .gmailComposeFoot .send:hover:not(:disabled){
+.composeWindow .sbComposeSend:hover:not(:disabled),
+.inlineReplyComposer .sbComposeSend:hover:not(:disabled){
   background:var(--gmail-yellow-hover)!important;
-  box-shadow:0 1px 2px rgba(60,64,67,.16)!important;
+  box-shadow:0 1px 2px rgba(60,64,67,.18)!important;
 }
-.composeWindow .gmailComposeFoot .send:active:not(:disabled){
+.composeWindow .sbComposeSend:active:not(:disabled),
+.inlineReplyComposer .sbComposeSend:active:not(:disabled){
   transform:translateY(1px)!important;
 }
-.composeWindow .gmailComposeFoot .send:disabled{
+.composeWindow .sbComposeSend:disabled,
+.inlineReplyComposer .sbComposeSend:disabled{
   background:#eef0f2!important;
   color:#9aa0a6!important;
   opacity:1!important;
 }
-
-/* Tool cluster mirrors Gmail sizing. */
-.composeWindow .composeToolGroup{
+.composeWindow .sbComposeSend>svg,
+.inlineReplyComposer .sbComposeSend>svg{
+  width:18px!important;
+  height:17px!important;
+  margin-left:1px!important;
+  padding-left:6px!important;
+  border-left:1px solid rgba(51,41,0,.20)!important;
+  stroke-width:2!important;
+  box-sizing:content-box!important;
+}
+.composeWindow .sbComposeActionTools,
+.inlineReplyComposer .sbComposeActionTools{
   min-width:0!important;
   display:flex!important;
   align-items:center!important;
-  gap:1px!important;
+  gap:0!important;
   overflow:visible!important;
 }
-.composeWindow .gmailComposeFoot .composeToolGroup>button,
-.composeWindow .gmailComposeFoot .composeEmojiWrap>button,
-.composeWindow .gmailComposeFoot .composeMoreWrap>button,
-.composeWindow .gmailComposeFoot .discardDraftButton{
+.composeWindow .sbComposeTool,
+.inlineReplyComposer .sbComposeTool,
+.composeWindow .sbComposeDiscard,
+.inlineReplyComposer .sbComposeDiscard{
   width:30px!important;
   height:30px!important;
   min-width:30px!important;
   max-width:30px!important;
+  flex:0 0 30px!important;
+  margin:0!important;
   padding:0!important;
   display:grid!important;
   place-items:center!important;
   border:0!important;
-  border-radius:6px!important;
+  border-radius:5px!important;
   background:transparent!important;
-  color:#59636f!important;
+  color:#56616c!important;
   box-shadow:none!important;
 }
-.composeWindow .gmailComposeFoot .composeToolGroup>button:hover,
-.composeWindow .gmailComposeFoot .composeEmojiWrap>button:hover,
-.composeWindow .gmailComposeFoot .composeMoreWrap>button:hover,
-.composeWindow .gmailComposeFoot .discardDraftButton:hover{
+.composeWindow .sbComposeTool:hover,
+.inlineReplyComposer .sbComposeTool:hover,
+.composeWindow .sbComposeDiscard:hover,
+.inlineReplyComposer .sbComposeDiscard:hover{
   background:#f0f2f4!important;
   color:#202124!important;
 }
-.composeWindow .gmailComposeFoot .composeToolGroup svg,
-.composeWindow .gmailComposeFoot .composeEmojiWrap svg,
-.composeWindow .gmailComposeFoot .composeMoreWrap svg,
-.composeWindow .gmailComposeFoot .discardDraftButton svg{
-  width:16px!important;
-  height:16px!important;
-  stroke-width:1.9!important;
-}
-.composeWindow .gmailComposeFoot .formatToggle{
-  width:34px!important;
-  min-width:34px!important;
-  max-width:34px!important;
-  font-size:12px!important;
-  font-weight:600!important;
-}
-.composeWindow .gmailComposeFoot .formatToggle.active{
+.composeWindow .sbComposeTool.active,
+.inlineReplyComposer .sbComposeTool.active{
   background:#dfe4e9!important;
   color:#202124!important;
 }
-.composeWindow .composeSaveState{
-  min-width:0!important;
-  max-width:110px!important;
-  margin:0!important;
+.composeWindow .sbComposeTool svg,
+.inlineReplyComposer .sbComposeTool svg,
+.composeWindow .sbComposeDiscard svg,
+.inlineReplyComposer .sbComposeDiscard svg{
+  width:16px!important;
+  height:16px!important;
+  stroke-width:1.85!important;
+}
+.composeWindow .sbComposeAa,
+.inlineReplyComposer .sbComposeAa{
+  width:34px!important;
+  min-width:34px!important;
+  max-width:34px!important;
+  flex-basis:34px!important;
+  font-size:12px!important;
+  font-weight:650!important;
+}
+.composeWindow .sbComposeDockSpacer,
+.inlineReplyComposer .sbComposeDockSpacer{
+  min-width:8px!important;
+  flex:1 1 auto!important;
+}
+.composeWindow .sbComposeSaveState,
+.inlineReplyComposer .sbComposeSaveState{
+  flex:0 1 auto!important;
+  max-width:118px!important;
+  margin:0 2px 0 0!important;
   overflow:hidden!important;
   text-overflow:ellipsis!important;
   white-space:nowrap!important;
-  color:#858e98!important;
+  color:#7a838d!important;
   font-size:10px!important;
-  justify-self:end!important;
+  font-weight:400!important;
 }
-.composeWindow .discardDraftButton{
-  margin:0!important;
-  justify-self:end!important;
+.composeWindow .sbComposeDiscard,
+.inlineReplyComposer .sbComposeDiscard{
+  margin-left:1px!important;
 }
-.composeWindow .discardDraftButton:hover{
-  color:#b3261e!important;
+.composeWindow .sbComposeDiscard:hover,
+.inlineReplyComposer .sbComposeDiscard:hover{
   background:#fce8e6!important;
+  color:#b3261e!important;
 }
 
-/* Popovers anchor just above the action row. */
-.composeWindow .composeEmojiWrap,
-.composeWindow .composeMoreWrap{
+/* New isolated popovers. */
+.composeWindow .sbComposeEmojiWrap,
+.inlineReplyComposer .sbComposeEmojiWrap,
+.composeWindow .sbComposeMoreWrap,
+.inlineReplyComposer .sbComposeMoreWrap{
   position:relative!important;
+  flex:0 0 auto!important;
 }
-.composeWindow .composeEmojiMenu{
+.composeWindow .sbComposeEmojiMenu,
+.inlineReplyComposer .sbComposeEmojiMenu{
+  position:absolute!important;
+  z-index:520!important;
+  left:-92px!important;
   bottom:36px!important;
+  width:220px!important;
+  padding:8px!important;
+  display:grid!important;
+  grid-template-columns:repeat(6,30px)!important;
+  justify-content:center!important;
+  gap:3px!important;
+  border:1px solid #e4e7eb!important;
+  border-radius:9px!important;
+  background:#fff!important;
+  box-shadow:0 10px 32px rgba(60,64,67,.24),0 2px 7px rgba(60,64,67,.10)!important;
 }
-.composeWindow .composeMoreMenu{
+.composeWindow .sbComposeEmojiMenu button,
+.inlineReplyComposer .sbComposeEmojiMenu button{
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+  padding:0!important;
+  display:grid!important;
+  place-items:center!important;
+  border:0!important;
+  border-radius:5px!important;
+  background:transparent!important;
+  font-size:17px!important;
+  line-height:1!important;
+}
+.composeWindow .sbComposeEmojiMenu button:hover,
+.inlineReplyComposer .sbComposeEmojiMenu button:hover{
+  background:#f1f3f4!important;
+}
+.composeWindow .sbComposeMoreMenu,
+.inlineReplyComposer .sbComposeMoreMenu{
+  position:absolute!important;
+  z-index:520!important;
+  right:0!important;
   bottom:36px!important;
+  width:220px!important;
+  padding:6px!important;
+  border:1px solid #e4e7eb!important;
+  border-radius:9px!important;
+  background:#fff!important;
+  box-shadow:0 10px 32px rgba(60,64,67,.24),0 2px 7px rgba(60,64,67,.10)!important;
+}
+.composeWindow .sbComposeMoreMenu>button,
+.inlineReplyComposer .sbComposeMoreMenu>button{
+  width:100%!important;
+  height:36px!important;
+  min-height:36px!important;
+  padding:0 9px!important;
+  display:grid!important;
+  grid-template-columns:20px minmax(0,1fr)!important;
+  align-items:center!important;
+  gap:8px!important;
+  border:0!important;
+  border-radius:6px!important;
+  background:#fff!important;
+  color:#3c4043!important;
+  font-size:11px!important;
+  text-align:left!important;
+}
+.composeWindow .sbComposeMoreMenu>button:hover,
+.inlineReplyComposer .sbComposeMoreMenu>button:hover{
+  background:#f1f3f4!important;
+}
+.composeWindow .sbComposeMoreMenu svg,
+.inlineReplyComposer .sbComposeMoreMenu svg{
+  width:15px!important;
+  height:15px!important;
+  color:#5f6368!important;
 }
 
-/* Keep the editor visually connected to the toolbar, without a huge dead gap. */
-.composeWindow .composeEditor{
-  padding-bottom:12px!important;
+/* Full composer: dock stays attached to the bottom edge. */
+.composeWindow:not(.minimized) .sbComposeFormatDock,
+.composeWindow:not(.minimized) .sbComposeActionDock{
+  flex-shrink:0!important;
 }
 
-/* Wide desktop keeps the toolbar compact rather than stretching it. */
-@media(min-width:851px){
-  .composeWindow .composeFormatBar{
-    align-self:flex-start!important;
-  }
+/* Gmail inline reply is broad, not a tiny card. */
+.gmailReader .conversationExpanded .inlineReplyComposer{
+  width:100%!important;
+  max-width:none!important;
+  min-width:0!important;
+  margin:20px 0 4px!important;
+  overflow:visible!important;
+  border:1px solid #dfe3e7!important;
+  border-radius:8px!important;
+  background:#fff!important;
+  box-shadow:0 1px 2px rgba(60,64,67,.08)!important;
+}
+.gmailReader .inlineReplyEditor{
+  width:100%!important;
+  min-height:132px!important;
+  height:auto!important;
+  max-height:none!important;
+  padding:14px!important;
+  overflow:visible!important;
+  box-sizing:border-box!important;
+}
+.gmailReader .inlineReplyComposer .sbComposeFormatDock{
+  margin-top:5px!important;
+}
+.gmailReader .inlineReplyComposer .sbComposeActionDock{
+  padding-bottom:7px!important;
 }
 
-/* Mobile: same hierarchy, horizontally scrollable tools if needed. */
+/* Responsive: preserve the exact hierarchy instead of wrapping randomly. */
 @media(max-width:850px){
-  .composeWindow .composeFormatBar{
-    width:calc(100% - 16px)!important;
+  .composeWindow .sbComposeFormatDock,
+  .inlineReplyComposer .sbComposeFormatDock{
+    width:calc(100% - 14px)!important;
     max-width:none!important;
     height:38px!important;
-    min-height:38px!important;
-    flex-basis:38px!important;
-    margin:5px 8px 3px!important;
-    padding:4px 6px!important;
-    border-radius:19px!important;
+    margin:5px 7px 3px!important;
+    padding:3px 5px!important;
   }
-  .composeWindow .composeFormatBar button{
-    width:29px!important;
-    height:29px!important;
-    min-width:29px!important;
-    flex-basis:29px!important;
+  .composeWindow .sbComposeFormatDock .sbComposeFontChoice,
+  .inlineReplyComposer .sbComposeFormatDock .sbComposeFontChoice{
+    width:82px!important;
+    min-width:82px!important;
   }
-  .composeWindow .gmailComposeFoot{
-    height:52px!important;
-    min-height:52px!important;
-    flex-basis:52px!important;
-    padding:0 7px max(4px,env(safe-area-inset-bottom)) 9px!important;
-    grid-template-columns:auto minmax(0,1fr) auto!important;
+  .composeWindow .sbComposeActionDock,
+  .inlineReplyComposer .sbComposeActionDock{
+    height:50px!important;
+    min-height:50px!important;
+    padding:3px 7px max(5px,env(safe-area-inset-bottom)) 9px!important;
   }
-  .composeWindow .gmailComposeFoot .send{
+  .composeWindow .sbComposeSend,
+  .inlineReplyComposer .sbComposeSend{
     min-width:88px!important;
     height:34px!important;
-    padding:0 14px!important;
-    font-size:12px!important;
+    padding-left:13px!important;
+    font-size:11.5px!important;
   }
-  .composeWindow .composeToolGroup{
+  .composeWindow .sbComposeActionTools,
+  .inlineReplyComposer .sbComposeActionTools{
+    min-width:0!important;
     overflow-x:auto!important;
     overflow-y:hidden!important;
     scrollbar-width:none!important;
   }
-  .composeWindow .composeToolGroup::-webkit-scrollbar{
+  .composeWindow .sbComposeActionTools::-webkit-scrollbar,
+  .inlineReplyComposer .sbComposeActionTools::-webkit-scrollbar{
     display:none!important;
   }
-  .composeWindow .composeSaveState{
+  .composeWindow .sbComposeSaveState,
+  .inlineReplyComposer .sbComposeSaveState{
     display:none!important;
   }
-  .composeWindow .gmailComposeFoot>span{
-    display:none!important;
+  .composeWindow .sbComposeEmojiMenu,
+  .inlineReplyComposer .sbComposeEmojiMenu{
+    position:fixed!important;
+    left:8px!important;
+    right:8px!important;
+    bottom:max(58px,calc(env(safe-area-inset-bottom) + 54px))!important;
+    width:auto!important;
+    grid-template-columns:repeat(6,minmax(30px,1fr))!important;
   }
-  .composeWindow .discardDraftButton{
-    grid-column:3!important;
+  .composeWindow .sbComposeMoreMenu,
+  .inlineReplyComposer .sbComposeMoreMenu{
+    position:fixed!important;
+    right:8px!important;
+    bottom:max(58px,calc(env(safe-area-inset-bottom) + 54px))!important;
+    width:min(220px,calc(100vw - 16px))!important;
   }
 }
+
