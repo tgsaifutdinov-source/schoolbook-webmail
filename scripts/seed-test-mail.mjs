@@ -5,6 +5,7 @@ const JMAP_URL=process.env.JMAP_URL||"http://127.0.0.1:18080/jmap/session";
 const USER=process.env.JMAP_USER||"";
 const PASSWORD=process.env.JMAP_PASSWORD||"";
 const DRY_RUN=process.argv.includes("--dry-run");
+const PRETTY_ONLY=process.argv.includes("--pretty-20");
 const CRLF="\r\n";
 
 if(!USER||(!PASSWORD&&!DRY_RUN)){
@@ -87,7 +88,7 @@ function buildMime(item,index){
     "From: "+encoded(fromName)+" <"+fromEmail+">",
     "To: <"+USER+">",
     ...(item.cc?["Cc: "+item.cc]:[]),
-    "Subject: "+encoded("[QA "+String(index+1).padStart(2,"0")+"/30] "+item.subject),
+    "Subject: "+encoded("["+(PRETTY_ONLY?"HTML":"QA")+" "+String(index+1).padStart(2,"0")+"/"+expectedCount+"] "+item.subject),
     "Date: "+date.toUTCString(),
     "Message-ID: "+msgId,
     ...(item.inReplyTo?["In-Reply-To: "+item.inReplyTo,"References: "+item.references]:[]),
@@ -131,7 +132,7 @@ function shell(title,body,opts={}){
 const remoteHero=(seed,text="SchoolBook QA")=>'<img src="https://picsum.photos/seed/'+encodeURIComponent(seed)+'/1200/520" width="680" style="display:block;width:100%;max-width:680px;height:auto" alt="'+esc(text)+'">';
 const card=(title,text)=>'<div class="card"><b>'+esc(title)+'</b><p class="p" style="margin-top:8px">'+esc(text)+'</p></div>';
 
-const scenarios=[
+const baseScenarios=[
  {key:"plain-short",subject:"Короткое plain-text письмо",plainOnly:true,text:"Привет!\n\nЭто короткое текстовое письмо без HTML.\nПроверяем переносы строк, кириллицу и обычную ссылку: https://schoolbook.kg/test?q=mail\n\nSchoolBook QA"},
  {key:"html-typography",subject:"Типографика: заголовки, списки, цитата",text:"HTML typography test",html:shell("Типографика письма",'<p class="p">Обычный <b>жирный</b>, <i>курсив</i>, <u>подчёркнутый</u> и <a href="https://schoolbook.kg">ссылка</a>.</p><h2>Подзаголовок</h2><ul><li>Первый пункт</li><li>Второй пункт</li></ul><blockquote style="margin:18px 0;border-left:3px solid #f4c542;padding-left:14px;color:#5f6368">Цитата для проверки вложенных отступов.</blockquote>')},
  {key:"newsletter-hero",subject:"Newsletter с большой внешней картинкой",text:"Newsletter with remote hero image",html:shell("SchoolBook Digest",remoteHero("schoolbook-news","Большой баннер")+'<p class="p">Проверяем блокировку внешних изображений, широкую картинку и CTA.</p><a class="btn" href="https://schoolbook.kg">Открыть SchoolBook</a>')},
@@ -174,7 +175,49 @@ const scenarios=[
  ]}
 ];
 
-if(scenarios.length!==30)throw new Error("Expected exactly 30 QA scenarios, got "+scenarios.length);
+function prettyShell(kicker,title,body,accent="#f4c542"){
+  const line="#e5e8ec",muted="#6f7782",ink="#202124";
+  return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;padding:0;background:#f3f5f7">'+
+    '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;background:#f3f5f7"><tr><td align="center" style="padding:28px 14px">'+
+    '<table role="presentation" width="680" cellpadding="0" cellspacing="0" style="width:100%;max-width:680px;border-collapse:separate;border-spacing:0;background:#ffffff;border:1px solid '+line+';border-radius:16px;overflow:hidden">'+
+    '<tr><td style="height:6px;background:'+accent+'"></td></tr><tr><td style="padding:30px 34px 12px">'+
+    '<div style="margin:0 0 10px;font-family:Arial,sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:'+muted+'">'+esc(kicker)+'</div>'+
+    '<div style="font-family:Arial,sans-serif;font-size:28px;line-height:1.25;font-weight:700;color:'+ink+'">'+title+'</div></td></tr>'+
+    '<tr><td style="padding:14px 34px 30px">'+body+'</td></tr>'+
+    '<tr><td style="padding:18px 34px;border-top:1px solid '+line+';background:#fafbfc;font-family:Arial,sans-serif;font-size:11px;line-height:1.5;color:'+muted+'">SchoolBook · HTML QA message</td></tr>'+
+    '</table></td></tr></table></body></html>';
+}
+function prettyP(text){return '<p style="margin:0 0 15px;font-family:Arial,sans-serif;font-size:15px;line-height:1.65;color:#202124">'+text+'</p>'}
+function prettyBtn(text,color="#f4c542",fg="#2e2500"){return '<span style="display:inline-block;padding:12px 18px;border-radius:9px;background:'+color+';color:'+fg+';font-family:Arial,sans-serif;font-size:13px;font-weight:700">'+esc(text)+'</span>'}
+function prettyCard(title,text,accent="#f4c542"){return '<div style="margin:14px 0;padding:18px;border:1px solid #e5e8ec;border-left:4px solid '+accent+';border-radius:12px;background:#fff"><div style="margin-bottom:7px;font-family:Arial,sans-serif;font-size:14px;font-weight:700;color:#202124">'+esc(title)+'</div>'+prettyP(esc(text))+'</div>'}
+function prettyRow(label,value){return '<tr><td style="padding:10px 0;border-bottom:1px solid #e5e8ec;font-family:Arial,sans-serif;font-size:13px;color:#6f7782">'+esc(label)+'</td><td align="right" style="padding:10px 0;border-bottom:1px solid #e5e8ec;font-family:Arial,sans-serif;font-size:13px;font-weight:700;color:#202124">'+esc(value)+'</td></tr>'}
+
+const prettyScenarios=[
+ {key:"pretty-payment",subject:"Оплата прошла успешно",fromName:"SchoolBook Billing",text:"Оплата заказа SB-4821 подтверждена. Сумма 12 450 сом.",html:prettyShell("Оплата","Спасибо! Оплата подтверждена",prettyP("Мы получили оплату по заказу <b>SB-4821</b>. Производство можно запускать без дополнительных действий.")+'<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;margin:18px 0">'+prettyRow("Заказ","#SB-4821")+prettyRow("Способ","Visa •••• 4281")+prettyRow("Сумма","12 450 сом")+"</table>"+prettyBtn("Открыть заказ"),"#188038")},
+ {key:"pretty-production",subject:"Альбом передан в печать",fromName:"SchoolBook Production",text:"Заказ SB-4907 передан в печать.",html:prettyShell("Производство","Альбом уже в печати",prettyP("Макет проверен и отправлен в производство.")+prettyCard("Статус","Печать · в работе","#f4c542")+prettyCard("Ожидаемая готовность","29 сентября","#1a73e8")+prettyBtn("Следить за заказом"))},
+ {key:"pretty-gallery",subject:"Фотографии готовы к выбору",fromName:"SchoolBook Studio",text:"В галерее доступно 148 фотографий.",html:prettyShell("Галерея","Фотографии готовы к выбору",prettyP("Мы загрузили новую съёмку. Выберите любимые кадры до <b>28 сентября</b>.")+'<div style="margin:20px 0;padding:22px;border-radius:14px;background:#f7f8fa;text-align:center"><div style="font-family:Arial,sans-serif;font-size:34px;font-weight:700;color:#202124">148</div><div style="font-family:Arial,sans-serif;font-size:12px;color:#6f7782">фотографий в галерее</div></div>'+prettyBtn("Открыть галерею"))},
+ {key:"pretty-layout",subject:"Подтвердите финальный макет",fromName:"SchoolBook Design",text:"Финальный макет готов к согласованию.",html:prettyShell("Согласование","Финальный макет готов",prettyP("Мы внесли последние правки. Проверьте развороты и подтвердите печать.")+prettyCard("Важно","После подтверждения редактирование станет недоступно.","#b3261e")+prettyBtn("Посмотреть макет"))},
+ {key:"pretty-delivery",subject:"Доставка назначена на завтра",fromName:"SchoolBook Delivery",text:"Курьер приедет завтра с 12:00 до 15:00.",html:prettyShell("Доставка","Заказ будет у вас завтра",prettyP("Курьер привезёт выпускные альбомы по указанному адресу.")+'<div style="padding:20px;border-radius:14px;background:#e8f0fe"><div style="font-family:Arial,sans-serif;font-size:11px;font-weight:700;color:#1a73e8">ВРЕМЯ</div><div style="margin-top:4px;font-family:Arial,sans-serif;font-size:24px;font-weight:700;color:#202124">12:00–15:00</div><div style="margin-top:8px;font-family:Arial,sans-serif;font-size:13px;color:#6f7782">Бишкек · ул. Тестовая, 24</div></div>',"#1a73e8")},
+ {key:"pretty-comment",subject:"Новый комментарий к макету",fromName:"Мария · SchoolBook",text:"Давайте сделаем фото на 3 развороте немного крупнее.",html:prettyShell("Комментарий","Мария оставила замечание",'<div style="padding:18px 20px;border-radius:12px;background:#f7f8fa;font-family:Arial,sans-serif;font-size:15px;line-height:1.6;color:#202124">“Давайте сделаем фото на 3 развороте немного крупнее и уберём подпись справа.”</div>'+prettyP("<b>Разворот №3</b> · комментарий добавлен только что"))},
+ {key:"pretty-report",subject:"Еженедельный отчёт по заказам",fromName:"SchoolBook Reports",text:"28 новых заказов, 19 оплачено, 12 отправлено в печать.",html:prettyShell("Отчёт","Итоги недели",'<table role="presentation" width="100%" cellpadding="6" cellspacing="0"><tr><td style="width:33%;padding:6px"><div style="padding:16px;border-radius:12px;background:#e8f0fe;font-family:Arial,sans-serif"><small style="color:#6f7782">Новые</small><div style="font-size:24px;font-weight:700;color:#202124">28</div></div></td><td style="width:33%;padding:6px"><div style="padding:16px;border-radius:12px;background:#e6f4ea;font-family:Arial,sans-serif"><small style="color:#6f7782">Оплачено</small><div style="font-size:24px;font-weight:700;color:#202124">19</div></div></td><td style="width:33%;padding:6px"><div style="padding:16px;border-radius:12px;background:#fff8d8;font-family:Arial,sans-serif"><small style="color:#6f7782">В печати</small><div style="font-size:24px;font-weight:700;color:#202124">12</div></div></td></tr></table>'+prettyCard("Требуют внимания","У 4 заказов не подтверждён финальный макет.","#b3261e"))},
+ {key:"pretty-welcome",subject:"Добро пожаловать в SchoolBook",fromName:"Команда SchoolBook",text:"Начните с создания первого проекта.",html:prettyShell("Добро пожаловать","Рады видеть вас в SchoolBook",prettyP("Три шага для быстрого старта:")+prettyCard("01 · Проект","Создайте первый выпускной проект.","#1a73e8")+prettyCard("02 · Клиенты","Добавьте контакты родителей и учеников.","#f4c542")+prettyCard("03 · Фотографии","Загрузите съёмку и откройте выбор.","#188038"))},
+ {key:"pretty-code",subject:"Код входа: 482 917",fromName:"SchoolBook Security",text:"Код 482 917 действует 10 минут.",html:prettyShell("Безопасность","Код для входа",prettyP("Введите этот код в окне авторизации:")+'<div style="margin:20px 0;padding:22px;border:1px solid #e5e8ec;border-radius:14px;background:#f7f8fa;text-align:center;font-family:Arial,sans-serif;font-size:32px;font-weight:700;letter-spacing:6px;color:#202124">482 917</div>'+prettyP("Код действует 10 минут. Никому не сообщайте его."),"#1a73e8")},
+ {key:"pretty-security",subject:"Новый вход в аккаунт",fromName:"SchoolBook Security",text:"Chrome, Windows, Бишкек.",html:prettyShell("Безопасность","Новый вход в аккаунт",prettyP("Мы заметили авторизацию с нового устройства.")+'<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse">'+prettyRow("Устройство","Chrome · Windows")+prettyRow("Город","Бишкек")+prettyRow("Время","Сегодня, 09:02")+"</table>"+prettyCard("Если это были не вы","Смените пароль и завершите активные сеансы.","#b3261e"),"#b3261e")},
+ {key:"pretty-invoice",subject:"Счёт № 2026-091",fromName:"SchoolBook Finance",text:"Итого к оплате 38 700 сом.",html:prettyShell("Счёт","Счёт № 2026-091",prettyP("Оплатить до <b>30 сентября 2026</b>.")+'<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;margin:16px 0">'+prettyRow("Печать альбомов · 30 шт.","36 000 сом")+prettyRow("Доставка","2 700 сом")+prettyRow("Итого","38 700 сом")+"</table>"+prettyBtn("Оплатить счёт"))},
+ {key:"pretty-deadline",subject:"Согласование заканчивается сегодня",fromName:"SchoolBook",text:"Сегодня последний день согласования макета.",html:prettyShell("Напоминание","Сегодня последний день",prettyP("До конца дня нужно подтвердить макет класса <b>11-А</b>.")+'<div style="margin:20px 0;padding:18px;border-radius:12px;background:#fff8d8;border:1px solid #f3dc86"><div style="font-family:Arial,sans-serif;font-size:11px;font-weight:700;color:#7a5a00">ОСТАЛОСЬ</div><div style="font-family:Arial,sans-serif;font-size:27px;font-weight:700;color:#202124">8 часов</div></div>'+prettyBtn("Подтвердить макет"))},
+ {key:"pretty-support-new",subject:"Ваше обращение принято",fromName:"SchoolBook Support",text:"Обращение #2148 принято.",html:prettyShell("Поддержка","Мы получили ваше обращение",prettyP("Номер обращения: <b>#2148</b>. Команда поддержки уже видит сообщение.")+prettyCard("Тема","Не отображается фотография в макете","#1a73e8")+prettyP("Среднее время ответа сегодня — около <b>35 минут</b>."),"#1a73e8")},
+ {key:"pretty-support-answer",subject:"Ответ поддержки по обращению #2148",fromName:"Евгений · SchoolBook",text:"Проблема исправлена.",html:prettyShell("Поддержка","Проблема исправлена",prettyP("Мы пересобрали превью макета. Обновите страницу и проверьте третий разворот ещё раз.")+'<div style="margin:18px 0;padding:16px 18px;border-radius:12px;background:#e6f4ea;color:#188038;font-family:Arial,sans-serif;font-size:13px;font-weight:700">✓ Исправление уже применено</div>'+prettyBtn("Открыть макет"))},
+ {key:"pretty-update",subject:"Новая версия SchoolBook Mail",fromName:"SchoolBook Product",text:"Обновлены HTML письма, поиск и ответы.",html:prettyShell("Обновление","SchoolBook Mail стал удобнее",prettyCard("HTML-письма","Сохраняют исходное форматирование.","#188038")+prettyCard("Поиск","Быстрее находит нужную переписку.","#1a73e8")+prettyCard("Ответы","Компактнее и ближе к логике Gmail.","#f4c542"))},
+ {key:"pretty-progress",subject:"Галерея закроется через 2 дня",fromName:"SchoolBook Gallery",text:"Выбрано 17 из 24 фотографий.",html:prettyShell("Галерея","Осталось выбрать 7 фотографий",prettyP("Ваш текущий прогресс:")+'<div style="margin:18px 0;height:12px;border-radius:999px;background:#eceff2;overflow:hidden"><div style="width:71%;height:12px;background:#f4c542"></div></div><div style="font-family:Arial,sans-serif;font-size:12px;color:#6f7782">17 выбрано · 24 нужно</div><div style="margin-top:20px">'+prettyBtn("Продолжить выбор")+"</div>")},
+ {key:"pretty-contract",subject:"Договор ожидает подписи",fromName:"SchoolBook Documents",text:"Договор SB-DOC-871 ожидает подписи до 1 октября.",html:prettyShell("Документы","Нужна ваша подпись",prettyP("Договор на изготовление выпускных альбомов подготовлен.")+'<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse">'+prettyRow("Документ","SB-DOC-871")+prettyRow("Класс","11-А")+prettyRow("Срок","1 октября 2026")+"</table><div style=\"margin-top:20px\">"+prettyBtn("Открыть договор","#7b1fa2","#ffffff")+"</div>","#7b1fa2")},
+ {key:"pretty-thanks",subject:"Спасибо за заказ!",fromName:"SchoolBook",text:"Ваш заказ завершён. Нам важно ваше мнение.",html:prettyShell("Спасибо","Ваш заказ завершён",prettyP("Альбомы выданы, заказ <b>#SB-4720</b> завершён. Спасибо, что выбрали SchoolBook.")+'<div style="margin:22px 0;text-align:center;font-family:Arial,sans-serif"><div style="font-size:12px;color:#6f7782;margin-bottom:10px">Как вам результат?</div><div style="font-size:30px;letter-spacing:6px;color:#f4c542">☆ ☆ ☆ ☆ ☆</div></div>'+prettyBtn("Оставить отзыв"))},
+ {key:"pretty-shoot",subject:"План съёмочного дня",fromName:"SchoolBook Studio",text:"3 октября: сбор 08:40, портреты 09:00, общее фото 11:30.",html:prettyShell("Съёмка","План на 3 октября",prettyCard("08:40 · Сбор","Проверяем списки и готовность класса.","#1a73e8")+prettyCard("09:00 · Портреты","Индивидуальная съёмка учеников.","#f4c542")+prettyCard("11:30 · Общее фото","Групповые кадры класса.","#188038"))},
+ {key:"pretty-analytics",subject:"Месячная сводка: сентябрь",fromName:"SchoolBook Analytics",text:"126 заказов, 94 оплачено, выручка 1 248 000 сом.",html:prettyShell("Аналитика","Сентябрь в цифрах",'<table role="presentation" width="100%" cellpadding="6" cellspacing="0"><tr><td style="padding:6px"><div style="padding:18px;border-radius:12px;background:#e8f0fe;font-family:Arial,sans-serif"><small style="color:#6f7782">Заказы</small><div style="font-size:24px;font-weight:700">126</div></div></td><td style="padding:6px"><div style="padding:18px;border-radius:12px;background:#e6f4ea;font-family:Arial,sans-serif"><small style="color:#6f7782">Оплачено</small><div style="font-size:24px;font-weight:700">94</div></div></td><td style="padding:6px"><div style="padding:18px;border-radius:12px;background:#fff8d8;font-family:Arial,sans-serif"><small style="color:#6f7782">Выручка</small><div style="font-size:20px;font-weight:700">1,248M</div></div></td></tr></table>'+prettyP("Конверсия выросла на <b>8,4%</b> по сравнению с августом."))}
+];
+
+const scenarios=PRETTY_ONLY?prettyScenarios:baseScenarios;
+const expectedCount=PRETTY_ONLY?20:30;
+if(scenarios.length!==expectedCount)throw new Error("Expected exactly "+expectedCount+" QA scenarios, got "+scenarios.length);
 
 // Connect thread messages 17-19 together.
 const threadIds=["<qa-"+runTag+"-17@schoolbook.test>","<qa-"+runTag+"-18@schoolbook.test>","<qa-"+runTag+"-19@schoolbook.test>"];
@@ -224,7 +267,7 @@ const mailboxGet=mailboxResponses.find(x=>x[0]==="Mailbox/get")?.[1];
 const inbox=mailboxGet?.list?.find(x=>x.role==="inbox")||mailboxGet?.list?.find(x=>String(x.name||"").toLowerCase()==="inbox");
 if(!inbox?.id)throw new Error("Inbox mailbox not found");
 
-console.log("Uploading 30 RFC822 messages…");
+console.log("Uploading "+expectedCount+" RFC822 messages…");
 const uploaded=[];
 for(let i=0;i<mimeMessages.length;i++){
   const r=await fetch(uploadUrl,{
@@ -237,7 +280,7 @@ for(let i=0;i<mimeMessages.length;i++){
   const data=JSON.parse(body);
   if(!data.blobId)throw new Error("Upload "+(i+1)+" returned no blobId");
   uploaded.push(data);
-  process.stdout.write("\rUploaded "+String(i+1).padStart(2," ")+" / 30");
+  process.stdout.write("\rUploaded "+String(i+1).padStart(2," ")+" / "+expectedCount);
 }
 process.stdout.write("\n");
 
@@ -259,7 +302,7 @@ if(failures.length){
   for(const [key,value] of failures)console.error(" - "+key+": "+JSON.stringify(value));
 }
 const successCount=Object.keys(imported.created||{}).length;
-console.log("Imported "+successCount+" / 30 QA messages into Inbox.");
+console.log("Imported "+successCount+" / "+expectedCount+" QA messages into Inbox.");
 console.log("Scenarios:");
 scenarios.forEach((s,i)=>console.log(" "+String(i+1).padStart(2,"0")+". "+s.key));
-if(successCount!==30)process.exitCode=1;
+if(successCount!==expectedCount)process.exitCode=1;
