@@ -18388,3 +18388,143 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
     min-height:46px!important;
   }
 }
+
+
+/* Gmail sidebar v49 — unread severity badges in collapsed and expanded states */
+/* 1–10 = green, 11–20 = yellow, 21+ = red. */
+.mailSidebar .unreadBadge{
+  margin:0!important;
+  min-width:22px!important;
+  max-width:48px!important;
+  height:20px!important;
+  padding:0 7px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  position:static!important;
+  border:0!important;
+  border-radius:999px!important;
+  box-shadow:none!important;
+  font-size:10px!important;
+  font-weight:700!important;
+  font-style:normal!important;
+  line-height:20px!important;
+  letter-spacing:0!important;
+  font-variant-numeric:tabular-nums!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  opacity:1!important;
+  box-sizing:border-box!important;
+}
+.mailSidebar .unreadBadge.unreadLow{
+  background:#e6f4ea!important;
+  color:#137333!important;
+}
+.mailSidebar .unreadBadge.unreadMid{
+  background:#fef7e0!important;
+  color:#8d6500!important;
+}
+.mailSidebar .unreadBadge.unreadHigh{
+  background:#fce8e6!important;
+  color:#b3261e!important;
+}
+
+/* Active/hover rows keep the severity color instead of turning every counter yellow. */
+.mailSidebar nav>button.active .unreadBadge.unreadLow,
+.mailSidebar .customFolderRow.active .unreadBadge.unreadLow,
+.mailSidebar nav>button:hover .unreadBadge.unreadLow,
+.mailSidebar .folderMain:hover .unreadBadge.unreadLow{
+  background:#d9f0df!important;
+  color:#0f6b2b!important;
+}
+.mailSidebar nav>button.active .unreadBadge.unreadMid,
+.mailSidebar .customFolderRow.active .unreadBadge.unreadMid,
+.mailSidebar nav>button:hover .unreadBadge.unreadMid,
+.mailSidebar .folderMain:hover .unreadBadge.unreadMid{
+  background:#fce8a6!important;
+  color:#755400!important;
+}
+.mailSidebar nav>button.active .unreadBadge.unreadHigh,
+.mailSidebar .customFolderRow.active .unreadBadge.unreadHigh,
+.mailSidebar nav>button:hover .unreadBadge.unreadHigh,
+.mailSidebar .folderMain:hover .unreadBadge.unreadHigh{
+  background:#f8d7d3!important;
+  color:#a61b14!important;
+}
+
+/* Hover-expanded collapsed rail: undo the old tiny absolute badge geometry. */
+@media(min-width:851px){
+  .workspace.sidebarCollapsed .mailSidebar:hover nav>button,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within nav>button,
+  .workspace.sidebarCollapsed .mailSidebar:hover .folderMain,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within .folderMain{
+    overflow:hidden!important;
+  }
+
+  .workspace.sidebarCollapsed .mailSidebar:hover .unreadBadge,
+  .workspace.sidebarCollapsed .mailSidebar:focus-within .unreadBadge{
+    position:static!important;
+    right:auto!important;
+    top:auto!important;
+    min-width:22px!important;
+    max-width:48px!important;
+    height:20px!important;
+    padding:0 7px!important;
+    display:inline-flex!important;
+    border:0!important;
+    border-radius:999px!important;
+    font-size:10px!important;
+    line-height:20px!important;
+    box-shadow:none!important;
+    justify-self:end!important;
+  }
+
+  /* Fully collapsed icon rail: compact notification badge with a clean white ring. */
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) nav>button,
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) .folderMain{
+    position:relative!important;
+    overflow:visible!important;
+  }
+
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) .unreadBadge{
+    position:absolute!important;
+    right:-3px!important;
+    top:-2px!important;
+    z-index:3!important;
+    min-width:18px!important;
+    max-width:28px!important;
+    height:18px!important;
+    padding:0 5px!important;
+    display:inline-flex!important;
+    border:2px solid #f6f8fc!important;
+    border-radius:999px!important;
+    font-size:8px!important;
+    font-weight:800!important;
+    line-height:14px!important;
+    box-shadow:0 1px 2px rgba(60,64,67,.18)!important;
+  }
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) .unreadBadge.unreadLow{
+    background:#34a853!important;
+    color:#fff!important;
+  }
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) .unreadBadge.unreadMid{
+    background:#fbbc04!important;
+    color:#3b2d00!important;
+  }
+  .workspace.sidebarCollapsed .mailSidebar:not(:hover):not(:focus-within) .unreadBadge.unreadHigh{
+    background:#ea4335!important;
+    color:#fff!important;
+  }
+}
+
+/* Mobile drawer uses the same calm pills as expanded desktop. */
+@media(max-width:850px){
+  .mailSidebar .unreadBadge{
+    min-width:21px!important;
+    height:19px!important;
+    padding:0 6px!important;
+    font-size:9.5px!important;
+    line-height:19px!important;
+  }
+}
