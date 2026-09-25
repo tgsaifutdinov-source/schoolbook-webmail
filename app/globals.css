@@ -19872,3 +19872,282 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
     animation:none!important;
   }
 }
+
+
+/* SchoolBook feedback v63 — unified floating notifications */
+/* One visual language for every floating informational message. */
+.toast,
+.undoToast,
+.sentToast,
+.offlineBanner,
+.draftRecoveryBar{
+  border:0!important;
+  border-radius:13px!important;
+  background:#2f3133!important;
+  color:#fff!important;
+  box-shadow:
+    0 12px 34px rgba(32,33,36,.28),
+    0 3px 10px rgba(32,33,36,.18)!important;
+  font-family:inherit!important;
+  letter-spacing:0!important;
+  box-sizing:border-box!important;
+}
+
+/* Standard transient notice. */
+.toast{
+  z-index:1700!important;
+  left:22px!important;
+  right:auto!important;
+  bottom:24px!important;
+  transform:none!important;
+  min-width:290px!important;
+  max-width:min(520px,calc(100vw - 44px))!important;
+  min-height:52px!important;
+  height:auto!important;
+  padding:0 18px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  color:#fff!important;
+  font-size:13px!important;
+  font-weight:500!important;
+  line-height:1.35!important;
+  text-align:left!important;
+  animation:sbFeedbackIn .18s ease-out!important;
+}
+
+/* Undo notification follows the same shell as sent-message feedback. */
+.undoToast{
+  z-index:1700!important;
+  left:22px!important;
+  right:auto!important;
+  bottom:24px!important;
+  transform:none!important;
+  min-width:360px!important;
+  max-width:min(560px,calc(100vw - 44px))!important;
+  min-height:52px!important;
+  height:auto!important;
+  padding:6px 8px 6px 18px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:5px!important;
+  animation:sbFeedbackIn .18s ease-out!important;
+}
+.undoToast>span{
+  min-width:0!important;
+  flex:1 1 auto!important;
+  margin-right:8px!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  color:#fff!important;
+  font-size:13px!important;
+  font-weight:500!important;
+  line-height:1.25!important;
+}
+.undoToast>button{
+  flex:0 0 auto!important;
+  height:36px!important;
+  padding:0 10px!important;
+  border:0!important;
+  border-radius:8px!important;
+  background:transparent!important;
+  color:#ffd24a!important;
+  box-shadow:none!important;
+  font-size:12.5px!important;
+  font-weight:650!important;
+}
+.undoToast>button:hover,
+.undoToast>button:focus-visible{
+  background:rgba(255,210,74,.11)!important;
+  color:#ffe17d!important;
+  outline:0!important;
+}
+
+/* Sent snackbar already has actions; make sure it uses the exact same shell. */
+.sentToast{
+  z-index:1700!important;
+  left:22px!important;
+  right:auto!important;
+  bottom:24px!important;
+  transform:none!important;
+  min-height:52px!important;
+  animation:sbFeedbackIn .18s ease-out!important;
+}
+
+/* Offline status keeps its top position but shares the same shape, type and shadow. */
+.offlineBanner{
+  z-index:1710!important;
+  top:12px!important;
+  left:50%!important;
+  right:auto!important;
+  bottom:auto!important;
+  transform:translateX(-50%)!important;
+  width:auto!important;
+  min-width:300px!important;
+  max-width:min(560px,calc(100vw - 32px))!important;
+  min-height:44px!important;
+  padding:0 16px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  color:#fff!important;
+  font-size:12px!important;
+  font-weight:500!important;
+  line-height:1.35!important;
+  text-align:center!important;
+  animation:sbFeedbackTopIn .18s ease-out!important;
+}
+
+/* Recoverable draft is also floating feedback, but keeps its richer two-column content. */
+.draftRecoveryBar{
+  z-index:1695!important;
+  left:22px!important;
+  right:auto!important;
+  bottom:24px!important;
+  transform:none!important;
+  width:min(620px,calc(100vw - 44px))!important;
+  min-height:58px!important;
+  padding:7px 8px 7px 15px!important;
+  animation:sbFeedbackIn .18s ease-out!important;
+}
+.draftRecoveryBar>div:first-child>svg{
+  color:#ffd24a!important;
+}
+.draftRecoveryBar b{
+  color:#fff!important;
+  font-size:12.5px!important;
+  font-weight:600!important;
+}
+.draftRecoveryBar small{
+  margin-top:2px!important;
+  color:#c9cdd2!important;
+  font-size:10.5px!important;
+}
+.draftRecoveryBar button{
+  height:36px!important;
+  padding:0 10px!important;
+  border:0!important;
+  border-radius:8px!important;
+  background:transparent!important;
+  color:#d7dade!important;
+  font-size:11.5px!important;
+  font-weight:600!important;
+  box-shadow:none!important;
+}
+.draftRecoveryBar button:hover,
+.draftRecoveryBar button:focus-visible{
+  background:rgba(255,255,255,.10)!important;
+  color:#fff!important;
+  outline:0!important;
+}
+.draftRecoveryBar .restoreDraftButton{
+  background:rgba(255,210,74,.12)!important;
+  color:#ffd24a!important;
+}
+.draftRecoveryBar .restoreDraftButton:hover,
+.draftRecoveryBar .restoreDraftButton:focus-visible{
+  background:rgba(255,210,74,.18)!important;
+  color:#ffe17d!important;
+}
+
+/* If offline status and draft recovery are both present, avoid overlap. */
+.offlineBanner+.draftRecoveryBar{
+  bottom:24px!important;
+}
+
+@keyframes sbFeedbackIn{
+  from{opacity:0;transform:translateY(10px)}
+  to{opacity:1;transform:translateY(0)}
+}
+@keyframes sbFeedbackTopIn{
+  from{opacity:0;transform:translate(-50%,-8px)}
+  to{opacity:1;transform:translate(-50%,0)}
+}
+
+@media(max-width:850px){
+  .toast,
+  .undoToast,
+  .sentToast,
+  .draftRecoveryBar{
+    left:10px!important;
+    right:10px!important;
+    bottom:max(12px,env(safe-area-inset-bottom))!important;
+    transform:none!important;
+    min-width:0!important;
+    max-width:none!important;
+    width:auto!important;
+    border-radius:13px!important;
+  }
+  .toast{
+    min-height:50px!important;
+    padding:0 14px!important;
+    font-size:12px!important;
+  }
+  .undoToast{
+    min-height:52px!important;
+    padding:6px 7px 6px 14px!important;
+  }
+  .undoToast>span{
+    font-size:11.5px!important;
+  }
+  .undoToast>button{
+    height:38px!important;
+    padding:0 8px!important;
+    font-size:10.5px!important;
+  }
+  .offlineBanner{
+    top:8px!important;
+    left:8px!important;
+    right:8px!important;
+    transform:none!important;
+    min-width:0!important;
+    max-width:none!important;
+    width:auto!important;
+    min-height:42px!important;
+    padding:0 12px!important;
+    border-radius:13px!important;
+    font-size:11px!important;
+  }
+  .draftRecoveryBar{
+    min-height:62px!important;
+    padding:8px!important;
+  }
+  .draftRecoveryBar b{
+    font-size:11.5px!important;
+  }
+  .draftRecoveryBar small{
+    font-size:9.5px!important;
+  }
+  .draftRecoveryBar button{
+    height:34px!important;
+    padding:0 8px!important;
+    font-size:10px!important;
+  }
+}
+
+@media(max-width:520px){
+  .undoToast{
+    min-width:0!important;
+  }
+  .draftRecoveryBar{
+    gap:7px!important;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .toast,
+  .undoToast,
+  .sentToast,
+  .offlineBanner,
+  .draftRecoveryBar{
+    animation:none!important;
+  }
+}
+
+@media print{
+  .sentToast,
+  .draftRecoveryBar{
+    display:none!important;
+  }
+}
