@@ -10,6 +10,7 @@
     "check:source": "node scripts/check-source.mjs",
     "check": "npm run check:source && npm run typecheck && npm run build",
     "seed:test-mail": "node scripts/seed-test-mail.mjs",
+    "seed:pretty-html": "node scripts/seed-test-mail.mjs --pretty-20",
     "check:test-mail-seed": "JMAP_USER=qa@example.com node scripts/seed-test-mail.mjs --dry-run"
   },
   "dependencies": {
