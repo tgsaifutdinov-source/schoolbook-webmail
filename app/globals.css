@@ -18146,3 +18146,245 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
     line-height:19px!important;
   }
 }
+
+
+/* Gmail recipient chooser v48 — exact compact contact popup */
+.composeWindow.sbGmailCompose .recipientChipField{
+  position:relative!important;
+  min-height:38px!important;
+  padding:3px 8px 3px 12px!important;
+  display:grid!important;
+  grid-template-columns:auto minmax(0,1fr) auto!important;
+  align-items:center!important;
+  column-gap:5px!important;
+  overflow:visible!important;
+}
+
+.composeWindow.sbGmailCompose .recipientFieldLabel{
+  width:auto!important;
+  min-width:38px!important;
+  height:30px!important;
+  padding:0!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  color:#5f6368!important;
+  box-shadow:none!important;
+  font-size:12.5px!important;
+  font-weight:400!important;
+  line-height:30px!important;
+  text-align:left!important;
+  white-space:nowrap!important;
+}
+.composeWindow.sbGmailCompose .recipientFieldLabel:hover,
+.composeWindow.sbGmailCompose .recipientFieldLabel:focus-visible{
+  background:transparent!important;
+  color:#202124!important;
+  outline:0!important;
+  box-shadow:none!important;
+}
+
+.composeWindow.sbGmailCompose .recipientChipEditor{
+  min-width:0!important;
+  width:100%!important;
+  min-height:30px!important;
+  gap:4px!important;
+}
+.composeWindow.sbGmailCompose .recipientChipEditor>input{
+  min-width:90px!important;
+  height:30px!important;
+  flex:1 1 120px!important;
+  font-size:12.5px!important;
+  line-height:30px!important;
+}
+.composeWindow.sbGmailCompose .recipientExtras{
+  gap:2px!important;
+}
+.composeWindow.sbGmailCompose .recipientExtras button{
+  height:30px!important;
+  padding:0 3px!important;
+  color:#5f6368!important;
+  font-size:12px!important;
+  font-weight:400!important;
+  white-space:nowrap!important;
+}
+.composeWindow.sbGmailCompose .recipientExtras button:hover{
+  background:transparent!important;
+  color:#202124!important;
+}
+
+/* Gmail-like contact popup: narrow, left-aligned with the typed address. */
+.composeWindow.sbGmailCompose .recipientChipField .recipientSuggestions{
+  position:absolute!important;
+  z-index:700!important;
+  top:calc(100% - 1px)!important;
+  left:58px!important;
+  right:auto!important;
+  width:min(322px,calc(100% - 70px))!important;
+  min-width:260px!important;
+  max-width:322px!important;
+  max-height:324px!important;
+  padding:7px 0!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  border:1px solid #dadce0!important;
+  border-radius:4px!important;
+  background:#fff!important;
+  box-shadow:
+    0 2px 6px rgba(60,64,67,.20),
+    0 8px 20px rgba(60,64,67,.14)!important;
+  scrollbar-width:thin!important;
+  scrollbar-color:#dadce0 transparent!important;
+}
+.composeWindow.sbGmailCompose .recipientChipField .recipientSuggestions::-webkit-scrollbar{
+  width:7px!important;
+}
+.composeWindow.sbGmailCompose .recipientChipField .recipientSuggestions::-webkit-scrollbar-thumb{
+  border:2px solid transparent!important;
+  border-radius:8px!important;
+  background:#dadce0!important;
+  background-clip:padding-box!important;
+}
+
+/* The Gmail reference has no heading above the contacts. */
+.composeWindow.sbGmailCompose .recipientSuggestionCaption{
+  display:none!important;
+}
+
+.composeWindow.sbGmailCompose .recipientSuggestionRow{
+  width:100%!important;
+  min-width:0!important;
+  height:44px!important;
+  min-height:44px!important;
+  display:block!important;
+  background:#fff!important;
+}
+.composeWindow.sbGmailCompose .recipientSuggestionRow:hover,
+.composeWindow.sbGmailCompose .recipientSuggestionRow.active{
+  background:#f1f3f4!important;
+}
+
+.composeWindow.sbGmailCompose .recipientSuggestionRow .recipientSuggestion{
+  width:100%!important;
+  height:44px!important;
+  min-height:44px!important;
+  padding:4px 12px!important;
+  display:grid!important;
+  grid-template-columns:32px minmax(0,1fr)!important;
+  align-items:center!important;
+  column-gap:10px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+  box-shadow:none!important;
+  text-align:left!important;
+  overflow:hidden!important;
+}
+.composeWindow.sbGmailCompose .recipientSuggestionRow .recipientSuggestion:hover,
+.composeWindow.sbGmailCompose .recipientSuggestionRow .recipientSuggestion.active,
+.composeWindow.sbGmailCompose .recipientSuggestionRow .recipientSuggestion[aria-selected="true"]{
+  background:#f1f3f4!important;
+}
+
+.composeWindow.sbGmailCompose .recipientSuggestionRow .contactAvatar,
+.composeWindow.sbGmailCompose .recipientSuggestion.customAddress .contactAvatar{
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+  max-width:30px!important;
+  flex-basis:30px!important;
+  border-radius:50%!important;
+  display:grid!important;
+  place-items:center!important;
+  color:#fff!important;
+  font-size:12px!important;
+  font-weight:500!important;
+  line-height:30px!important;
+}
+
+.composeWindow.sbGmailCompose .recipientSuggestionRow .contactMeta,
+.composeWindow.sbGmailCompose .recipientSuggestion.customAddress .contactMeta{
+  min-width:0!important;
+  width:100%!important;
+  display:flex!important;
+  flex-direction:column!important;
+  justify-content:center!important;
+  align-items:flex-start!important;
+  gap:1px!important;
+  overflow:hidden!important;
+}
+
+.composeWindow.sbGmailCompose .recipientSuggestionRow .contactName,
+.composeWindow.sbGmailCompose .recipientSuggestion.customAddress .contactName{
+  width:100%!important;
+  margin:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  color:#202124!important;
+  font-size:13px!important;
+  font-weight:500!important;
+  line-height:16px!important;
+}
+.composeWindow.sbGmailCompose .recipientSuggestionRow .contactEmail,
+.composeWindow.sbGmailCompose .recipientSuggestion.customAddress .contactEmail{
+  width:100%!important;
+  margin:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  color:#5f6368!important;
+  font-size:11px!important;
+  font-weight:400!important;
+  line-height:14px!important;
+}
+
+.composeWindow.sbGmailCompose .recipientSuggestionHide,
+.composeWindow.sbGmailCompose .recipientFavoriteMark{
+  display:none!important;
+}
+
+.composeWindow.sbGmailCompose .recipientSuggestion.customAddress{
+  width:100%!important;
+  height:44px!important;
+  min-height:44px!important;
+  padding:4px 12px!important;
+  display:grid!important;
+  grid-template-columns:32px minmax(0,1fr)!important;
+  align-items:center!important;
+  column-gap:10px!important;
+  border:0!important;
+  border-top:1px solid #f1f3f4!important;
+  border-radius:0!important;
+  background:#fff!important;
+  box-shadow:none!important;
+}
+.composeWindow.sbGmailCompose .recipientSuggestion.customAddress:hover{
+  background:#f1f3f4!important;
+}
+.composeWindow.sbGmailCompose .recipientSuggestion.customAddress .contactAvatar{
+  background:#5f6368!important;
+}
+
+/* Keep the dropdown Gmail-like on smaller composer widths. */
+@media(max-width:850px){
+  .composeWindow.sbGmailCompose .recipientChipField{
+    grid-template-columns:auto minmax(0,1fr) auto!important;
+  }
+  .composeWindow.sbGmailCompose .recipientChipField .recipientSuggestions{
+    left:48px!important;
+    right:8px!important;
+    width:auto!important;
+    min-width:0!important;
+    max-width:none!important;
+    max-height:min(324px,46dvh)!important;
+  }
+  .composeWindow.sbGmailCompose .recipientSuggestionRow,
+  .composeWindow.sbGmailCompose .recipientSuggestionRow .recipientSuggestion{
+    height:46px!important;
+    min-height:46px!important;
+  }
+}
