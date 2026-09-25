@@ -18528,3 +18528,63 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
     line-height:19px!important;
   }
 }
+
+
+/* Gmail inline reply v50 — close action pinned to the top-right corner */
+.gmailReader .sbInlineReply{
+  position:relative!important;
+}
+
+/* Remove the close button from the header grid and pin it like the trash action. */
+.gmailReader .sbInlineReplyTop{
+  grid-template-columns:30px minmax(0,1fr) auto!important;
+  padding-right:46px!important;
+}
+
+.gmailReader .sbInlineReplyClose{
+  position:absolute!important;
+  top:7px!important;
+  right:8px!important;
+  z-index:6!important;
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+  margin:0!important;
+  padding:0!important;
+  display:grid!important;
+  place-items:center!important;
+  border:0!important;
+  border-radius:5px!important;
+  background:transparent!important;
+  color:#56616c!important;
+  box-shadow:none!important;
+  outline:0!important;
+}
+
+.gmailReader .sbInlineReplyClose:hover{
+  background:#f0f2f4!important;
+  color:#202124!important;
+}
+
+.gmailReader .sbInlineReplyClose:focus,
+.gmailReader .sbInlineReplyClose:focus-visible{
+  outline:0!important;
+  box-shadow:none!important;
+}
+
+.gmailReader .sbInlineReplyClose svg{
+  width:16px!important;
+  height:16px!important;
+  stroke-width:1.9!important;
+}
+
+@media(max-width:850px){
+  .gmailReader .sbInlineReplyTop{
+    grid-template-columns:30px minmax(0,1fr)!important;
+    padding-right:44px!important;
+  }
+  .gmailReader .sbInlineReplyClose{
+    top:6px!important;
+    right:7px!important;
+  }
+}
