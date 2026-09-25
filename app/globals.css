@@ -16051,3 +16051,257 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
     font-size:11px!important;
   }
 }
+
+
+/* Gmail visual system v39 — compose footer reference */
+
+/* Formatting strip: compact rounded toolbar like Gmail. */
+.composeWindow .composeFormatBar{
+  width:calc(100% - 24px)!important;
+  max-width:560px!important;
+  min-height:40px!important;
+  height:40px!important;
+  flex:0 0 40px!important;
+  margin:6px 12px 4px!important;
+  padding:4px 8px!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:2px!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
+  border:0!important;
+  border-radius:20px!important;
+  background:#f1f3f4!important;
+  box-shadow:none!important;
+  scrollbar-width:none!important;
+}
+.composeWindow .composeFormatBar::-webkit-scrollbar{
+  display:none!important;
+}
+.composeWindow .composeFormatBar button{
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+  flex:0 0 30px!important;
+  padding:0!important;
+  display:grid!important;
+  place-items:center!important;
+  border:0!important;
+  border-radius:6px!important;
+  background:transparent!important;
+  color:#59636f!important;
+  box-shadow:none!important;
+  font-size:12px!important;
+}
+.composeWindow .composeFormatBar button:hover{
+  background:#e2e5e9!important;
+  color:#202124!important;
+}
+.composeWindow .composeFormatBar button.active{
+  background:#d9dde2!important;
+  color:#202124!important;
+}
+.composeWindow .composeFormatBar button svg{
+  width:16px!important;
+  height:16px!important;
+  stroke-width:1.9!important;
+}
+.composeWindow .composeFormatBar .removeFormat{
+  font-size:11px!important;
+  font-weight:600!important;
+}
+.composeWindow .composeFormatBar i{
+  width:1px!important;
+  height:18px!important;
+  flex:0 0 1px!important;
+  margin:0 3px!important;
+  border:0!important;
+  background:#cfd4da!important;
+}
+
+/* Main bottom action row. */
+.composeWindow .gmailComposeFoot{
+  width:100%!important;
+  min-width:0!important;
+  height:50px!important;
+  min-height:50px!important;
+  flex:0 0 50px!important;
+  padding:0 10px 4px 12px!important;
+  display:grid!important;
+  grid-template-columns:auto minmax(0,1fr) auto auto!important;
+  align-items:center!important;
+  gap:6px!important;
+  overflow:visible!important;
+  border-top:0!important;
+  background:#fff!important;
+}
+.composeWindow .gmailComposeFoot .send{
+  min-width:106px!important;
+  height:36px!important;
+  margin:0!important;
+  padding:0 18px!important;
+  border:0!important;
+  border-radius:18px!important;
+  background:var(--gmail-yellow)!important;
+  color:#332900!important;
+  box-shadow:none!important;
+  font-size:12.5px!important;
+  font-weight:700!important;
+}
+.composeWindow .gmailComposeFoot .send:hover:not(:disabled){
+  background:var(--gmail-yellow-hover)!important;
+  box-shadow:0 1px 2px rgba(60,64,67,.16)!important;
+}
+.composeWindow .gmailComposeFoot .send:active:not(:disabled){
+  transform:translateY(1px)!important;
+}
+.composeWindow .gmailComposeFoot .send:disabled{
+  background:#eef0f2!important;
+  color:#9aa0a6!important;
+  opacity:1!important;
+}
+
+/* Tool cluster mirrors Gmail sizing. */
+.composeWindow .composeToolGroup{
+  min-width:0!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:1px!important;
+  overflow:visible!important;
+}
+.composeWindow .gmailComposeFoot .composeToolGroup>button,
+.composeWindow .gmailComposeFoot .composeEmojiWrap>button,
+.composeWindow .gmailComposeFoot .composeMoreWrap>button,
+.composeWindow .gmailComposeFoot .discardDraftButton{
+  width:30px!important;
+  height:30px!important;
+  min-width:30px!important;
+  max-width:30px!important;
+  padding:0!important;
+  display:grid!important;
+  place-items:center!important;
+  border:0!important;
+  border-radius:6px!important;
+  background:transparent!important;
+  color:#59636f!important;
+  box-shadow:none!important;
+}
+.composeWindow .gmailComposeFoot .composeToolGroup>button:hover,
+.composeWindow .gmailComposeFoot .composeEmojiWrap>button:hover,
+.composeWindow .gmailComposeFoot .composeMoreWrap>button:hover,
+.composeWindow .gmailComposeFoot .discardDraftButton:hover{
+  background:#f0f2f4!important;
+  color:#202124!important;
+}
+.composeWindow .gmailComposeFoot .composeToolGroup svg,
+.composeWindow .gmailComposeFoot .composeEmojiWrap svg,
+.composeWindow .gmailComposeFoot .composeMoreWrap svg,
+.composeWindow .gmailComposeFoot .discardDraftButton svg{
+  width:16px!important;
+  height:16px!important;
+  stroke-width:1.9!important;
+}
+.composeWindow .gmailComposeFoot .formatToggle{
+  width:34px!important;
+  min-width:34px!important;
+  max-width:34px!important;
+  font-size:12px!important;
+  font-weight:600!important;
+}
+.composeWindow .gmailComposeFoot .formatToggle.active{
+  background:#dfe4e9!important;
+  color:#202124!important;
+}
+.composeWindow .composeSaveState{
+  min-width:0!important;
+  max-width:110px!important;
+  margin:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  color:#858e98!important;
+  font-size:10px!important;
+  justify-self:end!important;
+}
+.composeWindow .discardDraftButton{
+  margin:0!important;
+  justify-self:end!important;
+}
+.composeWindow .discardDraftButton:hover{
+  color:#b3261e!important;
+  background:#fce8e6!important;
+}
+
+/* Popovers anchor just above the action row. */
+.composeWindow .composeEmojiWrap,
+.composeWindow .composeMoreWrap{
+  position:relative!important;
+}
+.composeWindow .composeEmojiMenu{
+  bottom:36px!important;
+}
+.composeWindow .composeMoreMenu{
+  bottom:36px!important;
+}
+
+/* Keep the editor visually connected to the toolbar, without a huge dead gap. */
+.composeWindow .composeEditor{
+  padding-bottom:12px!important;
+}
+
+/* Wide desktop keeps the toolbar compact rather than stretching it. */
+@media(min-width:851px){
+  .composeWindow .composeFormatBar{
+    align-self:flex-start!important;
+  }
+}
+
+/* Mobile: same hierarchy, horizontally scrollable tools if needed. */
+@media(max-width:850px){
+  .composeWindow .composeFormatBar{
+    width:calc(100% - 16px)!important;
+    max-width:none!important;
+    height:38px!important;
+    min-height:38px!important;
+    flex-basis:38px!important;
+    margin:5px 8px 3px!important;
+    padding:4px 6px!important;
+    border-radius:19px!important;
+  }
+  .composeWindow .composeFormatBar button{
+    width:29px!important;
+    height:29px!important;
+    min-width:29px!important;
+    flex-basis:29px!important;
+  }
+  .composeWindow .gmailComposeFoot{
+    height:52px!important;
+    min-height:52px!important;
+    flex-basis:52px!important;
+    padding:0 7px max(4px,env(safe-area-inset-bottom)) 9px!important;
+    grid-template-columns:auto minmax(0,1fr) auto!important;
+  }
+  .composeWindow .gmailComposeFoot .send{
+    min-width:88px!important;
+    height:34px!important;
+    padding:0 14px!important;
+    font-size:12px!important;
+  }
+  .composeWindow .composeToolGroup{
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+    scrollbar-width:none!important;
+  }
+  .composeWindow .composeToolGroup::-webkit-scrollbar{
+    display:none!important;
+  }
+  .composeWindow .composeSaveState{
+    display:none!important;
+  }
+  .composeWindow .gmailComposeFoot>span{
+    display:none!important;
+  }
+  .composeWindow .discardDraftButton{
+    grid-column:3!important;
+  }
+}
