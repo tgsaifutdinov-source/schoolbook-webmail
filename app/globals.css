@@ -18827,3 +18827,18 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
 .composeWindow.sbGmailCompose .recipientChip>button:last-child{
   flex:0 0 22px!important;
 }
+
+
+/* Gmail topbar v54 — align search with mailbox content */
+@media(min-width:851px){
+  /* The mailbox starts exactly after the adaptive sidebar. Keep the search on
+     the same vertical line while preserving the existing 8px topbar inset. */
+  .gmailTopbar .topbarLeft{
+    width:calc(var(--sb-sidebar-expanded) - 8px)!important;
+    flex:0 0 calc(var(--sb-sidebar-expanded) - 8px)!important;
+  }
+
+  .gmailTopbar .searchArea{
+    margin-left:0!important;
+  }
+}
