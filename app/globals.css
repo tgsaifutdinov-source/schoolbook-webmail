@@ -19147,3 +19147,264 @@ html[data-mail-density="compact"] .gmailList .mailRowMeta time{font-size:10.5px!
     min-width:0!important;
   }
 }
+
+
+/* Gmail compose v56 — reliable dropdowns and centered schedule dialog */
+/* Formatting dropdowns must not be clipped by the rounded toolbar. */
+@media(min-width:851px){
+  .composeWindow.sbGmailCompose .sbComposeFormatDock,
+  .gmailReader .sbInlineReply .sbComposeFormatDock{
+    overflow:visible!important;
+  }
+}
+.sbComposeFormatMenuWrap{
+  z-index:25!important;
+}
+.sbComposeFormatMenuWrap:has(.sbComposeFormatMenu){
+  z-index:80!important;
+}
+
+/* The arrow only exposes one Gmail-like secondary action. */
+.sbComposeActionDock{
+  position:relative!important;
+  z-index:60!important;
+}
+.sbComposeSendWrap{
+  z-index:90!important;
+}
+.sbComposeSendMenu{
+  width:230px!important;
+  min-width:230px!important;
+  padding:5px!important;
+  bottom:39px!important;
+  border-radius:7px!important;
+  background:#fff!important;
+  box-shadow:0 4px 14px rgba(60,64,67,.24),0 1px 4px rgba(60,64,67,.12)!important;
+}
+.sbComposeSendMenuTitle,
+.sbComposeSendMenu>.sbComposeScheduleCustom{
+  display:none!important;
+}
+.sbComposeSendMenu>.sbScheduleOpenButton{
+  width:100%!important;
+  min-height:38px!important;
+  padding:0 12px!important;
+  display:grid!important;
+  grid-template-columns:20px minmax(0,1fr)!important;
+  align-items:center!important;
+  justify-content:stretch!important;
+  gap:9px!important;
+  border:0!important;
+  border-radius:4px!important;
+  background:#fff!important;
+  color:#3c4043!important;
+  text-align:left!important;
+  box-shadow:none!important;
+}
+.sbComposeSendMenu>.sbScheduleOpenButton:hover:not(:disabled){
+  background:#f1f3f4!important;
+}
+.sbComposeSendMenu>.sbScheduleOpenButton:disabled{
+  color:#a6abb1!important;
+  cursor:default!important;
+}
+.sbComposeSendMenu>.sbScheduleOpenButton svg{
+  width:16px!important;
+  height:16px!important;
+  color:#5f6368!important;
+}
+
+/* Centered modal modeled after Gmail's schedule-send picker. */
+.sbScheduleScrim{
+  position:fixed!important;
+  z-index:1600!important;
+  inset:0!important;
+  display:grid!important;
+  place-items:center!important;
+  padding:18px!important;
+  background:rgba(60,64,67,.42)!important;
+  box-sizing:border-box!important;
+}
+.sbScheduleDialog{
+  width:min(330px,calc(100vw - 32px))!important;
+  max-height:min(520px,calc(100dvh - 36px))!important;
+  overflow:hidden!important;
+  border:0!important;
+  border-radius:26px!important;
+  background:#fff!important;
+  box-shadow:0 18px 46px rgba(32,33,36,.34),0 4px 12px rgba(32,33,36,.16)!important;
+  color:#202124!important;
+}
+.sbScheduleDialogHead{
+  min-height:86px!important;
+  padding:20px 22px 14px 24px!important;
+  display:flex!important;
+  align-items:flex-start!important;
+  justify-content:space-between!important;
+  gap:14px!important;
+  box-sizing:border-box!important;
+}
+.sbScheduleDialogHead>div{
+  min-width:0!important;
+}
+.sbScheduleDialogHead h3{
+  margin:0 0 8px!important;
+  color:#202124!important;
+  font-size:21px!important;
+  font-weight:500!important;
+  line-height:1.2!important;
+  letter-spacing:-.2px!important;
+}
+.sbScheduleDialogHead span{
+  display:block!important;
+  color:#5f6368!important;
+  font-size:13px!important;
+  line-height:1.2!important;
+}
+.sbScheduleDialogHead>button{
+  width:32px!important;
+  height:32px!important;
+  min-width:32px!important;
+  margin:-5px -7px 0 0!important;
+  padding:0!important;
+  display:grid!important;
+  place-items:center!important;
+  border:0!important;
+  border-radius:50%!important;
+  background:transparent!important;
+  color:#5f6368!important;
+  box-shadow:none!important;
+}
+.sbScheduleDialogHead>button:hover{
+  background:#f1f3f4!important;
+  color:#202124!important;
+}
+.sbScheduleDialogHead>button svg{
+  width:19px!important;
+  height:19px!important;
+}
+.sbScheduleChoices{
+  border-top:1px solid #f1f3f4!important;
+  border-bottom:1px solid #e5e8ec!important;
+}
+.sbScheduleChoices>button{
+  width:100%!important;
+  height:43px!important;
+  padding:0 24px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:space-between!important;
+  gap:18px!important;
+  border:0!important;
+  border-radius:0!important;
+  background:#fff!important;
+  color:#3c4043!important;
+  box-shadow:none!important;
+  text-align:left!important;
+}
+.sbScheduleChoices>button:hover{
+  background:#f1f3f4!important;
+}
+.sbScheduleChoices>button span{
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  font-size:13px!important;
+  font-weight:400!important;
+}
+.sbScheduleChoices>button small{
+  flex:0 0 auto!important;
+  color:#6f7782!important;
+  font-size:12px!important;
+  font-weight:400!important;
+  white-space:nowrap!important;
+}
+.sbScheduleCustom{
+  padding:0!important;
+  background:#fff!important;
+}
+.sbScheduleCustomOpen{
+  width:100%!important;
+  height:56px!important;
+  padding:0 24px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:flex-start!important;
+  gap:12px!important;
+  border:0!important;
+  background:#fff!important;
+  color:#4a4f55!important;
+  box-shadow:none!important;
+  text-align:left!important;
+  font-size:13px!important;
+  font-weight:400!important;
+}
+.sbScheduleCustomOpen:hover{
+  background:#f1f3f4!important;
+}
+.sbScheduleCustomOpen svg{
+  width:18px!important;
+  height:18px!important;
+  color:#5f6368!important;
+}
+.sbScheduleCustomEditor{
+  padding:14px 18px 16px!important;
+}
+.sbScheduleCustomEditor>input{
+  width:100%!important;
+  height:40px!important;
+  padding:0 10px!important;
+  border:1px solid #d6dbe1!important;
+  border-radius:8px!important;
+  outline:0!important;
+  background:#fff!important;
+  color:#202124!important;
+  font-size:13px!important;
+  box-sizing:border-box!important;
+}
+.sbScheduleCustomEditor>input:focus{
+  border-color:#9aa0a6!important;
+  box-shadow:0 0 0 3px rgba(60,64,67,.08)!important;
+}
+.sbScheduleCustomEditor>div{
+  margin-top:12px!important;
+  display:flex!important;
+  justify-content:flex-end!important;
+  gap:8px!important;
+}
+.sbScheduleCustomEditor>div>button{
+  height:34px!important;
+  padding:0 12px!important;
+  border:0!important;
+  border-radius:7px!important;
+  background:#f1f3f4!important;
+  color:#3c4043!important;
+  font-size:11.5px!important;
+  font-weight:650!important;
+}
+.sbScheduleCustomEditor>div>button.primary{
+  background:var(--gmail-yellow)!important;
+  color:#332900!important;
+}
+.sbScheduleCustomEditor>div>button.primary:disabled{
+  background:#eceff2!important;
+  color:#a0a6ad!important;
+}
+
+/* In compact/mobile composer the format row may still scroll; the dropdown itself
+   is fixed by the existing v55 mobile rule. */
+@media(max-width:850px){
+  .composeWindow.sbGmailCompose .sbComposeFormatDock,
+  .gmailReader .sbInlineReply .sbComposeFormatDock{
+    overflow-x:auto!important;
+    overflow-y:hidden!important;
+  }
+  .sbScheduleScrim{
+    padding:12px!important;
+  }
+  .sbScheduleDialog{
+    width:min(360px,calc(100vw - 24px))!important;
+    border-radius:22px!important;
+  }
+}
